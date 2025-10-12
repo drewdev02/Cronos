@@ -20,7 +20,7 @@ export default function ClientsModule() {
     setViewMode('edit');
   };
 
-  const handleClientSelect = (client: ClientType) => {
+  const handleClientSelect = () => {
     // El cliente ya se guarda en el store cuando se selecciona
     setViewMode('detail');
   };

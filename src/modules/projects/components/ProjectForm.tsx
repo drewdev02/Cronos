@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createProjectSchema, CreateProjectData, ProjectType } from '../types';
+import { createProjectSchema, ProjectType } from '../types';
 import { useProjectStore } from '../store';
 import { useClientsStore } from '../../clients/store';
 import { ProjectStatus } from '../../../types';
@@ -25,7 +26,13 @@ export default function ProjectForm({ project, onSuccess, onCancel }: ProjectFor
     formState: { errors },
     reset,
     setValue
-  } = useForm<CreateProjectData>({
+  } = useForm<{
+    name: string;
+    clientId: string;
+    hourlyRate: number;
+    description: string;
+    status: ProjectStatus;
+  }>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
       name: project?.name || '',
@@ -46,7 +53,13 @@ export default function ProjectForm({ project, onSuccess, onCancel }: ProjectFor
     }
   }, [project, setValue]);
 
-  const onSubmit: SubmitHandler<CreateProjectData> = async (data) => {
+  const onSubmit: SubmitHandler<{
+    name: string;
+    clientId: string;
+    hourlyRate: number;
+    description: string;
+    status: ProjectStatus;
+  }> = async (data) => {
     setIsSubmitting(true);
     
     try {

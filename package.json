@@ -3,9 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && electron-builder",
+    "build": "tsc && vite build",
+    "dist": "npm run build && electron-builder",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "drizzle:generate": "drizzle-kit generate:sqlite --out ./drizzle"
@@ -13,6 +15,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@tailwindcss/vite": "^4.1.14",
+    "@types/uuid": "^10.0.0",
     "better-sqlite3": "^12.4.1",
     "drizzle-orm": "^0.44.6",
     "react": "^18.2.0",
@@ -20,6 +23,7 @@
     "react-hook-form": "^7.65.0",
     "react-router-dom": "^6.30.1",
     "tailwindcss": "^4.1.14",
+    "uuid": "^13.0.0",
     "zod": "^3.25.76",
     "zustand": "^5.0.8"
   },
@@ -42,5 +46,21 @@
     "vite-plugin-electron": "^0.28.6",
     "vite-plugin-electron-renderer": "^0.14.5"
   },
-  "main": "dist-electron/main.js"
-}
+  "build": {
+    "appId": "com.cronos.app",
+    "productName": "Cronos",
+    "directories": {
+      "buildResources": "build",
+      "output": "release"
+    },
+    "files": [
+      "dist/",
+      "dist-electron/"
+    ],
+    "mac": {
+      "target": ["dmg", "zip"],
+      "category": "public.app-category.productivity",
+      "artifactName": "Cronos-${version}.${ext}"
+    }
+  }
+} 
