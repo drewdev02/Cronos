@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Tray, Menu, nativeImage, ipcMain } from 'electron'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
@@ -23,6 +23,22 @@ export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
 
 let win: BrowserWindow | null
+let tray: Tray | null = null
+
+// Timer state for menu bar
+interface TimerState {
+  isRunning: boolean
+  taskName: string
+  elapsedTime: string
+  status: 'stopped' | 'running' | 'paused'
+}
+
+let timerState: TimerState = { 
+  isRunning: false, 
+  taskName: '', 
+  elapsedTime: '00:00:00',
+  status: 'stopped'
+}
 
 function createWindow() {
   win = new BrowserWindow({
@@ -75,4 +91,35 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow();
+  createTray();
+})
+
+function createTray() {
+  tray = new Tray(nativeImage.createEmpty()); // You can set a custom icon here
+  updateTrayMenu();
+}
+
+function updateTrayMenu() {
+  let label = 'Cronos';
+  if (timerState.isRunning) {
+    label = `${timerState.elapsedTime} - ${timerState.taskName}`;
+  } else if (timerState.status === 'paused') {
+    label = `⏸ ${timerState.elapsedTime} - ${timerState.taskName}`;
+  }
+  tray?.setTitle(label); // macOS only
+  tray?.setToolTip('Cronos Timer');
+  tray?.setContextMenu(Menu.buildFromTemplate([
+    { label: label, enabled: false },
+    { type: 'separator' },
+    { label: 'Abrir Cronos', click: () => win?.show() },
+    { label: 'Salir', click: () => app.quit() }
+  ]));
+}
+
+// IPC handler to receive timer updates from renderer
+ipcMain.on('timer-update', (_event, state) => {
+  timerState = state;
+  updateTrayMenu();
+});

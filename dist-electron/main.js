@@ -1,37 +1,86 @@
-import { app as n, BrowserWindow as i } from "electron";
-import { fileURLToPath as p } from "node:url";
-import o from "node:path";
-const s = o.dirname(p(import.meta.url));
-process.env.APP_ROOT = o.join(s, "..");
-const t = process.env.VITE_DEV_SERVER_URL, f = o.join(process.env.APP_ROOT, "dist-electron"), r = o.join(process.env.APP_ROOT, "dist");
-process.env.VITE_PUBLIC = t ? o.join(process.env.APP_ROOT, "public") : r;
-let e;
-function l() {
-  e = new i({
+import { app, BrowserWindow, Tray, nativeImage, Menu, ipcMain } from "electron";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+process.env.APP_ROOT = path.join(__dirname, "..");
+const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
+const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
+const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
+process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
+let win;
+let tray = null;
+let timerState = {
+  isRunning: false,
+  taskName: "",
+  elapsedTime: "00:00:00",
+  status: "stopped"
+};
+function createWindow() {
+  win = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: o.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
-      preload: o.join(s, "preload.mjs"),
-      nodeIntegration: !1,
-      contextIsolation: !0,
-      webSecurity: !0
+      preload: path.join(__dirname, "preload.mjs"),
+      nodeIntegration: false,
+      contextIsolation: true,
+      webSecurity: true
     }
-  }), e.webContents.on("did-finish-load", () => {
-    e == null || e.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
-  }), e.webContents.on("did-fail-load", (_, a, d, c) => {
-    console.error("Failed to load:", a, d, c);
-  }), t ? (e.loadURL(t), e.webContents.openDevTools()) : e.loadFile(o.join(r, "index.html"));
+  });
+  win.webContents.on("did-finish-load", () => {
+    win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
+  });
+  win.webContents.on("did-fail-load", (_event, errorCode, errorDescription, validatedURL) => {
+    console.error("Failed to load:", errorCode, errorDescription, validatedURL);
+  });
+  if (VITE_DEV_SERVER_URL) {
+    win.loadURL(VITE_DEV_SERVER_URL);
+    win.webContents.openDevTools();
+  } else {
+    win.loadFile(path.join(RENDERER_DIST, "index.html"));
+  }
 }
-n.on("window-all-closed", () => {
-  process.platform !== "darwin" && (n.quit(), e = null);
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+    win = null;
+  }
 });
-n.on("activate", () => {
-  i.getAllWindows().length === 0 && l();
+app.on("activate", () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
 });
-n.whenReady().then(l);
+app.whenReady().then(() => {
+  createWindow();
+  createTray();
+});
+function createTray() {
+  tray = new Tray(nativeImage.createEmpty());
+  updateTrayMenu();
+}
+function updateTrayMenu() {
+  let label = "Cronos";
+  if (timerState.isRunning) {
+    label = `${timerState.elapsedTime} - ${timerState.taskName}`;
+  } else if (timerState.status === "paused") {
+    label = `⏸ ${timerState.elapsedTime} - ${timerState.taskName}`;
+  }
+  tray == null ? void 0 : tray.setTitle(label);
+  tray == null ? void 0 : tray.setToolTip("Cronos Timer");
+  tray == null ? void 0 : tray.setContextMenu(Menu.buildFromTemplate([
+    { label, enabled: false },
+    { type: "separator" },
+    { label: "Abrir Cronos", click: () => win == null ? void 0 : win.show() },
+    { label: "Salir", click: () => app.quit() }
+  ]));
+}
+ipcMain.on("timer-update", (_event, state) => {
+  timerState = state;
+  updateTrayMenu();
+});
 export {
-  f as MAIN_DIST,
-  r as RENDERER_DIST,
-  t as VITE_DEV_SERVER_URL
+  MAIN_DIST,
+  RENDERER_DIST,
+  VITE_DEV_SERVER_URL
 };

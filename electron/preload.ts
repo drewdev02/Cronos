@@ -19,6 +19,8 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     return ipcRenderer.invoke(channel, ...omit)
   },
 
-  // You can expose other APTs you need here.
-  // ...
+  // Send timer state to main process for tray update
+  timerUpdate(state: any) {
+    ipcRenderer.send('timer-update', state);
+  }
 })

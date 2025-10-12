@@ -16,21 +16,45 @@ export const Timer: React.FC = () => {
   const timerState = getTimerState();
 
   // Update timer every second when running
+
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    
+    let interval: NodeJS.Timeout | undefined;
     if (timer.status === TimerStatus.Running) {
       interval = setInterval(() => {
         refreshTimer();
+        const state = getTimerState();
+        window.ipcRenderer?.timerUpdate?.({
+          isRunning: timer.status === TimerStatus.Running,
+          taskName: state.task?.name || '',
+          elapsedTime: state.formattedTime,
+          status: timer.status
+        });
       }, 1000);
+    } else {
+      // Always send update when timer stops or pauses
+      const state = getTimerState();
+      window.ipcRenderer?.timerUpdate?.({
+        isRunning: timer.status === TimerStatus.Running,
+        taskName: state.task?.name || '',
+        elapsedTime: state.formattedTime,
+        status: timer.status
+      });
     }
-
     return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
+      if (interval) clearInterval(interval);
     };
-  }, [timer.status, refreshTimer]);
+  }, [timer.status, timer.taskId, getTimerState, refreshTimer]);
+
+    // Send timer state to main process for tray update
+    useEffect(() => {
+      const state = getTimerState();
+      window.ipcRenderer?.timerUpdate?.({
+        isRunning: timer.status === TimerStatus.Running,
+        taskName: state.task?.name || '',
+        elapsedTime: state.formattedTime,
+        status: timer.status
+      });
+    }, [timer.status, timer.taskId, getTimerState, refreshTimer]);
 
   const handleStart = () => {
     if (!timer.taskId) {
