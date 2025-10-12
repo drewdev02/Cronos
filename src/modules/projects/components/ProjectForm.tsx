@@ -1,11 +1,33 @@
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createProjectSchema, ProjectType } from '../types';
+import { z } from 'zod';
+import { ProjectType } from '../types';
 import { useProjectStore } from '../store';
 import { useClientsStore } from '../../clients/store';
 import { ProjectStatus } from '../../../types';
+
+// Form-specific schema that matches the form expectations
+const projectFormSchema = z.object({
+  name: z.string()
+    .min(1, 'El nombre es requerido')
+    .min(2, 'El nombre debe tener al menos 2 caracteres')
+    .max(100, 'El nombre no puede exceder 100 caracteres'),
+  
+  clientId: z.string()
+    .min(1, 'Debe seleccionar un cliente'),
+  
+  hourlyRate: z.number()
+    .min(0.01, 'La tarifa por hora debe ser mayor a 0')
+    .max(10000, 'La tarifa por hora no puede exceder 10,000'),
+  
+  description: z.string(),
+  
+  status: z.nativeEnum(ProjectStatus)
+});
+
+// Form data type that matches what the form actually sends
+type ProjectFormData = z.infer<typeof projectFormSchema>;
 
 interface ProjectFormProps {
   project?: ProjectType;
@@ -26,14 +48,8 @@ export default function ProjectForm({ project, onSuccess, onCancel }: ProjectFor
     formState: { errors },
     reset,
     setValue
-  } = useForm<{
-    name: string;
-    clientId: string;
-    hourlyRate: number;
-    description: string;
-    status: ProjectStatus;
-  }>({
-    resolver: zodResolver(createProjectSchema),
+  } = useForm<ProjectFormData>({
+    resolver: zodResolver(projectFormSchema),
     defaultValues: {
       name: project?.name || '',
       clientId: project?.clientId || '',
@@ -53,13 +69,7 @@ export default function ProjectForm({ project, onSuccess, onCancel }: ProjectFor
     }
   }, [project, setValue]);
 
-  const onSubmit: SubmitHandler<{
-    name: string;
-    clientId: string;
-    hourlyRate: number;
-    description: string;
-    status: ProjectStatus;
-  }> = async (data) => {
+  const onSubmit: SubmitHandler<ProjectFormData> = async (data) => {
     setIsSubmitting(true);
     
     try {
