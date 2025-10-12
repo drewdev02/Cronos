@@ -51,10 +51,10 @@
   --color-dark-600: #80868b;
   --color-dark-700: #5f6368;
   --color-dark-800: #3c4043;
-  --color-dark-900: #202124;
-  --color-dark-925: #1a1a1a;   /* Fondo secundario */
-  --color-dark-950: #161b22;   /* Fondo terciario */
-  --color-dark-975: #0d1117;   /* Fondo principal - el más oscuro */
+  --color-dark-900: #1c1c1c;
+  --color-dark-925: #161616;   /* Fondo secundario */
+  --color-dark-950: #121212;   /* Fondo terciario */
+  --color-dark-975: #161616;   /* Fondo principal - el más oscuro */
 
   /* VERDE - Acento principal (basado en #00d25b) */
   --color-emerald-50: #f0fdf4;
@@ -75,8 +75,8 @@
   --color-cronos-200: #bbf7d1;
   --color-cronos-300: #86efad;
   --color-cronos-400: #4ade7f;
-  --color-cronos-500: #00d25b;   /* Verde principal de las imágenes */
-  --color-cronos-600: #238636;   /* Verde más oscuro */
+  --color-cronos-500: #2458cb;   /* Verde principal de las imágenes */
+  --color-cronos-600: #1e4ba3;   /* Verde más oscuro */
   --color-cronos-700: #1a6b2b;
   --color-cronos-800: #165a24;
   --color-cronos-900: #14401d;
@@ -155,8 +155,8 @@
   --color-background: var(--color-dark-975);      /* Fondo principal más oscuro */
   --color-surface: var(--color-dark-950);         /* Superficies elevadas */
   --color-surface-secondary: var(--color-dark-925); /* Fondos de cards */
-  --color-surface-tertiary: #21262d;              /* Hover states y contraste medio */
-  --color-surface-quaternary: #2d333b;            /* Bordes y divisores */
+  --color-surface-tertiary: #1e1e1e;              /* Hover states y contraste medio */
+  --color-surface-quaternary: #2a2a2a;            /* Bordes y divisores */
   
   /* OVERLAY - Para modales y dropdowns */
   --color-overlay: color-mix(in srgb, var(--color-dark-975) 80%, transparent);
@@ -170,10 +170,10 @@
   --color-text-inverse: var(--color-dark-975); /* Texto en fondos claros */
 
   /* BORDES - Sutiles pero definidos */
-  --color-border-primary: #30363d;     /* Bordes principales */
-  --color-border-secondary: #21262d;   /* Bordes más sutiles */
+  --color-border-primary: #2a2a2a;     /* Bordes principales */
+  --color-border-secondary: #1e1e1e;   /* Bordes más sutiles */
   --color-border-focus: var(--color-cronos-500); /* Estados de foco */
-  --color-border-hover: #484f58;       /* Estados de hover */
+  --color-border-hover: #3a3a3a;       /* Estados de hover */
 
   /* ESTADOS SEMÁNTICOS */
   --color-success: var(--color-cronos-500);
@@ -461,7 +461,7 @@
   background: var(--color-border-hover);
 }
 
-/* ANIMACIONES PARA GRÁFICOS Y DATOS */
+/* GRÁFICOS PARA GRÁFICOS Y DATOS */
 @keyframes cronos-pulse {
   0%, 100% {
     opacity: 1;
@@ -488,6 +488,416 @@
   50% {
     transform: translateY(0);
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes cronos-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   ESTILOS PARA GRÁFICOS Y CHARTS
+   ========================================================================== */
+
+/* DONUT CHARTS - Gráficos circulares como en la imagen */
+.cronos-donut-chart {
+  position: relative;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--color-cronos-500) 0deg 130deg,
+    var(--color-blue-600) 130deg 180deg,
+    var(--color-orange-500) 180deg 220deg,
+    var(--color-purple-500) 220deg 260deg,
+    var(--color-yellow-500) 260deg 290deg,
+    var(--color-red-500) 290deg 320deg,
+    var(--color-gray-600) 320deg 360deg
+  );
+}
+
+.cronos-donut-chart::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  background-color: var(--color-surface-secondary);
+  border-radius: 50%;
+}
+
+/* PRODUCTIVITY DONUT - Gráfico de productividad específico */
+.cronos-productivity-donut {
+  background: conic-gradient(
+    var(--color-cronos-500) 0deg 310deg,
+    var(--color-red-500) 310deg 332deg,
+    var(--color-gray-600) 332deg 360deg
+  );
+}
+
+/* PROJECTS DONUT - Gráfico de proyectos específico */
+.cronos-projects-donut {
+  background: conic-gradient(
+    var(--color-orange-500) 0deg 200deg,
+    var(--color-gray-600) 200deg 240deg,
+    var(--color-purple-500) 240deg 250deg,
+    var(--color-purple-600) 250deg 260deg,
+    var(--color-gray-500) 260deg 360deg
+  );
+}
+
+/* BAR CHARTS - Gráficos de barras */
+.cronos-bar-chart {
+  display: flex;
+  align-items: end;
+  gap: 4px;
+  height: 120px;
+  padding: 1rem;
+}
+
+.cronos-bar {
+  flex: 1;
+  min-width: 12px;
+  border-radius: 2px 2px 0 0;
+  transition: var(--transition-transform);
+  position: relative;
+}
+
+.cronos-bar:hover {
+  transform: scaleY(1.1);
+}
+
+/* WEEKDAY BARS - Barras azules para días de la semana */
+.cronos-weekday-bar {
+  background: linear-gradient(
+    to top,
+    var(--color-blue-700),
+    var(--color-blue-500)
+  );
+}
+
+/* HOURLY BARS - Barras verdes para horas del día */
+.cronos-hourly-bar {
+  background: linear-gradient(
+    to top,
+    var(--color-cronos-700),
+    var(--color-cronos-500)
+  );
+}
+
+/* CHART CONTAINER */
+.cronos-chart-container {
+  background-color: var(--color-surface-secondary);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  border: 1px solid var(--color-border-secondary);
+}
+
+/* STATS CARDS */
+.cronos-stats-card {
+  background-color: var(--color-surface-secondary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  transition: var(--transition-colors), var(--transition-shadow);
+}
+
+.cronos-stats-card:hover {
+  background-color: var(--color-surface-tertiary);
+  box-shadow: var(--shadow-lg);
+}
+
+/* METRIC NUMBERS */
+.cronos-metric-primary {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.cronos-metric-secondary {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+/* PERCENTAGE INDICATORS */
+.cronos-percentage {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-cronos-500);
+}
+
+.cronos-percentage.warning {
+  color: var(--color-orange-500);
+}
+
+.cronos-percentage.danger {
+  color: var(--color-red-500);
+}
+
+/* SIDEBAR STYLING ESPECÍFICO PARA LA IMAGEN */
+.cronos-sidebar {
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border-primary);
+  width: 240px;
+  height: 100vh;
+  padding: 1rem;
+}
+
+.cronos-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  transition: var(--transition-colors);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cronos-sidebar-item:hover {
+  background-color: var(--color-surface-tertiary);
+  color: var(--color-text-primary);
+}
+
+.cronos-sidebar-item.active {
+  background-color: var(--color-blue-600);
+  color: white;
+}
+
+.cronos-sidebar-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* PROJECT INDICATORS */
+.cronos-project-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cronos-project-indicator.orange {
+  background-color: var(--color-orange-500);
+}
+
+.cronos-project-indicator.purple {
+  background-color: var(--color-purple-500);
+}
+
+.cronos-project-indicator.pink {
+  background-color: #ec4899;
+}
+
+.cronos-project-indicator.blue {
+  background-color: var(--color-blue-600);
+}
+
+/* TOP APPLICATIONS LIST */
+.cronos-app-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cronos-app-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  transition: var(--transition-colors);
+}
+
+.cronos-app-item:hover {
+  background-color: var(--color-surface-tertiary);
+}
+
+.cronos-app-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.cronos-app-time {
+  margin-left: auto;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+/* HEADER NAVIGATION */
+.cronos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.cronos-header-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.cronos-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cronos-nav-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-tertiary);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  transition: var(--transition-colors);
+  cursor: pointer;
+  border: none;
+}
+
+.cronos-nav-button:hover {
+  background-color: var(--color-surface-quaternary);
+  color: var(--color-text-primary);
+}
+
+.cronos-nav-arrow {
+  width: 16px;
+  height: 16px;
+  transition: var(--transition-transform);
+}
+
+.cronos-nav-arrow:hover {
+  transform: scale(1.1);
+}
+
+/* TIME PERIOD SELECTOR */
+.cronos-period-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-surface-secondary);
+  border-radius: var(--radius-md);
+  padding: 0.25rem;
+}
+
+.cronos-period-button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  transition: var(--transition-colors);
+  cursor: pointer;
+  border: none;
+}
+
+.cronos-period-button.active {
+  background-color: var(--color-surface-quaternary);
+  color: var(--color-text-primary);
+}
+
+/* NOTIFICATION BADGE */
+.cronos-notification-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-tertiary);
+  color: var(--color-text-secondary);
+  transition: var(--transition-colors);
+  cursor: pointer;
+}
+
+.cronos-notification-badge:hover {
+  background-color: var(--color-surface-quaternary);
+  color: var(--color-text-primary);
+}
+
+.cronos-notification-badge::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-blue-600);
+  border-radius: 50%;
+  border: 2px solid var(--color-surface);
+}
+
+/* LAYOUT GRID PARA DASHBOARD */
+.cronos-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.cronos-dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cronos-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 1024px) {
+  .cronos-dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+  
+  .cronos-sidebar {
+    width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cronos-sidebar {
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-fixed);
+    flex-direction: row;
+    padding: 0.75rem;
+  }
+  
+  .cronos-dashboard-grid {
+    padding: 1rem;
+    gap: 1rem;
   }
 }
 
