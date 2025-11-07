@@ -23,7 +23,7 @@ export function TimerTabs({
                     <TabsTrigger
                         value="active"
                         className="flex items-center gap-2 px-6 py-2.5 rounded-md transition-all duration-200 
-                     data-[state=active]:bg-background data-[state=active]:shadow-md 
+                     timer-tab-active data-[state=active]:shadow-md 
                      data-[state=active]:text-foreground data-[state=active]:border 
                      data-[state=inactive]:text-muted-foreground hover:text-foreground"
                     >
@@ -37,7 +37,7 @@ export function TimerTabs({
                     <TabsTrigger
                         value="completed"
                         className="flex items-center gap-2 px-6 py-2.5 rounded-md transition-all duration-200
-                     data-[state=active]:bg-background data-[state=active]:shadow-md 
+                     timer-tab-active data-[state=active]:shadow-md 
                      data-[state=active]:text-foreground data-[state=active]:border
                      data-[state=inactive]:text-muted-foreground hover:text-foreground"
                     >
