@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Plus } from "lucide-react"
 import {
     useTimers,
     useStartTimer,
@@ -61,14 +62,16 @@ export function TimerContainer() {
         <>
             <div className="h-full">
                 <div className="flex items-center justify-between p-6 border-b">
-                    <div>
+                    <div className="flex-1 text-center">
                         <h1 className="text-2xl font-semibold">Mis Timers</h1>
-                        <p className="text-muted-foreground">
-                            Gestiona tus cronómetros y sesiones de trabajo
-                        </p>
                     </div>
-                    <Button onClick={handleCreateTimer}>
-                        Agregar timer
+                    <Button 
+                        onClick={handleCreateTimer} 
+                        size="icon" 
+                        variant="outline" 
+                        className="!rounded-xl bg-card text-card-foreground border shadow-sm"
+                    >
+                        <Plus className="h-4 w-4" />
                     </Button>
                 </div>
 
