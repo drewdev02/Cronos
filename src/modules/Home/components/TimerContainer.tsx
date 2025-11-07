@@ -13,11 +13,15 @@ import { TimerTabs, TimerTabContent } from "./TimerTabs"
 import { TimerEmptyState } from "./TimerEmptyState"
 import { CreateTimerDialog } from "./CreateTimerDialog"
 import { useState } from "react"
+import { useElectronTray } from "@/hooks/use-electron-tray"
 
 
 export function TimerContainer() {
     // Use Zustand store
     const timers = useTimers()
+    
+    // Electron tray integration
+    const { notifyTimerStarted, notifyTimerPaused, notifyTimerStopped, notifyTimerReset } = useElectronTray()
     
     // Estado local para el diálogo
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
@@ -31,6 +35,32 @@ export function TimerContainer() {
     const pauseTimer = usePauseTimer()
     const stopTimer = useStopTimer()
     const removeTimer = useRemoveTimer()
+
+    // Enhanced timer actions with Electron notifications
+    const handleStartTimer = (timerId: string) => {
+        const timer = timers.find(t => t.id === timerId)
+        if (timer) {
+          startTimer(timerId)
+          
+          // Notify with current time as start time
+          notifyTimerStarted({
+            id: timer.id,
+            title: timer.title,
+            startTime: Date.now(),
+            totalTime: timer.totalTime
+          })
+        }
+    }
+
+    const handlePauseTimer = (timerId: string) => {
+        pauseTimer(timerId)
+        notifyTimerPaused()
+    }
+
+    const handleStopTimer = (timerId: string) => {
+        stopTimer(timerId)
+        notifyTimerStopped()
+    }
 
     // Handle edit timer - placeholder for future implementation
     const handleEditTimer = (timerId: string) => {
@@ -88,9 +118,9 @@ export function TimerContainer() {
                         ) : (
                             <TimerGrid
                                 timers={activeTimers}
-                                onStartTimer={startTimer}
-                                onPauseTimer={pauseTimer}
-                                onStopTimer={stopTimer}
+                                onStartTimer={handleStartTimer}
+                                onPauseTimer={handlePauseTimer}
+                                onStopTimer={handleStopTimer}
                                 onEditTimer={handleEditTimer}
                                 onDeleteTimer={removeTimer}
                             />
@@ -103,9 +133,9 @@ export function TimerContainer() {
                         ) : (
                             <TimerGrid
                                 timers={completedTimers}
-                                onStartTimer={startTimer}
-                                onPauseTimer={pauseTimer}
-                                onStopTimer={stopTimer}
+                                onStartTimer={handleStartTimer}
+                                onPauseTimer={handlePauseTimer}
+                                onStopTimer={handleStopTimer}
                                 onEditTimer={handleEditTimer}
                                 onDeleteTimer={removeTimer}
                             />

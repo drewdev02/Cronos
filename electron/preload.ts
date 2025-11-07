@@ -18,9 +18,35 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     const [channel, ...omit] = args
     return ipcRenderer.invoke(channel, ...omit)
   },
+})
 
-  /* // Send timer state to main process for tray update
-  timerUpdate(state: any) {
-    ipcRenderer.send('timer-update', state);
-  } */
+// Expose timer-specific IPC functions
+contextBridge.exposeInMainWorld('electronAPI', {
+  // Send timer events to main process
+  timerStarted: (timerData: { id: string; title: string; startTime: number; totalTime: number }) => {
+    ipcRenderer.send('timer-started', timerData)
+  },
+  timerPaused: () => {
+    ipcRenderer.send('timer-paused')
+  },
+  timerStopped: () => {
+    ipcRenderer.send('timer-stopped')
+  },
+  timerReset: () => {
+    ipcRenderer.send('timer-reset')
+  },
+  
+  // Listen for tray events
+  onTrayPauseTimer: (callback: () => void) => {
+    ipcRenderer.on('tray-pause-timer', callback)
+  },
+  onTrayStopTimer: (callback: () => void) => {
+    ipcRenderer.on('tray-stop-timer', callback)
+  },
+  
+  // Remove listeners
+  removeTrayListeners: () => {
+    ipcRenderer.removeAllListeners('tray-pause-timer')
+    ipcRenderer.removeAllListeners('tray-stop-timer')
+  }
 })

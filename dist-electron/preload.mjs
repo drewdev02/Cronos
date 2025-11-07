@@ -17,8 +17,31 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
     const [channel, ...omit] = args;
     return electron.ipcRenderer.invoke(channel, ...omit);
   }
-  /* // Send timer state to main process for tray update
-  timerUpdate(state: any) {
-    ipcRenderer.send('timer-update', state);
-  } */
+});
+electron.contextBridge.exposeInMainWorld("electronAPI", {
+  // Send timer events to main process
+  timerStarted: (timerData) => {
+    electron.ipcRenderer.send("timer-started", timerData);
+  },
+  timerPaused: () => {
+    electron.ipcRenderer.send("timer-paused");
+  },
+  timerStopped: () => {
+    electron.ipcRenderer.send("timer-stopped");
+  },
+  timerReset: () => {
+    electron.ipcRenderer.send("timer-reset");
+  },
+  // Listen for tray events
+  onTrayPauseTimer: (callback) => {
+    electron.ipcRenderer.on("tray-pause-timer", callback);
+  },
+  onTrayStopTimer: (callback) => {
+    electron.ipcRenderer.on("tray-stop-timer", callback);
+  },
+  // Remove listeners
+  removeTrayListeners: () => {
+    electron.ipcRenderer.removeAllListeners("tray-pause-timer");
+    electron.ipcRenderer.removeAllListeners("tray-stop-timer");
+  }
 });

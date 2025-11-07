@@ -8,3 +8,6 @@
 // Timer types
 export * from './timer'
 
+// Electron types
+export * from './electron'
+
