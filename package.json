@@ -1,7 +1,7 @@
 {
   "name": "cronos",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0-beta",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
@@ -10,7 +10,12 @@
     "dist": "npm run build && electron-builder",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "drizzle:generate": "drizzle-kit generate:sqlite --out ./drizzle"
+    "drizzle:generate": "drizzle-kit generate:sqlite --out ./drizzle",
+    "release": "./scripts/release.sh",
+    "release:patch": "./scripts/release.sh patch",
+    "release:minor": "./scripts/release.sh minor",
+    "release:major": "./scripts/release.sh major",
+    "pre-release": "./scripts/pre-release.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -93,7 +98,26 @@
         "zip"
       ],
       "category": "public.app-category.productivity",
-      "artifactName": "Cronos-${version}.${ext}"
+      "artifactName": "Cronos-${version}-mac.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "artifactName": "Cronos-${version}-linux.${ext}"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "artifactName": "Cronos-${version}-win.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   }
 }

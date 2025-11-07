@@ -1,0 +1,65 @@
+name: Pre-release
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pre-release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Get version
+        id: version
+        run: |
+          echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+          echo "short_sha=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_OUTPUT
+
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release: true
+          build_script_name: build
+
+        env:
+          # Create pre-release
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create pre-release
+        if: matrix.os == 'ubuntu-latest'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.version }}-pre.${{ steps.version.outputs.short_sha }}
+          name: Pre-release v${{ steps.version.outputs.version }}-pre.${{ steps.version.outputs.short_sha }}
+          body: |
+            Pre-release build from develop branch
+            
+            **Changes:**
+            - Automatic build from commit ${{ github.sha }}
+            
+            **Note:** This is a pre-release version and may contain bugs.
+          draft: false
+          prerelease: true
+          files: release/**/*

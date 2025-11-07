@@ -21,7 +21,7 @@ export function TimerContainer() {
     const timers = useTimers()
     
     // Electron tray integration
-    const { notifyTimerStarted, notifyTimerPaused, notifyTimerStopped, notifyTimerReset } = useElectronTray()
+    const { notifyTimerStarted, notifyTimerPaused, notifyTimerStopped } = useElectronTray()
     
     // Estado local para el diálogo
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
