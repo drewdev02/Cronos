@@ -93,7 +93,7 @@ app.on('activate', () => {
 
 app.whenReady().then(() => {
   createWindow();
-  createTray();
+  //createTray();
 })
 
 function createTray() {

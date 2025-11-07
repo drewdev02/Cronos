@@ -19,8 +19,8 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     return ipcRenderer.invoke(channel, ...omit)
   },
 
-  // Send timer state to main process for tray update
+  /* // Send timer state to main process for tray update
   timerUpdate(state: any) {
     ipcRenderer.send('timer-update', state);
-  }
+  } */
 })

@@ -16,9 +16,9 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
   invoke(...args) {
     const [channel, ...omit] = args;
     return electron.ipcRenderer.invoke(channel, ...omit);
-  },
-  // Send timer state to main process for tray update
-  timerUpdate(state) {
-    electron.ipcRenderer.send("timer-update", state);
   }
+  /* // Send timer state to main process for tray update
+  timerUpdate(state: any) {
+    ipcRenderer.send('timer-update', state);
+  } */
 });

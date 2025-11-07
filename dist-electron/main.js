@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, nativeImage, Menu, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -8,7 +8,6 @@ const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
 let win;
-let tray = null;
 let timerState = {
   isRunning: false,
   taskName: "",
@@ -53,27 +52,13 @@ app.on("activate", () => {
 });
 app.whenReady().then(() => {
   createWindow();
-  createTray();
 });
-function createTray() {
-  tray = new Tray(nativeImage.createEmpty());
-  updateTrayMenu();
-}
 function updateTrayMenu() {
-  let label = "Cronos";
   if (timerState.isRunning) {
-    label = `${timerState.elapsedTime} - ${timerState.taskName}`;
+    `${timerState.elapsedTime} - ${timerState.taskName}`;
   } else if (timerState.status === "paused") {
-    label = `⏸ ${timerState.elapsedTime} - ${timerState.taskName}`;
+    `⏸ ${timerState.elapsedTime} - ${timerState.taskName}`;
   }
-  tray == null ? void 0 : tray.setTitle(label);
-  tray == null ? void 0 : tray.setToolTip("Cronos Timer");
-  tray == null ? void 0 : tray.setContextMenu(Menu.buildFromTemplate([
-    { label, enabled: false },
-    { type: "separator" },
-    { label: "Abrir Cronos", click: () => win == null ? void 0 : win.show() },
-    { label: "Salir", click: () => app.quit() }
-  ]));
 }
 ipcMain.on("timer-update", (_event, state) => {
   timerState = state;
