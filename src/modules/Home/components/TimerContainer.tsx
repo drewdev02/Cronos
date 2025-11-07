@@ -1,15 +1,3 @@
-import { IconBell } from "@tabler/icons-react"
-import { RefreshCcwIcon } from "lucide-react"
-
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-} from "@/components/ui/empty"
-
 import { Button } from "@/components/ui/button"
 import {
     useTimers,
@@ -19,7 +7,10 @@ import {
     useRemoveTimer,
     useCreateExampleTimer
 } from "@/stores/timer-store"
+import { TimerStatus } from "@/types/timer"
 import { TimerGrid } from "./TimerGrid"
+import { TimerTabs, TimerTabContent } from "./TimerTabs"
+import { TimerEmptyState } from "./TimerEmptyState"
 
 
 export function TimerContainer() {
@@ -27,6 +18,9 @@ export function TimerContainer() {
     const timers = useTimers()
     console.debug({ timers });
 
+    // Filtrar timers por estado
+    const completedTimers = timers.filter(timer => timer.status === TimerStatus.COMPLETED)
+    const activeTimers = timers.filter(timer => timer.status !== TimerStatus.COMPLETED)
 
     // Individual action hooks
     const startTimer = useStartTimer()
@@ -43,23 +37,10 @@ export function TimerContainer() {
 
     if (timers.length === 0) {
         return (
-            <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
-                <EmptyHeader>
-                    <EmptyMedia variant="icon">
-                        <IconBell />
-                    </EmptyMedia>
-                    <EmptyTitle>No hay timers</EmptyTitle>
-                    <EmptyDescription>
-                        No tienes timers creados. Crea tu primer timer para comenzar.
-                    </EmptyDescription>
-                </EmptyHeader>
-                <EmptyContent>
-                    <Button onClick={createExampleTimer} variant="outline" size="sm">
-                        <RefreshCcwIcon />
-                        Crear timer de ejemplo
-                    </Button>
-                </EmptyContent>
-            </Empty>
+            <TimerEmptyState
+                variant="no-timers"
+                onCreateExample={createExampleTimer}
+            />
         )
     }
 
@@ -77,14 +58,43 @@ export function TimerContainer() {
                 </Button>
             </div>
 
-            <TimerGrid
-                timers={timers}
-                onStartTimer={startTimer}
-                onPauseTimer={pauseTimer}
-                onStopTimer={stopTimer}
-                onEditTimer={handleEditTimer}
-                onDeleteTimer={removeTimer}
-            />
+            <TimerTabs
+                activeCount={activeTimers.length}
+                completedCount={completedTimers.length}
+            >
+                <TimerTabContent value="active">
+                    {activeTimers.length === 0 ? (
+                        <TimerEmptyState
+                            variant="no-active"
+                            onCreateExample={createExampleTimer}
+                        />
+                    ) : (
+                        <TimerGrid
+                            timers={activeTimers}
+                            onStartTimer={startTimer}
+                            onPauseTimer={pauseTimer}
+                            onStopTimer={stopTimer}
+                            onEditTimer={handleEditTimer}
+                            onDeleteTimer={removeTimer}
+                        />
+                    )}
+                </TimerTabContent>
+
+                <TimerTabContent value="completed">
+                    {completedTimers.length === 0 ? (
+                        <TimerEmptyState variant="no-completed" />
+                    ) : (
+                        <TimerGrid
+                            timers={completedTimers}
+                            onStartTimer={startTimer}
+                            onPauseTimer={pauseTimer}
+                            onStopTimer={stopTimer}
+                            onEditTimer={handleEditTimer}
+                            onDeleteTimer={removeTimer}
+                        />
+                    )}
+                </TimerTabContent>
+            </TimerTabs>
         </div>
     )
 }

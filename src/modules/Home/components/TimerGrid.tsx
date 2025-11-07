@@ -1,5 +1,6 @@
 import { useTimers } from "@/stores/timer-store"
 import { TimerCard } from "./TimerCard"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface TimerGridProps {
     timers: ReturnType<typeof useTimers>
@@ -19,18 +20,20 @@ export function TimerGrid({
     onDeleteTimer
 }: TimerGridProps) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
-            {timers.map((timer) => (
-                <TimerCard
-                    key={timer.id}
-                    timer={timer}
-                    onStartTimer={onStartTimer}
-                    onPauseTimer={onPauseTimer}
-                    onStopTimer={onStopTimer}
-                    onEditTimer={onEditTimer}
-                    onDeleteTimer={onDeleteTimer}
-                />
-            ))}
-        </div>
+        <ScrollArea className="h-full w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
+                {timers.map((timer) => (
+                    <TimerCard
+                        key={timer.id}
+                        timer={timer}
+                        onStartTimer={onStartTimer}
+                        onPauseTimer={onPauseTimer}
+                        onStopTimer={onStopTimer}
+                        onEditTimer={onEditTimer}
+                        onDeleteTimer={onDeleteTimer}
+                    />
+                ))}
+            </div>
+        </ScrollArea>
     )
 }
