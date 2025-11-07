@@ -20,7 +20,6 @@ interface TimerStore {
 
   // Helper actions
   createExampleTimer: () => void
-  getCurrentSessionDuration: (timerId: string) => number
   getTimerById: (timerId: string) => Timer | undefined
 
   // Bulk actions
@@ -45,16 +44,27 @@ export const useTimerStore = create<TimerStore>()(
         // Internal actions for timer management
         startTimerInterval: (timerId) => {
           const { intervals, clearTimerInterval } = get()
-          
+
+          // Ensure intervals is a Map
+          if (!(intervals instanceof Map)) {
+            console.warn('Intervals is not a Map, reinitializing...')
+            set(
+              (state) => ({ ...state, intervals: new Map() }),
+              false,
+              'reinitializeMap'
+            )
+            return
+          }
+
           // Limpiar intervalo existente si existe
           clearTimerInterval(timerId)
-          
+
           // Crear nuevo intervalo que actualiza el store cada segundo
           const interval = setInterval(() => {
             set(
               (state) => ({
                 ...state,
-                timers: state.timers.map(timer => 
+                timers: state.timers.map(timer =>
                   timer.id === timerId && timer.status === TimerStatus.RUNNING
                     ? { ...timer, updatedAt: new Date() } // Forzar actualización
                     : timer
@@ -64,10 +74,10 @@ export const useTimerStore = create<TimerStore>()(
               'timerInterval'
             )
           }, 1000)
-          
+
           // Guardar referencia del intervalo
           intervals.set(timerId, interval)
-          
+
           set(
             (state) => ({ ...state, intervals: new Map(intervals) }),
             false,
@@ -77,12 +87,24 @@ export const useTimerStore = create<TimerStore>()(
 
         clearTimerInterval: (timerId) => {
           const { intervals } = get()
+
+          // Ensure intervals is a Map
+          if (!(intervals instanceof Map)) {
+            console.warn('Intervals is not a Map, reinitializing...')
+            set(
+              (state) => ({ ...state, intervals: new Map() }),
+              false,
+              'reinitializeMap'
+            )
+            return
+          }
+
           const interval = intervals.get(timerId)
-          
+
           if (interval) {
             clearInterval(interval)
             intervals.delete(timerId)
-            
+
             set(
               (state) => ({ ...state, intervals: new Map(intervals) }),
               false,
@@ -93,11 +115,22 @@ export const useTimerStore = create<TimerStore>()(
 
         clearAllIntervals: () => {
           const { intervals } = get()
-          
+
+          // Ensure intervals is a Map
+          if (!(intervals instanceof Map)) {
+            console.warn('Intervals is not a Map, reinitializing...')
+            set(
+              (state) => ({ ...state, intervals: new Map() }),
+              false,
+              'reinitializeMap'
+            )
+            return
+          }
+
           // Limpiar todos los intervalos
           intervals.forEach((interval) => clearInterval(interval))
           intervals.clear()
-          
+
           set(
             (state) => ({ ...state, intervals: new Map() }),
             false,
@@ -129,7 +162,7 @@ export const useTimerStore = create<TimerStore>()(
 
         removeTimer: (timerId) => {
           const { clearTimerInterval } = get()
-          
+
           // Limpiar el intervalo si existe antes de remover el timer
           clearTimerInterval(timerId)
 
@@ -280,7 +313,7 @@ export const useTimerStore = create<TimerStore>()(
 
         resetTimer: (timerId) => {
           const { clearTimerInterval } = get()
-          
+
           // Limpiar el intervalo si existe
           clearTimerInterval(timerId)
 
@@ -323,17 +356,6 @@ export const useTimerStore = create<TimerStore>()(
           addTimer(exampleTimer)
         },
 
-        getCurrentSessionDuration: (timerId) => {
-          const { timers } = get()
-          const timer = timers.find(t => t.id === timerId)
-
-          if (!timer || timer.status !== TimerStatus.RUNNING || !timer.currentSessionStart) {
-            return 0
-          }
-
-          return Date.now() - timer.currentSessionStart.getTime()
-        },
-
         getTimerById: (timerId) => {
           const { timers } = get()
           return timers.find(t => t.id === timerId)
@@ -342,7 +364,7 @@ export const useTimerStore = create<TimerStore>()(
         // Bulk actions
         clearAllTimers: () => {
           const { clearAllIntervals } = get()
-          
+
           // Limpiar todos los intervalos antes de limpiar los timers
           clearAllIntervals()
 
@@ -360,7 +382,7 @@ export const useTimerStore = create<TimerStore>()(
 
         importTimers: (timers) => {
           const { clearAllIntervals, startTimerInterval } = get()
-          
+
           // Limpiar todos los intervalos existentes
           clearAllIntervals()
 
@@ -404,7 +426,7 @@ export const useTimerStore = create<TimerStore>()(
           getItem: (name) => {
             const str = localStorage.getItem(name)
             if (!str) return null
-            
+
             try {
               const state = JSON.parse(str)
               // Convert date strings back to Date objects
@@ -421,6 +443,10 @@ export const useTimerStore = create<TimerStore>()(
                   }))
                 }))
               }
+              // Ensure intervals is always a Map
+              if (state.state) {
+                state.state.intervals = new Map()
+              }
               return state
             } catch (error) {
               console.error('Error parsing stored timer data:', error)
@@ -436,12 +462,18 @@ export const useTimerStore = create<TimerStore>()(
         },
         // Callback after rehydration to restart intervals for running timers
         onRehydrateStorage: () => (state) => {
-          if (state?.timers) {
-            state.timers.forEach(timer => {
-              if (timer.status === TimerStatus.RUNNING) {
-                state.startTimerInterval(timer.id)
-              }
-            })
+          if (state) {
+            // Ensure intervals is a Map after rehydration
+            state.intervals = new Map()
+
+            // Restart intervals for running timers
+            if (state.timers) {
+              state.timers.forEach(timer => {
+                if (timer.status === TimerStatus.RUNNING) {
+                  state.startTimerInterval(timer.id)
+                }
+              })
+            }
           }
         }
       }
@@ -467,7 +499,7 @@ export const useCreateExampleTimer = () => useTimerStore(state => state.createEx
 export const useClearAllTimers = () => useTimerStore(state => state.clearAllTimers)
 
 export const useTimerById = (timerId: string) =>
-  useTimerStore(state => state.timers.find(t => t.id === timerId))
+  useTimerStore(state => state.getTimerById(timerId))
 
 export const useRunningTimers = () =>
   useTimerStore(state => state.timers.filter(t => t.status === TimerStatus.RUNNING))
