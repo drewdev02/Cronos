@@ -33,8 +33,17 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
 
   const handleAddTag = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && newTag.trim() && !tags.includes(newTag.trim())) {
+      e.preventDefault()
       setTags([...tags, newTag.trim()])
       setNewTag("")
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      const syntheticEvent = { preventDefault: () => {} } as React.FormEvent
+      handleSubmit(syntheticEvent)
     }
   }
 
@@ -43,6 +52,8 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log("Submitting form...");
+    
     e.preventDefault()
     
     if (!title.trim()) {
@@ -110,6 +121,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="dialog-input h-11"
               required
             />
@@ -121,6 +133,13 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault()
+                  const syntheticEvent = { preventDefault: () => {} } as React.FormEvent
+                  handleSubmit(syntheticEvent)
+                }
+              }}
               className="dialog-input resize-none min-h-[90px]"
               rows={3}
             />
@@ -167,7 +186,6 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
           <Button
             type="submit"
             onClick={handleSubmit}
-            disabled={isLoading || !title.trim()}
             className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm h-11 px-8"
           >
             {isLoading ? "Creando..." : "Crear timer"}
