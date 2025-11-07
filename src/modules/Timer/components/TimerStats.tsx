@@ -1,7 +1,7 @@
 import { Timer } from "@/types/timer"
 import { CardContent } from "@/components/ui/card"
 import { ClockIcon, CalendarIcon } from "lucide-react"
-import { formatDate, formatDuration, getTotalTimeIncludingCurrent } from "@/modules/Home/utils"
+import { formatDate, formatDuration, getTotalTimeIncludingCurrent } from "@/modules/Timer/utils"
 
 interface TimerStatsProps {
     timer: Timer

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import {useState, useEffect} from "react"
 import {
     Dialog,
     DialogContent,
@@ -6,15 +6,15 @@ import {
     DialogTitle,
     DialogFooter
 } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { X } from "lucide-react"
-import { useUpdateTimer, useTimerById } from "@/stores/timer-store"
-import { Timer, TimerStatus } from "@/types/timer"
-import { toast } from "sonner"
+import {Button} from "@/components/ui/button"
+import {Input} from "@/components/ui/input"
+import {Label} from "@/components/ui/label"
+import {Textarea} from "@/components/ui/textarea"
+import {Badge} from "@/components/ui/badge"
+import {X} from "lucide-react"
+import {useUpdateTimer, useTimerById} from "@/stores/timer-store"
+import {Timer, TimerStatus} from "@/types/timer"
+import {toast} from "sonner"
 
 // Utility functions for time conversion
 const millisecondsToTime = (ms: number) => {
@@ -22,7 +22,7 @@ const millisecondsToTime = (ms: number) => {
     const hours = Math.floor(totalSeconds / 3600)
     const minutes = Math.floor((totalSeconds % 3600) / 60)
     const seconds = totalSeconds % 60
-    return { hours, minutes, seconds }
+    return {hours, minutes, seconds}
 }
 
 const timeToMilliseconds = (hours: number, minutes: number, seconds: number) => {
@@ -35,7 +35,7 @@ interface EditTimerDialogProps {
     timerId: string | null
 }
 
-export function EditTimerDialog({ open, onOpenChange, timerId }: EditTimerDialogProps) {
+export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogProps) {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [tags, setTags] = useState<string[]>([])
@@ -77,7 +77,10 @@ export function EditTimerDialog({ open, onOpenChange, timerId }: EditTimerDialog
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault()
-            const syntheticEvent = { preventDefault: () => { } } as React.FormEvent
+            const syntheticEvent = {
+                preventDefault: () => {
+                }
+            } as React.FormEvent
             handleSubmit(syntheticEvent)
         }
     }
@@ -195,7 +198,7 @@ export function EditTimerDialog({ open, onOpenChange, timerId }: EditTimerDialog
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-xl max-w-xl" style={{ backgroundColor: '#1e1e1e' }}>
+            <DialogContent className="sm:max-w-xl max-w-xl" style={{backgroundColor: '#1e1e1e'}}>
                 <DialogHeader className="space-y-4 pb-6">
                     <DialogTitle className="text-xl font-medium">Editar timer</DialogTitle>
                 </DialogHeader>
@@ -222,7 +225,10 @@ export function EditTimerDialog({ open, onOpenChange, timerId }: EditTimerDialog
                             onKeyDown={(e) => {
                                 if (e.key === "Enter" && !e.shiftKey) {
                                     e.preventDefault()
-                                    const syntheticEvent = { preventDefault: () => { } } as React.FormEvent
+                                    const syntheticEvent = {
+                                        preventDefault: () => {
+                                        }
+                                    } as React.FormEvent
                                     handleSubmit(syntheticEvent)
                                 }
                             }}
@@ -244,14 +250,15 @@ export function EditTimerDialog({ open, onOpenChange, timerId }: EditTimerDialog
                         {tags.length > 0 && (
                             <div className="flex gap-2 flex-wrap mt-4">
                                 {tags.map((tag) => (
-                                    <Badge key={tag} variant="secondary" className="gap-1 bg-secondary hover:bg-secondary/80 text-secondary-foreground border-border/50">
+                                    <Badge key={tag} variant="secondary"
+                                           className="gap-1 bg-secondary hover:bg-secondary/80 text-secondary-foreground border-border/50">
                                         {tag}
                                         <button
                                             type="button"
                                             onClick={() => handleRemoveTag(tag)}
                                             className="hover:text-destructive transition-colors"
                                         >
-                                            <X className="h-3 w-3" />
+                                            <X className="h-3 w-3"/>
                                         </button>
                                     </Badge>
                                 ))}
@@ -315,7 +322,8 @@ export function EditTimerDialog({ open, onOpenChange, timerId }: EditTimerDialog
                             </div>
                         </div>
                         <div className="text-xs text-muted-foreground mt-2">
-                            Tiempo total: {String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+                            Tiempo
+                            total: {String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
                         </div>
 
                         {/* Quick time buttons */}
@@ -370,8 +378,10 @@ export function EditTimerDialog({ open, onOpenChange, timerId }: EditTimerDialog
                         </div>
 
                         {timer?.status === TimerStatus.RUNNING && (
-                            <div className="text-xs text-amber-500 mt-2 bg-amber-50 dark:bg-amber-950/20 p-2 rounded border">
-                                ⚠️ Este timer está en ejecución. No podrás cambiar el tiempo hasta que lo pauses o detengas.
+                            <div
+                                className="text-xs text-amber-500 mt-2 bg-amber-50 dark:bg-amber-950/20 p-2 rounded border">
+                                ⚠️ Este timer está en ejecución. No podrás cambiar el tiempo hasta que lo pauses o
+                                detengas.
                             </div>
                         )}
                     </div>

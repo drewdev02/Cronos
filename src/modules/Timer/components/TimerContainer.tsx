@@ -14,16 +14,16 @@ import { TimerEmptyState } from "./TimerEmptyState"
 import { CreateTimerDialog } from "./CreateTimerDialog"
 import { EditTimerDialog } from "./EditTimerDialog"
 import { useState } from "react"
-import { useElectronTray } from "@/hooks/use-electron-tray"
+import { useElectronTray } from "@/modules/Timer/hooks/use-electron-tray.ts"
 
 
 export function TimerContainer() {
     // Use Zustand store
     const timers = useTimers()
-    
+
     // Electron tray integration
     const { notifyTimerStarted, notifyTimerPaused, notifyTimerStopped } = useElectronTray()
-    
+
     // Estado local para los diálogos
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
@@ -44,7 +44,7 @@ export function TimerContainer() {
         const timer = timers.find(t => t.id === timerId)
         if (timer) {
           startTimer(timerId)
-          
+
           // Notify with current time as start time
           notifyTimerStarted({
             id: timer.id,
@@ -103,10 +103,10 @@ export function TimerContainer() {
                     <div className="flex-1 text-center">
                         <h1 className="text-2xl font-semibold">Mis Timers</h1>
                     </div>
-                    <Button 
-                        onClick={handleCreateTimer} 
-                        size="icon" 
-                        variant="outline" 
+                    <Button
+                        onClick={handleCreateTimer}
+                        size="icon"
+                        variant="outline"
                         className="!rounded-xl bg-card text-card-foreground border shadow-sm"
                     >
                         <Plus className="h-4 w-4" />

@@ -1,7 +1,7 @@
-import { Home } from "./modules/Home";
+import { Home } from "./modules/Timer";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "next-themes";
-import { useTimerTrayIntegration } from "@/hooks/use-timer-tray-integration";
+import { useTimerTrayIntegration } from "@/modules/Timer/hooks/use-timer-tray-integration.ts";
 
 export default function App() {
   // Initialize tray integration
