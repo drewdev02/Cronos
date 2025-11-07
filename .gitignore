@@ -52,3 +52,4 @@ Desktop.ini
 *.pem
 *.crt
 *.key
+dist-electron

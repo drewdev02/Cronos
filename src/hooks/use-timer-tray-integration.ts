@@ -15,8 +15,8 @@ export const useTimerTrayIntegration = () => {
   useEffect(() => {
     // Find currently running timer
     const runningTimer = timers.find(timer => timer.status === TimerStatus.RUNNING)
-    
-    if (runningTimer && runningTimer.currentSessionStart) {
+
+    if (runningTimer?.currentSessionStart) {
       // Notify Electron about the running timer
       notifyTimerStarted({
         id: runningTimer.id,
