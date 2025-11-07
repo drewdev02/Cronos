@@ -5,6 +5,7 @@ import { Timer, TimerStatus } from '@/types/timer'
 interface TimerStore {
   // State
   timers: Timer[]
+  intervals: Map<string, NodeJS.Timeout> // Para manejar los intervalos de cada timer
 
   // Actions
   addTimer: (timer: Omit<Timer, 'id' | 'createdAt' | 'updatedAt'>) => void
@@ -26,6 +27,11 @@ interface TimerStore {
   clearAllTimers: () => void
   exportTimers: () => Timer[]
   importTimers: (timers: Timer[]) => void
+
+  // Internal actions for timer management
+  startTimerInterval: (timerId: string) => void
+  clearTimerInterval: (timerId: string) => void
+  clearAllIntervals: () => void
 }
 
 export const useTimerStore = create<TimerStore>()(
@@ -34,6 +40,70 @@ export const useTimerStore = create<TimerStore>()(
       (set, get) => ({
         // Initial state
         timers: [],
+        intervals: new Map<string, NodeJS.Timeout>(),
+
+        // Internal actions for timer management
+        startTimerInterval: (timerId) => {
+          const { intervals, clearTimerInterval } = get()
+          
+          // Limpiar intervalo existente si existe
+          clearTimerInterval(timerId)
+          
+          // Crear nuevo intervalo que actualiza el store cada segundo
+          const interval = setInterval(() => {
+            set(
+              (state) => ({
+                ...state,
+                timers: state.timers.map(timer => 
+                  timer.id === timerId && timer.status === TimerStatus.RUNNING
+                    ? { ...timer, updatedAt: new Date() } // Forzar actualización
+                    : timer
+                )
+              }),
+              false,
+              'timerInterval'
+            )
+          }, 1000)
+          
+          // Guardar referencia del intervalo
+          intervals.set(timerId, interval)
+          
+          set(
+            (state) => ({ ...state, intervals: new Map(intervals) }),
+            false,
+            'setInterval'
+          )
+        },
+
+        clearTimerInterval: (timerId) => {
+          const { intervals } = get()
+          const interval = intervals.get(timerId)
+          
+          if (interval) {
+            clearInterval(interval)
+            intervals.delete(timerId)
+            
+            set(
+              (state) => ({ ...state, intervals: new Map(intervals) }),
+              false,
+              'clearInterval'
+            )
+          }
+        },
+
+        clearAllIntervals: () => {
+          const { intervals } = get()
+          
+          // Limpiar todos los intervalos
+          intervals.forEach((interval) => clearInterval(interval))
+          intervals.clear()
+          
+          set(
+            (state) => ({ ...state, intervals: new Map() }),
+            false,
+            'clearAllIntervals'
+          )
+        },
 
         // Actions
         addTimer: (timerData) => {
@@ -58,8 +128,14 @@ export const useTimerStore = create<TimerStore>()(
         },
 
         removeTimer: (timerId) => {
+          const { clearTimerInterval } = get()
+          
+          // Limpiar el intervalo si existe antes de remover el timer
+          clearTimerInterval(timerId)
+
           set(
             (state) => ({
+              ...state,
               timers: state.timers.filter(timer => timer.id !== timerId)
             }),
             false,
@@ -83,13 +159,14 @@ export const useTimerStore = create<TimerStore>()(
 
         // Timer control actions
         startTimer: (timerId) => {
-          const { timers } = get()
+          const { timers, startTimerInterval } = get()
           const timer = timers.find(t => t.id === timerId)
 
           if (!timer || timer.status === TimerStatus.RUNNING) return
 
           set(
             (state) => ({
+              ...state,
               timers: state.timers.map(t =>
                 t.id === timerId
                   ? {
@@ -104,13 +181,19 @@ export const useTimerStore = create<TimerStore>()(
             false,
             'startTimer'
           )
+
+          // Iniciar el intervalo para actualizar el store cada segundo
+          startTimerInterval(timerId)
         },
 
         pauseTimer: (timerId) => {
-          const { timers } = get()
+          const { timers, clearTimerInterval } = get()
           const timer = timers.find(t => t.id === timerId)
 
           if (!timer || timer.status !== TimerStatus.RUNNING) return
+
+          // Limpiar el intervalo ya que el timer se pausa
+          clearTimerInterval(timerId)
 
           const now = new Date()
           const sessionDuration = timer.currentSessionStart
@@ -126,6 +209,7 @@ export const useTimerStore = create<TimerStore>()(
 
           set(
             (state) => ({
+              ...state,
               timers: state.timers.map(t =>
                 t.id === timerId
                   ? {
@@ -145,12 +229,15 @@ export const useTimerStore = create<TimerStore>()(
         },
 
         stopTimer: (timerId) => {
-          const { timers } = get()
+          const { timers, clearTimerInterval } = get()
           const timer = timers.find(t => t.id === timerId)
 
           if (!timer || (timer.status !== TimerStatus.RUNNING && timer.status !== TimerStatus.PAUSED)) {
             return
           }
+
+          // Limpiar el intervalo si existe
+          clearTimerInterval(timerId)
 
           const now = new Date()
           let sessionDuration = 0
@@ -172,6 +259,7 @@ export const useTimerStore = create<TimerStore>()(
 
           set(
             (state) => ({
+              ...state,
               timers: state.timers.map(t =>
                 t.id === timerId
                   ? {
@@ -191,8 +279,14 @@ export const useTimerStore = create<TimerStore>()(
         },
 
         resetTimer: (timerId) => {
+          const { clearTimerInterval } = get()
+          
+          // Limpiar el intervalo si existe
+          clearTimerInterval(timerId)
+
           set(
             (state) => ({
+              ...state,
               timers: state.timers.map(t =>
                 t.id === timerId
                   ? {
@@ -247,8 +341,13 @@ export const useTimerStore = create<TimerStore>()(
 
         // Bulk actions
         clearAllTimers: () => {
+          const { clearAllIntervals } = get()
+          
+          // Limpiar todos los intervalos antes de limpiar los timers
+          clearAllIntervals()
+
           set(
-            { timers: [] },
+            { timers: [], intervals: new Map() },
             false,
             'clearAllTimers'
           )
@@ -260,6 +359,11 @@ export const useTimerStore = create<TimerStore>()(
         },
 
         importTimers: (timers) => {
+          const { clearAllIntervals, startTimerInterval } = get()
+          
+          // Limpiar todos los intervalos existentes
+          clearAllIntervals()
+
           // Validate and clean up imported timers
           const validTimers = timers.filter(timer =>
             timer.id &&
@@ -279,10 +383,17 @@ export const useTimerStore = create<TimerStore>()(
           }))
 
           set(
-            { timers: validTimers },
+            { timers: validTimers, intervals: new Map() },
             false,
             'importTimers'
           )
+
+          // Reanudar intervalos para timers que están corriendo
+          validTimers.forEach(timer => {
+            if (timer.status === TimerStatus.RUNNING) {
+              startTimerInterval(timer.id)
+            }
+          })
         }
       }),
       {
@@ -321,6 +432,16 @@ export const useTimerStore = create<TimerStore>()(
           },
           removeItem: (name) => {
             localStorage.removeItem(name)
+          }
+        },
+        // Callback after rehydration to restart intervals for running timers
+        onRehydrateStorage: () => (state) => {
+          if (state?.timers) {
+            state.timers.forEach(timer => {
+              if (timer.status === TimerStatus.RUNNING) {
+                state.startTimerInterval(timer.id)
+              }
+            })
           }
         }
       }

@@ -2,18 +2,13 @@ import { Timer } from "@/types/timer"
 import { CardContent } from "@/components/ui/card"
 import { ClockIcon, CalendarIcon } from "lucide-react"
 import { formatDate, formatDuration, getTotalTimeIncludingCurrent } from "@/modules/Home/utils"
-import { useRealTimeTimer } from "../hooks/use-real-time-timer"
 
 interface TimerStatsProps {
     timer: Timer
 }
 
 export function TimerStats({ timer }: TimerStatsProps) {
-    // Force re-render every second for running timers
-    useRealTimeTimer(timer)
-
     const totalDisplayTime = getTotalTimeIncludingCurrent(timer)
-
     return (
         <CardContent className="space-y-4 !px-6 !py-4 flex-1">
             {/* Tiempo total destacado */}
