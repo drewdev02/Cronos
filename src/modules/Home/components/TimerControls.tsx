@@ -64,19 +64,22 @@ export function TimerControls({
 
             {/* Controles secundarios */}
             <div className="flex justify-between w-full opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => onEditTimer?.(timer.id)}
-                    className="text-xs"
-                >
-                    Editar
-                </Button>
+                {timer.status !== TimerStatus.RUNNING && (
+                    <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => onEditTimer?.(timer.id)}
+                        className="text-xs"
+                    >
+                        Editar
+                    </Button>
+                )}
                 <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => onDeleteTimer?.(timer.id)}
                     className="text-xs text-destructive hover:text-destructive"
+                    style={{ marginLeft: timer.status === TimerStatus.RUNNING ? 'auto' : undefined }}
                 >
                     Eliminar
                 </Button>

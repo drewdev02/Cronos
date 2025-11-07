@@ -1,155 +1,242 @@
-import { app as c, BrowserWindow as I, nativeImage as g, Tray as R, Menu as S, ipcMain as f } from "electron";
-import { fileURLToPath as P } from "node:url";
-import s from "node:path";
-const h = s.dirname(P(import.meta.url));
-process.env.APP_ROOT = s.join(h, "..");
-const v = process.env.VITE_DEV_SERVER_URL, j = s.join(process.env.APP_ROOT, "dist-electron"), C = s.join(process.env.APP_ROOT, "dist");
-process.env.VITE_PUBLIC = v ? s.join(process.env.APP_ROOT, "public") : C;
-let e, r = null, m = !1, i = null;
-function E() {
-  f.on("timer-started", (o, t) => {
-    i = {
-      id: t.id,
-      title: t.title,
-      startTime: t.startTime,
-      totalTime: t.totalTime
-    }, T(!0);
-    const n = Date.now() - t.startTime, u = t.totalTime + n, w = _(u), y = `${t.title} - ${w}`;
-    d(y), l || k();
-  }), f.on("timer-paused", () => {
-    i = null, d("Cronos"), T(!1), b();
-  }), f.on("timer-stopped", () => {
-    i = null, d("Cronos"), T(!1), b();
-  }), f.on("timer-reset", () => {
-    i = null, d("Cronos"), T(!1), b();
+import { app, BrowserWindow, nativeImage, Tray, Menu, ipcMain } from "electron";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+process.env.APP_ROOT = path.join(__dirname, "..");
+const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
+const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
+const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
+process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
+let win;
+let tray = null;
+let isQuitting = false;
+let currentRunningTimer = null;
+function setupIPC() {
+  ipcMain.on("timer-started", (_, timerData) => {
+    currentRunningTimer = {
+      id: timerData.id,
+      title: timerData.title,
+      startTime: timerData.startTime,
+      totalTime: timerData.totalTime
+    };
+    updateTrayMenu(true);
+    const currentTime = Date.now();
+    const sessionTime = currentTime - timerData.startTime;
+    const totalTime = timerData.totalTime + sessionTime;
+    const formattedTime = formatDuration(totalTime);
+    const title = `${timerData.title} - ${formattedTime}`;
+    updateTrayTitle(title);
+    if (!trayUpdateInterval) {
+      startTrayUpdateInterval();
+    }
+  });
+  ipcMain.on("timer-paused", () => {
+    currentRunningTimer = null;
+    updateTrayTitle("Cronos");
+    updateTrayMenu(false);
+    stopTrayUpdateInterval();
+  });
+  ipcMain.on("timer-stopped", () => {
+    currentRunningTimer = null;
+    updateTrayTitle("Cronos");
+    updateTrayMenu(false);
+    stopTrayUpdateInterval();
+  });
+  ipcMain.on("timer-reset", () => {
+    currentRunningTimer = null;
+    updateTrayTitle("Cronos");
+    updateTrayMenu(false);
+    stopTrayUpdateInterval();
   });
 }
-function _(o) {
-  const t = Math.floor(o / 1e3), a = Math.floor(t / 3600), n = Math.floor(t % 3600 / 60), u = t % 60;
-  return a > 0 ? `${a.toString().padStart(2, "0")}:${n.toString().padStart(2, "0")}:${u.toString().padStart(2, "0")}` : `${n.toString().padStart(2, "0")}:${u.toString().padStart(2, "0")}`;
+function formatDuration(milliseconds) {
+  const totalSeconds = Math.floor(milliseconds / 1e3);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor(totalSeconds % 3600 / 60);
+  const seconds = totalSeconds % 60;
+  if (hours > 0) {
+    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  }
+  return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 }
-function M() {
-  const o = g.createFromNamedImage("NSImageNameStopwatch", [16, 16]);
-  r = new R(o), r.setToolTip("Cronos - Timer App"), d("Cronos");
-  const t = S.buildFromTemplate([
+function createTray() {
+  const trayIcon = nativeImage.createFromNamedImage("NSImageNameStopwatch", [16, 16]);
+  tray = new Tray(trayIcon);
+  tray.setToolTip("Cronos - Timer App");
+  updateTrayTitle("Cronos");
+  const contextMenu = Menu.buildFromTemplate([
     {
       label: "Mostrar aplicación",
       click: () => {
-        e ? (e.show(), e.focus()) : p();
+        if (win) {
+          win.show();
+          win.focus();
+        } else {
+          createWindow();
+        }
       }
     },
     {
       label: "Pausar timer activo",
       id: "pause-timer",
-      enabled: !1,
+      enabled: false,
       click: () => {
-        e == null || e.webContents.send("tray-pause-timer");
+        win == null ? void 0 : win.webContents.send("tray-pause-timer");
       }
     },
     {
       label: "Detener timer activo",
       id: "stop-timer",
-      enabled: !1,
+      enabled: false,
       click: () => {
-        e == null || e.webContents.send("tray-stop-timer");
+        win == null ? void 0 : win.webContents.send("tray-stop-timer");
       }
     },
     { type: "separator" },
     {
       label: "Salir",
       click: () => {
-        m = !0, c.quit();
+        isQuitting = true;
+        app.quit();
       }
     }
   ]);
-  r.setContextMenu(t), r.on("click", () => {
-    e ? e.isVisible() ? e.hide() : (e.show(), e.focus()) : p();
+  tray.setContextMenu(contextMenu);
+  tray.on("click", () => {
+    if (win) {
+      if (win.isVisible()) {
+        win.hide();
+      } else {
+        win.show();
+        win.focus();
+      }
+    } else {
+      createWindow();
+    }
   });
 }
-function d(o = "Cronos") {
-  r && r.setTitle(o);
+function updateTrayTitle(title = "Cronos") {
+  if (tray) {
+    tray.setTitle(title);
+  }
 }
-function T(o) {
-  if (!r) return;
-  const t = S.buildFromTemplate([
+function updateTrayMenu(hasRunningTimer) {
+  if (!tray) return;
+  const contextMenu = Menu.buildFromTemplate([
     {
       label: "Mostrar aplicación",
       click: () => {
-        e ? (e.show(), e.focus()) : p();
+        if (win) {
+          win.show();
+          win.focus();
+        } else {
+          createWindow();
+        }
       }
     },
     {
       label: "Pausar timer activo",
       id: "pause-timer",
-      enabled: o,
+      enabled: hasRunningTimer,
       click: () => {
-        e == null || e.webContents.send("tray-pause-timer");
+        win == null ? void 0 : win.webContents.send("tray-pause-timer");
       }
     },
     {
       label: "Detener timer activo",
       id: "stop-timer",
-      enabled: o,
+      enabled: hasRunningTimer,
       click: () => {
-        e == null || e.webContents.send("tray-stop-timer");
+        win == null ? void 0 : win.webContents.send("tray-stop-timer");
       }
     },
     { type: "separator" },
     {
       label: "Salir",
       click: () => {
-        m = !0, c.quit();
+        isQuitting = true;
+        app.quit();
       }
     }
   ]);
-  r.setContextMenu(t);
+  tray.setContextMenu(contextMenu);
 }
-let l = null;
-function k() {
-  l && clearInterval(l), l = setInterval(() => {
-    if (i) {
-      const t = Date.now() - i.startTime, a = i.totalTime + t, n = _(a), u = `${i.title} - ${n}`;
-      d(u);
+let trayUpdateInterval = null;
+function startTrayUpdateInterval() {
+  if (trayUpdateInterval) {
+    clearInterval(trayUpdateInterval);
+  }
+  trayUpdateInterval = setInterval(() => {
+    if (currentRunningTimer) {
+      const currentTime = Date.now();
+      const sessionTime = currentTime - currentRunningTimer.startTime;
+      const totalTime = currentRunningTimer.totalTime + sessionTime;
+      const formattedTime = formatDuration(totalTime);
+      const title = `${currentRunningTimer.title} - ${formattedTime}`;
+      updateTrayTitle(title);
     }
   }, 1e3);
 }
-function b() {
-  l && (clearInterval(l), l = null);
+function stopTrayUpdateInterval() {
+  if (trayUpdateInterval) {
+    clearInterval(trayUpdateInterval);
+    trayUpdateInterval = null;
+  }
 }
-function p() {
-  e = new I({
+function createWindow() {
+  win = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: s.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
-      preload: s.join(h, "preload.mjs"),
-      nodeIntegration: !1,
-      contextIsolation: !0,
-      webSecurity: !0
+      preload: path.join(__dirname, "preload.mjs"),
+      nodeIntegration: false,
+      contextIsolation: true,
+      webSecurity: true
     }
-  }), e.on("close", (o) => {
-    if (!m)
-      return o.preventDefault(), e == null || e.hide(), !1;
-  }), e.webContents.on("did-finish-load", () => {
-    e == null || e.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
-  }), e.webContents.on("did-fail-load", (o, t, a, n) => {
-    console.error("Failed to load:", t, a, n);
-  }), v ? (e.loadURL(v), e.webContents.openDevTools()) : e.loadFile(s.join(C, "index.html"));
+  });
+  win.on("close", (event) => {
+    if (!isQuitting) {
+      event.preventDefault();
+      win == null ? void 0 : win.hide();
+      return false;
+    }
+  });
+  win.webContents.on("did-finish-load", () => {
+    win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
+  });
+  win.webContents.on("did-fail-load", (_event, errorCode, errorDescription, validatedURL) => {
+    console.error("Failed to load:", errorCode, errorDescription, validatedURL);
+  });
+  if (VITE_DEV_SERVER_URL) {
+    win.loadURL(VITE_DEV_SERVER_URL);
+    win.webContents.openDevTools();
+  } else {
+    win.loadFile(path.join(RENDERER_DIST, "index.html"));
+  }
 }
-c.on("window-all-closed", () => {
-  process.platform !== "darwin" && (m = !0, c.quit(), e = null);
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    isQuitting = true;
+    app.quit();
+    win = null;
+  }
 });
-c.on("before-quit", () => {
-  m = !0;
+app.on("before-quit", () => {
+  isQuitting = true;
 });
-c.on("activate", () => {
-  I.getAllWindows().length === 0 && p();
+app.on("activate", () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
+  }
 });
-c.whenReady().then(() => {
-  p(), M(), E();
+app.whenReady().then(() => {
+  createWindow();
+  createTray();
+  setupIPC();
 });
 export {
-  j as MAIN_DIST,
-  C as RENDERER_DIST,
-  v as VITE_DEV_SERVER_URL
+  MAIN_DIST,
+  RENDERER_DIST,
+  VITE_DEV_SERVER_URL
 };

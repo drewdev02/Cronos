@@ -12,6 +12,7 @@ import { TimerGrid } from "./TimerGrid"
 import { TimerTabs, TimerTabContent } from "./TimerTabs"
 import { TimerEmptyState } from "./TimerEmptyState"
 import { CreateTimerDialog } from "./CreateTimerDialog"
+import { EditTimerDialog } from "./EditTimerDialog"
 import { useState } from "react"
 import { useElectronTray } from "@/hooks/use-electron-tray"
 
@@ -23,8 +24,10 @@ export function TimerContainer() {
     // Electron tray integration
     const { notifyTimerStarted, notifyTimerPaused, notifyTimerStopped } = useElectronTray()
     
-    // Estado local para el diálogo
+    // Estado local para los diálogos
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [editingTimerId, setEditingTimerId] = useState<string | null>(null)
 
     // Filtrar timers por estado
     const completedTimers = timers.filter(timer => timer.status === TimerStatus.COMPLETED)
@@ -62,10 +65,10 @@ export function TimerContainer() {
         notifyTimerStopped()
     }
 
-    // Handle edit timer - placeholder for future implementation
+    // Handle edit timer
     const handleEditTimer = (timerId: string) => {
-        console.log('Edit timer:', timerId)
-        // Aquí implementarías la lógica para editar el timer
+        setEditingTimerId(timerId)
+        setIsEditDialogOpen(true)
     }
 
     // Handle create timer
@@ -83,6 +86,11 @@ export function TimerContainer() {
                 <CreateTimerDialog
                     open={isCreateDialogOpen}
                     onOpenChange={setIsCreateDialogOpen}
+                />
+                <EditTimerDialog
+                    open={isEditDialogOpen}
+                    onOpenChange={setIsEditDialogOpen}
+                    timerId={editingTimerId}
                 />
             </>
         )
@@ -146,6 +154,11 @@ export function TimerContainer() {
             <CreateTimerDialog
                 open={isCreateDialogOpen}
                 onOpenChange={setIsCreateDialogOpen}
+            />
+            <EditTimerDialog
+                open={isEditDialogOpen}
+                onOpenChange={setIsEditDialogOpen}
+                timerId={editingTimerId}
             />
         </>
     )
