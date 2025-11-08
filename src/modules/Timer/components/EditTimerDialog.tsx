@@ -11,8 +11,10 @@ import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import {Textarea} from "@/components/ui/textarea"
 import {Badge} from "@/components/ui/badge"
-import {X} from "lucide-react"
-import {useUpdateTimer, useTimerById} from "@/stores/timer-store"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {X, FolderIcon} from "lucide-react"
+import {useUpdateTimer, useTimerById, useUpdateTimerProject} from "@/stores/timer-store"
+import { useProjects } from "@/stores/project-store"
 import {Timer, TimerStatus} from "@/types/timer"
 import {toast} from "sonner"
 
@@ -38,6 +40,7 @@ interface EditTimerDialogProps {
 export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogProps) {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
+    const [projectId, setProjectId] = useState<string | undefined>(undefined)
     const [tags, setTags] = useState<string[]>([])
     const [newTag, setNewTag] = useState("")
     const [isLoading, setIsLoading] = useState(false)
@@ -48,13 +51,16 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
     const [seconds, setSeconds] = useState(0)
 
     const updateTimer = useUpdateTimer()
+    const updateTimerProject = useUpdateTimerProject()
     const timer = useTimerById(timerId || "")
+    const projects = useProjects()
 
     // Load timer data when dialog opens
     useEffect(() => {
         if (open && timer) {
             setTitle(timer.title)
             setDescription(timer.description || "")
+            setProjectId(timer.projectId)
             setTags(timer.config?.tags || [])
             setNewTag("")
 
@@ -157,6 +163,11 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
 
             updateTimer(timerId, updatedData)
 
+            // Update project separately if it changed
+            if (timer.projectId !== projectId) {
+                updateTimerProject(timerId, projectId)
+            }
+
             // Mostrar toast de éxito
             toast.success("Timer actualizado exitosamente", {
                 description: `"${title}" ha sido modificado`
@@ -179,6 +190,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
         if (timer) {
             setTitle(timer.title)
             setDescription(timer.description || "")
+            setProjectId(timer.projectId)
             setTags(timer.config?.tags || [])
 
             // Restore time values
@@ -235,6 +247,38 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                             className="dialog-input resize-none min-h-[90px]"
                             rows={3}
                         />
+                    </div>
+
+                    <div className="space-y-3">
+                        <Label htmlFor="project" className="text-sm font-medium">Proyecto</Label>
+                        <Select value={projectId || "no-project"} onValueChange={(value) => setProjectId(value === "no-project" ? undefined : value)}>
+                            <SelectTrigger className="dialog-input h-11">
+                                <SelectValue placeholder="Seleccionar proyecto (opcional)">
+                                    {projectId && projects.find(p => p.id === projectId) ? (
+                                        <div className="flex items-center gap-2">
+                                            <FolderIcon className="w-4 h-4" />
+                                            <span>{projects.find(p => p.id === projectId)?.name}</span>
+                                        </div>
+                                    ) : (
+                                        <span>Sin proyecto</span>
+                                    )}
+                                </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="no-project">Sin proyecto</SelectItem>
+                                {projects.map((project) => (
+                                    <SelectItem key={project.id} value={project.id}>
+                                        <div className="flex items-center gap-2">
+                                            <FolderIcon className="w-4 h-4" />
+                                            <span>{project.name}</span>
+                                            <span className="text-muted-foreground text-sm">
+                                                (${project.hourlyRate}/h)
+                                            </span>
+                                        </div>
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="space-y-3">

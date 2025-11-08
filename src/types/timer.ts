@@ -51,6 +51,8 @@ export interface Timer {
   title: string
   /** Descripción opcional más detallada */
   description?: string
+  /** ID del proyecto asociado (opcional) */
+  projectId?: string
   /** Fecha y hora cuando se creó el cronómetro */
   createdAt: Date
   /** Fecha y hora de la última actualización */
@@ -112,6 +114,7 @@ export type TimerAction =
   | { type: 'RESET' }
   | { type: 'UPDATE_TITLE'; payload: string }
   | { type: 'UPDATE_DESCRIPTION'; payload: string }
+  | { type: 'UPDATE_PROJECT'; payload: string | undefined }
   | { type: 'ADD_NOTES'; payload: { entryId: string; notes: string } }
   | { type: 'UPDATE_CONFIG'; payload: Partial<TimerConfig> }
 

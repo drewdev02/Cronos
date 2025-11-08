@@ -1,5 +1,3 @@
-import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import {
     useProjectStore,
     useRemoveProject,
@@ -7,11 +5,12 @@ import {
 } from "@/stores/project-store"
 import { useState, useMemo } from "react"
 import { Project } from "@/types/project"
+import { ProjectHeader } from "./ProjectHeader"
 import { ProjectEmptyState } from "./ProjectEmptyState"
 import { CreateProjectDialog } from "./CreateProjectDialog"
 import { EditProjectDialog } from "./EditProjectDialog"
 import { ProjectGrid } from "./ProjectGrid"
-import { ProjectHeader } from "./ProjectHeader"
+
 
 
 export function ProjectContainer() {
