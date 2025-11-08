@@ -5,7 +5,7 @@ import {
     useRemoveCustomer,
     useSelectCustomer
 } from "@/stores/customer-store"
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { Customer } from "@/types/customer"
 import { CustomerEmptyState } from "./CustomerEmptyState"
 import { CreateCustomerDialog } from "./CreateCustomerDialog"
@@ -18,7 +18,6 @@ export function CustomerContainer() {
     const {
         customers,
         selectedCustomer,
-        getFilteredCustomers,
     } = useCustomerStore()
 
     // Individual action hooks
@@ -29,9 +28,6 @@ export function CustomerContainer() {
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null)
-
-    // Memoized calculations to avoid recalculations
-    const filteredCustomers = useMemo(() => getFilteredCustomers(), [getFilteredCustomers])
 
     // Handle edit customer
     const handleEditCustomer = (customer: Customer) => {
@@ -80,14 +76,14 @@ export function CustomerContainer() {
 
                 {/* Content */}
                 <div className="flex-1 overflow-auto">
-                    {filteredCustomers.length === 0 ? (
+                    {customers.length === 0 ? (
                         <CustomerEmptyState
                             variant="no-results"
                             onCreateExample={handleCreateCustomer}
                         />
                     ) : (
                         <CustomerGrid
-                            customers={filteredCustomers}
+                            customers={customers}
                             onEditCustomer={handleEditCustomer}
                             onDeleteCustomer={removeCustomer}
                             onSelectCustomer={selectCustomer}

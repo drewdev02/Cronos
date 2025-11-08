@@ -106,23 +106,11 @@ export const useProjectStore = create<ProjectStore>()(
 
         removeProject: (projectId) => {
           set(
-            (state) => {
-              const updatedProjects = state.projects.filter(project => project.id !== projectId)
-              const newState = {
-                ...state,
-                projects: updatedProjects,
-                selectedProject: state.selectedProject?.id === projectId ? null : state.selectedProject,
-                error: null
-              }
-              
-              // Forzar persistencia manual
-              try {
-                localStorage.setItem('project-store', JSON.stringify({ state: newState }))
-              } catch (e) {
-                console.error('Error forzando persistencia project-store:', e)
-              }
-              return newState
-            },
+            (state) => ({
+              projects: state.projects.filter(project => project.id !== projectId),
+              selectedProject: state.selectedProject?.id === projectId ? null : state.selectedProject,
+              error: null
+            }),
             false,
             'removeProject'
           )

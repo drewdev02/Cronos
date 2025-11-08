@@ -21,9 +21,9 @@ export function TimerStats({ timer }: TimerStatsProps) {
         <CardContent className="space-y-4 !px-6 !py-4 flex-1">
             {/* Proyecto asociado */}
             {associatedProject && (
-                <div className="flex items-center gap-2 p-2 rounded-lg bg-blue-50 border border-blue-200">
-                    <FolderIcon className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm font-medium text-blue-800">
+                <div className="flex items-center gap-2 p-2 rounded-lg bg-muted/50 border border-border">
+                    <FolderIcon className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-medium text-foreground">
                         {associatedProject.name}
                     </span>
                 </div>
@@ -42,16 +42,16 @@ export function TimerStats({ timer }: TimerStatsProps) {
 
             {/* Earnings si hay proyecto asociado */}
             {associatedProject && totalEarnings > 0 && (
-                <div className="text-center space-y-2 py-3 border rounded-lg bg-green-50 border-green-200">
-                    <div className="flex items-center justify-center gap-2 text-sm text-green-700">
-                        <DollarSignIcon className="w-4 h-4" />
+                <div className="text-center space-y-2 py-3 border rounded-lg bg-muted/40 border-border">
+                    <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                        <DollarSignIcon className="w-4 h-4 text-green-500" />
                         <span>Ganancias totales</span>
                     </div>
-                    <div className="font-mono font-bold text-2xl text-green-800">
+                    <div className="font-mono font-bold text-2xl text-green-500">
                         ${totalEarnings.toFixed(2)}
                     </div>
                     {currentSessionEarnings > 0 && (
-                        <div className="text-xs text-green-600">
+                        <div className="text-xs text-green-400/80">
                             Sesión actual: ${currentSessionEarnings.toFixed(2)}
                         </div>
                     )}

@@ -3,7 +3,7 @@ import {
     useRemoveProject,
     useSelectProject
 } from "@/stores/project-store"
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { Project } from "@/types/project"
 import { ProjectHeader } from "./ProjectHeader"
 import { ProjectEmptyState } from "./ProjectEmptyState"
@@ -30,8 +30,8 @@ export function ProjectContainer() {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [editingProject, setEditingProject] = useState<Project | null>(null)
 
-    // Memoized calculations to avoid recalculations
-    const filteredProjects = useMemo(() => getFilteredProjects(), [getFilteredProjects])
+    // Get filtered projects - Zustand optimizes re-renders
+    const filteredProjects = getFilteredProjects()
 
     // Handle edit project
     const handleEditProject = (project: Project) => {
