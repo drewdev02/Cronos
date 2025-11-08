@@ -95,31 +95,6 @@ export function CustomerContainer() {
     return (
         <>
             <div className="h-full">
-                {/* Header */}
-                <CustomerHeader
-                    stats={stats}
-                    onCreateCustomer={handleCreateCustomer}
-                />
-
-                {/* Search and Filters */}
-                <div className="p-6 border-b space-y-4">
-                    <div className="flex items-center gap-4">
-                        <div className="relative flex-1 max-w-md">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                            <Input
-                                placeholder="Buscar clientes..."
-                                value={searchQuery}
-                                onChange={(e) => handleSearchChange(e.target.value)}
-                                className="pl-10"
-                            />
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Users className="h-4 w-4" />
-                            <span>{filteredCustomers.length} cliente{filteredCustomers.length !== 1 ? 's' : ''}</span>
-                        </div>
-                    </div>
-                </div>
-
                 {/* Content */}
                 <div className="flex-1 overflow-auto">
                     {filteredCustomers.length === 0 ? (

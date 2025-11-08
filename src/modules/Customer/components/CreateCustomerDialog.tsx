@@ -55,9 +55,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
     ]
 
     const currencies = [
-        "USD", "EUR", "MXN", "ARS", "COP", "CLP", "PEN", "VES", "UYU", "PYG",
-        "BOB", "CRC", "PAB", "GTQ", "HNL", "SVC", "NIO", "DOP", "CUP", "GBP",
-        "CAD", "AUD", "BRL", "JPY", "CHF", "SEK", "NOK", "DKK", "PLN", "CZK"
+        "USD", "EUR",
     ]
 
     const handleInputChange = (field: keyof CreateCustomerDto, value: string) => {
@@ -78,14 +76,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
     const validateForm = (): boolean => {
         const required = {
             companyName: "Nombre de la empresa",
-            country: "País",
-            firstName: "Nombre",
-            lastName: "Apellido",
-            email: "Correo electrónico",
-            addressLine1: "Dirección",
-            postalCode: "Código postal",
-            city: "Ciudad",
-            invoiceCurrency: "Moneda de facturación"
+            email: "Correo electrónico"
         }
 
         for (const [field, label] of Object.entries(required)) {
@@ -192,7 +183,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="country" className="text-sm font-medium">País *</Label>
+                            <Label htmlFor="country" className="text-sm font-medium">País</Label>
                             <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
                                 <SelectTrigger className="h-11">
                                     <SelectValue placeholder="Seleccionar país..." />
@@ -211,26 +202,24 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                     {/* First and Last Name */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="firstName" className="text-sm font-medium">Nombre *</Label>
+                            <Label htmlFor="firstName" className="text-sm font-medium">Nombre</Label>
                             <Input
                                 id="firstName"
                                 value={formData.firstName}
                                 onChange={(e) => handleInputChange("firstName", e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 className="h-11"
-                                required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="lastName" className="text-sm font-medium">Apellido *</Label>
+                            <Label htmlFor="lastName" className="text-sm font-medium">Apellido</Label>
                             <Input
                                 id="lastName"
                                 value={formData.lastName}
                                 onChange={(e) => handleInputChange("lastName", e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 className="h-11"
-                                required
                             />
                         </div>
                     </div>
@@ -267,14 +256,13 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                     {/* Address */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="addressLine1" className="text-sm font-medium">Dirección línea 1 *</Label>
+                            <Label htmlFor="addressLine1" className="text-sm font-medium">Dirección línea 1</Label>
                             <Input
                                 id="addressLine1"
                                 value={formData.addressLine1}
                                 onChange={(e) => handleInputChange("addressLine1", e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 className="h-11"
-                                required
                             />
                         </div>
 
@@ -293,26 +281,24 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                     {/* Postal Code and City */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="postalCode" className="text-sm font-medium">Código postal *</Label>
+                            <Label htmlFor="postalCode" className="text-sm font-medium">Código postal</Label>
                             <Input
                                 id="postalCode"
                                 value={formData.postalCode}
                                 onChange={(e) => handleInputChange("postalCode", e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 className="h-11"
-                                required
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="city" className="text-sm font-medium">Ciudad *</Label>
+                            <Label htmlFor="city" className="text-sm font-medium">Ciudad</Label>
                             <Input
                                 id="city"
                                 value={formData.city}
                                 onChange={(e) => handleInputChange("city", e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 className="h-11"
-                                required
                             />
                         </div>
                     </div>
@@ -333,7 +319,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="invoiceCurrency" className="text-sm font-medium">Moneda de facturación *</Label>
+                            <Label htmlFor="invoiceCurrency" className="text-sm font-medium">Moneda de facturación</Label>
                             <Select value={formData.invoiceCurrency} onValueChange={(value) => handleInputChange("invoiceCurrency", value)}>
                                 <SelectTrigger className="h-11">
                                     <SelectValue placeholder="Seleccionar moneda..." />
