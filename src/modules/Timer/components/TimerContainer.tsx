@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
 import {
     useTimers,
     useStartTimer,
@@ -14,16 +12,16 @@ import { TimerEmptyState } from "./TimerEmptyState"
 import { CreateTimerDialog } from "./CreateTimerDialog"
 import { EditTimerDialog } from "./EditTimerDialog"
 import { useState } from "react"
-import { useElectronTray } from "@/hooks/use-electron-tray"
+import { useElectronTray } from "@/modules/Timer/hooks/use-electron-tray.ts"
 
 
 export function TimerContainer() {
     // Use Zustand store
     const timers = useTimers()
-    
+
     // Electron tray integration
     const { notifyTimerStarted, notifyTimerPaused, notifyTimerStopped } = useElectronTray()
-    
+
     // Estado local para los diálogos
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
@@ -43,15 +41,15 @@ export function TimerContainer() {
     const handleStartTimer = (timerId: string) => {
         const timer = timers.find(t => t.id === timerId)
         if (timer) {
-          startTimer(timerId)
-          
-          // Notify with current time as start time
-          notifyTimerStarted({
-            id: timer.id,
-            title: timer.title,
-            startTime: Date.now(),
-            totalTime: timer.totalTime
-          })
+            startTimer(timerId)
+
+            // Notify with current time as start time
+            notifyTimerStarted({
+                id: timer.id,
+                title: timer.title,
+                startTime: Date.now(),
+                totalTime: timer.totalTime
+            })
         }
     }
 
@@ -98,31 +96,21 @@ export function TimerContainer() {
 
     return (
         <>
-            <div className="h-full">
-                <div className="flex items-center justify-between p-6 border-b">
-                    <div className="flex-1 text-center">
-                        <h1 className="text-2xl font-semibold">Mis Timers</h1>
-                    </div>
-                    <Button 
-                        onClick={handleCreateTimer} 
-                        size="icon" 
-                        variant="outline" 
-                        className="!rounded-xl bg-card text-card-foreground border shadow-sm"
-                    >
-                        <Plus className="h-4 w-4" />
-                    </Button>
-                </div>
-
+            <div className="h-full flex flex-col">
                 <TimerTabs
                     activeCount={activeTimers.length}
                     completedCount={completedTimers.length}
+                    handleCreateTimer={handleCreateTimer}
+                    className="flex-1"
                 >
-                    <TimerTabContent value="active">
+                    <TimerTabContent value="active" className="flex-1 h-full">
                         {activeTimers.length === 0 ? (
-                            <TimerEmptyState
-                                variant="no-active"
-                                onCreateExample={handleCreateTimer}
-                            />
+                            <div className="flex items-center justify-center h-full">
+                                <TimerEmptyState
+                                    variant="no-active"
+                                    onCreateExample={handleCreateTimer}
+                                />
+                            </div>
                         ) : (
                             <TimerGrid
                                 timers={activeTimers}
@@ -135,9 +123,11 @@ export function TimerContainer() {
                         )}
                     </TimerTabContent>
 
-                    <TimerTabContent value="completed">
+                    <TimerTabContent value="completed" className="flex-1 h-full">
                         {completedTimers.length === 0 ? (
-                            <TimerEmptyState variant="no-completed" />
+                            <div className="flex items-center justify-center h-full">
+                                <TimerEmptyState variant="no-completed" />
+                            </div>
                         ) : (
                             <TimerGrid
                                 timers={completedTimers}

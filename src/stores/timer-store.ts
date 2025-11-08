@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { Timer, TimerStatus } from '@/types/timer'
+import { useProjectStore } from '@/stores/project-store'
 
 interface TimerStore {
   // State
@@ -11,6 +12,7 @@ interface TimerStore {
   addTimer: (timer: Omit<Timer, 'id' | 'createdAt' | 'updatedAt'>) => void
   removeTimer: (timerId: string) => void
   updateTimer: (timerId: string, updates: Partial<Timer>) => void
+  updateTimerProject: (timerId: string, projectId: string | undefined) => void
 
   // Timer control actions
   startTimer: (timerId: string) => void
@@ -21,6 +23,8 @@ interface TimerStore {
   // Helper actions
   createExampleTimer: () => void
   getTimerById: (timerId: string) => Timer | undefined
+  getTimerEarnings: (timerId: string) => number
+  getCurrentSessionEarnings: (timerId: string) => number
 
   // Bulk actions
   clearAllTimers: () => void
@@ -361,6 +365,58 @@ export const useTimerStore = create<TimerStore>()(
           return timers.find(t => t.id === timerId)
         },
 
+        updateTimerProject: (timerId, projectId) => {
+          set(
+            (state) => ({
+              timers: state.timers.map(timer =>
+                timer.id === timerId
+                  ? { ...timer, projectId, updatedAt: new Date() }
+                  : timer
+              )
+            }),
+            false,
+            'updateTimerProject'
+          )
+        },
+
+        getTimerEarnings: (timerId) => {
+          const { timers } = get()
+          const timer = timers.find(t => t.id === timerId)
+          
+          if (!timer || !timer.projectId) return 0
+
+          // Get the project from the store
+          const projectStore = useProjectStore.getState()
+          const project = projectStore.getProjectById(timer.projectId)
+          
+          if (!project) return 0
+
+          // Calculate earnings: (total time in hours) * hourly rate
+          const totalHours = timer.totalTime / (1000 * 60 * 60)
+          return totalHours * project.hourlyRate
+        },
+
+        getCurrentSessionEarnings: (timerId) => {
+          const { timers } = get()
+          const timer = timers.find(t => t.id === timerId)
+          
+          if (!timer || !timer.projectId || !timer.currentSessionStart) return 0
+
+          // Get the project from the store
+          const projectStore = useProjectStore.getState()
+          const project = projectStore.getProjectById(timer.projectId)
+          
+          if (!project) return 0
+
+          // Calculate current session duration
+          const now = new Date().getTime()
+          const sessionDuration = now - timer.currentSessionStart.getTime()
+          
+          // Calculate earnings: (session time in hours) * hourly rate
+          const sessionHours = sessionDuration / (1000 * 60 * 60)
+          return sessionHours * project.hourlyRate
+        },
+
         // Bulk actions
         clearAllTimers: () => {
           const { clearAllIntervals } = get()
@@ -491,6 +547,7 @@ export const useTimers = () => useTimerStore(state => state.timers)
 export const useAddTimer = () => useTimerStore(state => state.addTimer)
 export const useRemoveTimer = () => useTimerStore(state => state.removeTimer)
 export const useUpdateTimer = () => useTimerStore(state => state.updateTimer)
+export const useUpdateTimerProject = () => useTimerStore(state => state.updateTimerProject)
 export const useStartTimer = () => useTimerStore(state => state.startTimer)
 export const usePauseTimer = () => useTimerStore(state => state.pauseTimer)
 export const useStopTimer = () => useTimerStore(state => state.stopTimer)
@@ -515,3 +572,9 @@ export const useTimerStats = () =>
       totalTime: timers.reduce((acc, timer) => acc + timer.totalTime, 0)
     }
   })
+
+export const useTimerEarnings = (timerId: string) =>
+  useTimerStore(state => state.getTimerEarnings(timerId))
+
+export const useCurrentSessionEarnings = (timerId: string) =>
+  useTimerStore(state => state.getCurrentSessionEarnings(timerId))

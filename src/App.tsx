@@ -1,7 +1,43 @@
-import { Home } from "./modules/Home";
+import { Timer } from "./modules/Timer";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "next-themes";
-import { useTimerTrayIntegration } from "@/hooks/use-timer-tray-integration";
+import { useTimerTrayIntegration } from "@/modules/Timer/hooks/use-timer-tray-integration.ts";
+import { Customer } from "./modules/Customer";
+import ProjectModule from "./modules/Proyect";
+import { HashRouter, Routes, Route } from "react-router-dom";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
+
+
+enum AppRoute {
+  Timer = "/timer",
+  Customer = "/customer",
+  Project = "/project",
+}
+
+export type Route = {
+  path: AppRoute;
+  label: string;
+  element: JSX.Element;
+};
+
+const routes: Route[] = [
+  {
+    path: AppRoute.Timer,
+    label: "Timer",
+    element: <Timer />,
+  },
+  {
+    path: AppRoute.Customer,
+    label: "Customer",
+    element: <Customer />,
+  },
+  {
+    path: AppRoute.Project,
+    label: "Project",
+    element: <ProjectModule />,
+  },
+];
 
 export default function App() {
   // Initialize tray integration
@@ -9,8 +45,20 @@ export default function App() {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <Home />
-      <Toaster />
+      <HashRouter>
+        <SidebarProvider>
+          <AppSidebar routes={routes} />
+          <SidebarInset>
+            <Routes>
+              {routes.map(route => (
+                <Route key={route.path} path={route.path} element={route.element} />
+              ))}
+              <Route path="*" element={<Timer />} />
+            </Routes>
+          </SidebarInset>
+          <Toaster />
+        </SidebarProvider>
+      </HashRouter>
     </ThemeProvider>
   )
 }

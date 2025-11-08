@@ -1,265 +1,272 @@
-@import "tailwindcss/preflight";
 @import "tailwindcss";
 
-:root {
-  /* macOS Clock app inspired color palette */
-  --bg-primary: #1e1e1e;
-  --bg-secondary: #2c2c2e;
-  --bg-tertiary: #3a3a3c;
-  --bg-card: #323232;
-  --bg-dialog: #1e1e1e;
-  --bg-button-secondary: #272727;
+@layer base {
+  :root {
+    /* macOS Clock app inspired color palette */
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2c2c2e;
+    --bg-tertiary: #3a3a3c;
+    --bg-card: #323232;
+    --bg-dialog: #1e1e1e;
+    --bg-button-secondary: #272727;
 
-  --text-primary: #ffffff;
-  --text-secondary: #8e8e93;
-  --text-muted: #636366;
+    --text-primary: #ffffff;
+    --text-secondary: #8e8e93;
+    --text-muted: #636366;
 
-  --accent-blue: #007aff;
-  --accent-blue-hover: #0056b3;
-  --accent-green: #34c759;
-  --accent-orange: #ff9500;
-  --accent-red: #ff3b30;
+    --accent-blue: #007aff;
+    --accent-blue-hover: #0056b3;
+    --accent-green: #34c759;
+    --accent-orange: #ff9500;
+    --accent-red: #ff3b30;
 
-  --border-color: #48484a;
-  --border-light: #636366;
+    --border-color: #48484a;
+    --border-light: #636366;
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
 
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius: 10px;
-  
-  /* Tailwind design system colors - macOS dark theme */
-  --background: 0 0% 12%;
-  --foreground: 0 0% 98%;
-  --card: 0 0% 20%;
-  --card-foreground: 0 0% 98%;
-  --popover: 0 0% 12%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 213 100% 50%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 0 0% 15%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 220 13% 22%;
-  --muted-foreground: 220 9% 56%;
-  --accent: 220 13% 22%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 220 13% 28%;
-  --input: 220 13% 22%;
-  --ring: 213 100% 50%;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius: 10px;
+
+    /* Sidebar variables */
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+
+    /* Tailwind design system colors - macOS dark theme */
+    --background: 0 0% 12%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 20%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 213 100% 50%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 220 13% 22%;
+    --muted-foreground: 220 9% 56%;
+    --accent: 220 13% 22%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 28%;
+    --input: 220 13% 22%;
+    --ring: 213 100% 50%;
+  }
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-color: hsl(var(--border));
+    outline-color: hsl(var(--ring) / 0.5);
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+    height: 100vh;
+    overflow: hidden;
+  }
 }
 
-/* Base layer styles converted to regular CSS */
-* {
-  border-color: hsl(var(--border));
-  outline-color: hsl(var(--ring) / 0.5);
+@layer utilities {
+  .fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .text-primary {
+    color: var(--text-primary);
+  }
+
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+
+  .text-muted {
+    color: var(--text-muted);
+  }
+
+  .bg-primary {
+    background-color: var(--bg-primary);
+  }
+
+  .bg-secondary {
+    background-color: var(--bg-secondary);
+  }
+
+  .bg-tertiary {
+    background-color: var(--bg-tertiary);
+  }
+
+  .standard-card-radius {
+    border-radius: var(--radius-xl);
+  }
 }
 
-body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
-  height: 100vh;
-  overflow: hidden;
-}
+@layer components {
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
 
-/* Card component override to ensure correct color */
-.bg-card {
-  background-color: #323232 !important;
-}
+  .btn-primary {
+    background-color: var(--accent-green);
+    color: white;
+  }
 
-/* Tab active state override with standard border radius */
-.timer-tab-active[data-state="active"] {
-  background-color: #323232 !important;
-  border-radius: var(--radius-xl) !important;
-}
+  .btn-primary:hover {
+    background-color: var(--accent-green-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
 
-/* Standard border radius configuration */
-.standard-card-radius {
-  border-radius: var(--radius-xl);
-}
+  .btn-primary:active {
+    background-color: var(--accent-green-dark);
+    transform: translateY(0);
+  }
 
-#root {
-  height: 100vh;
-  width: 100vw;
-}
+  .btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
 
-/* Global utility classes */
-.text-primary {
-  color: var(--text-primary);
-}
+  .btn-secondary:hover {
+    background-color: var(--border-color);
+    border-color: var(--border-light);
+  }
 
-.text-secondary {
-  color: var(--text-secondary);
-}
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+  }
 
-.text-muted {
-  color: var(--text-muted);
-}
+  .btn-ghost:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
 
-.bg-primary {
-  background-color: var(--bg-primary);
-}
+  .card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
 
-.bg-secondary {
-  background-color: var(--bg-secondary);
-}
+  .input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    transition: border-color 0.2s ease;
+  }
 
-.bg-tertiary {
-  background-color: var(--bg-tertiary);
-}
+  .input:focus {
+    outline: none;
+    border-color: var(--accent-green);
+    box-shadow: 0 0 0 3px rgba(50, 215, 75, 0.1);
+  }
 
-/* Button styles */
-.btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  outline: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
+  .input::placeholder {
+    color: var(--text-muted);
+  }
 
-.btn-primary {
-  background-color: var(--accent-green);
-  color: white;
-}
+  .nav-tab {
+    padding: 0.75rem 1.5rem;
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
 
-.btn-primary:hover {
-  background-color: var(--accent-green-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
+  .nav-tab:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
 
-.btn-primary:active {
-  background-color: var(--accent-green-dark);
-  transform: translateY(0);
-}
+  .nav-tab.active {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
 
-.btn-secondary {
-  background-color: var(--bg-tertiary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-}
+  .digital-display {
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
 
-.btn-secondary:hover {
-  background-color: var(--border-color);
-  border-color: var(--border-light);
-}
+  .digital-display-large {
+    font-size: 4rem;
+    line-height: 1;
+  }
 
-.btn-ghost {
-  background-color: transparent;
-  color: var(--text-secondary);
-  border: 1px solid transparent;
-}
+  .digital-display-medium {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
 
-.btn-ghost:hover {
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-}
+  .digital-display-small {
+    font-size: 1.25rem;
+    line-height: 1.3;
+  }
 
-/* Card component */
-.card {
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
-}
+  .bg-card {
+    background-color: #323232 !important;
+  }
 
-/* Input styles */
-.input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background-color: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  font-size: 0.875rem;
-  transition: border-color 0.2s ease;
-}
+  .timer-tab-active[data-state="active"] {
+    background-color: #323232 !important;
+    border-radius: var(--radius-xl) !important;
+  }
 
-.input:focus {
-  outline: none;
-  border-color: var(--accent-green);
-  box-shadow: 0 0 0 3px rgba(50, 215, 75, 0.1);
-}
-
-.input::placeholder {
-  color: var(--text-muted);
-}
-
-/* Navigation styles */
-.nav-tab {
-  padding: 0.75rem 1.5rem;
-  background-color: transparent;
-  color: var(--text-secondary);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.nav-tab:hover {
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-}
-
-.nav-tab.active {
-  background-color: var(--bg-tertiary);
-  color: var(--text-primary);
-}
-
-/* Digital display styles (for time displays) */
-.digital-display {
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-}
-
-.digital-display-large {
-  font-size: 4rem;
-  line-height: 1;
-}
-
-.digital-display-medium {
-  font-size: 2rem;
-  line-height: 1.2;
-}
-
-.digital-display-small {
-  font-size: 1.25rem;
-  line-height: 1.3;
-}
-
-/* Animation utilities */
-.fade-in {
-  animation: fadeIn 0.3s ease-in-out;
+  #root {
+    height: 100vh;
+    width: 100vw;
+  }
 }
 
 @keyframes fadeIn {
@@ -267,14 +274,11 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.slide-up {
-  animation: slideUp 0.3s ease-out;
 }
 
 @keyframes slideUp {
@@ -282,13 +286,13 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Scrollbar styles */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -306,19 +310,15 @@ body {
   background: var(--border-light);
 }
 
-/* Selection styles */
 ::selection {
   background-color: rgba(50, 215, 75, 0.3);
   color: var(--text-primary);
 }
 
-/* Focus ring styles */
 .focus-ring {
   outline: 2px solid var(--accent-green);
   outline-offset: 2px;
 }
-
-/* Removed @theme inline block - variables are defined in :root instead */
 
 .dark {
   --background: 0 0% 12%;
@@ -340,26 +340,23 @@ body {
   --border: 220 13% 28%;
   --input: 220 13% 22%;
   --ring: 213 100% 50%;
+  
+  /* Sidebar dark theme variables */
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.439 0 0);
 }
 
-/* Base layer styles converted to regular CSS */
-* {
-  border-color: hsl(var(--border));
-  outline-color: hsl(var(--ring) / 0.5);
-}
-
-body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-}
-
-/* Secondary button override to ensure correct color */
-.bg-secondary, 
+.bg-secondary,
 .btn-secondary {
   background-color: #272727 !important;
 }
 
-/* Custom input styles for dialog */
 .dialog-input {
   border: 1px solid white !important;
   background-color: #2a2a2a !important;
@@ -372,4 +369,11 @@ body {
   border: 1px solid #0066cc !important;
   box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2) !important;
   outline: none !important;
+}
+
+[data-radix-select-content] {
+  background: #232323 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25) !important;
 }

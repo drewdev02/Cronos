@@ -11,8 +11,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { X } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { X, FolderIcon } from "lucide-react"
 import { useAddTimer } from "@/stores/timer-store"
+import { useProjects } from "@/stores/project-store"
 import { Timer, TimerStatus } from "@/types/timer"
 import { toast } from "sonner"
 
@@ -24,11 +26,13 @@ interface CreateTimerDialogProps {
 export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps) {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [projectId, setProjectId] = useState<string | undefined>(undefined)
   const [tags, setTags] = useState<string[]>([])
   const [newTag, setNewTag] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   const addTimer = useAddTimer()
+  const projects = useProjects()
 
   const handleAddTag = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && newTag.trim() && !tags.includes(newTag.trim())) {
@@ -66,6 +70,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
       const newTimer: Omit<Timer, 'id' | 'createdAt' | 'updatedAt'> = {
         title: title.trim(),
         description: description.trim() || undefined,
+        projectId: projectId || undefined,
         status: TimerStatus.IDLE,
         history: [],
         totalTime: 0,
@@ -85,6 +90,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
       // Limpiar formulario y cerrar diálogo
       setTitle("")
       setDescription("")
+      setProjectId(undefined)
       setTags([])
       setNewTag("")
       onOpenChange(false)
@@ -101,6 +107,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
   const handleCancel = () => {
     setTitle("")
     setDescription("")
+    setProjectId(undefined)
     setTags([])
     setNewTag("")
     onOpenChange(false)
@@ -142,6 +149,38 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
               className="dialog-input resize-none min-h-[90px]"
               rows={3}
             />
+          </div>
+
+          <div className="space-y-3">
+            <Label htmlFor="project" className="text-sm font-medium">Proyecto</Label>
+            <Select value={projectId || "no-project"} onValueChange={(value) => setProjectId(value === "no-project" ? undefined : value)}>
+              <SelectTrigger className="dialog-input h-11">
+                <SelectValue placeholder="Seleccionar proyecto (opcional)">
+                  {projectId && projects.find(p => p.id === projectId) ? (
+                    <div className="flex items-center gap-2">
+                      <FolderIcon className="w-4 h-4" />
+                      <span>{projects.find(p => p.id === projectId)?.name}</span>
+                    </div>
+                  ) : (
+                    <span>Sin proyecto</span>
+                  )}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="no-project">Sin proyecto</SelectItem>
+                {projects.map((project) => (
+                  <SelectItem key={project.id} value={project.id}>
+                    <div className="flex items-center gap-2">
+                      <FolderIcon className="w-4 h-4" />
+                      <span>{project.name}</span>
+                      <span className="text-muted-foreground text-sm">
+                        (${project.hourlyRate}/h)
+                      </span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-3">

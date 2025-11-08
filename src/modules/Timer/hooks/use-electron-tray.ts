@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { useTimerStore } from '@/stores/timer-store'
-import { TimerStatus } from '@/types/timer'
+import { useTimerStore } from '@/stores/timer-store.ts'
+import { TimerStatus } from '@/types/timer.ts'
 
 export const useElectronTray = () => {
   const timers = useTimerStore(state => state.timers)

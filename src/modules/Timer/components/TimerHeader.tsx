@@ -2,7 +2,7 @@ import { Timer } from "@/types/timer"
 import { CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { TagIcon } from "lucide-react"
-import { getStatusLabel, getStatusVariant } from "@/modules/Home/utils"
+import { getStatusLabel, getStatusVariant } from "@/modules/Timer/utils"
 
 
 interface TimerHeaderProps {
