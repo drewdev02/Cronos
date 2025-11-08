@@ -21,7 +21,7 @@ export function TimerGrid({
 }: TimerGridProps) {
     return (
         <ScrollArea className="h-full w-full">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
+            <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6 pl-24 place-items-center">
                 {timers.map((timer) => (
                     <TimerCard
                         key={timer.id}

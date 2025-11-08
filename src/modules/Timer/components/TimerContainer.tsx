@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
 import {
     useTimers,
     useStartTimer,
@@ -43,15 +41,15 @@ export function TimerContainer() {
     const handleStartTimer = (timerId: string) => {
         const timer = timers.find(t => t.id === timerId)
         if (timer) {
-          startTimer(timerId)
+            startTimer(timerId)
 
-          // Notify with current time as start time
-          notifyTimerStarted({
-            id: timer.id,
-            title: timer.title,
-            startTime: Date.now(),
-            totalTime: timer.totalTime
-          })
+            // Notify with current time as start time
+            notifyTimerStarted({
+                id: timer.id,
+                title: timer.title,
+                startTime: Date.now(),
+                totalTime: timer.totalTime
+            })
         }
     }
 
@@ -98,26 +96,14 @@ export function TimerContainer() {
 
     return (
         <>
-            <div className="h-full">
-                <div className="flex items-center justify-between p-6 border-b">
-                    <div className="flex-1 text-center">
-                        <h1 className="text-2xl font-semibold">Mis Timers</h1>
-                    </div>
-                    <Button
-                        onClick={handleCreateTimer}
-                        size="icon"
-                        variant="outline"
-                        className="!rounded-xl bg-card text-card-foreground border shadow-sm"
-                    >
-                        <Plus className="h-4 w-4" />
-                    </Button>
-                </div>
-
+            <div className="h-full flex flex-col">
                 <TimerTabs
                     activeCount={activeTimers.length}
                     completedCount={completedTimers.length}
+                    handleCreateTimer={handleCreateTimer}
+                    className="flex-1"
                 >
-                    <TimerTabContent value="active">
+                    <TimerTabContent value="active" className="flex flex-1 items-center justify-center">
                         {activeTimers.length === 0 ? (
                             <TimerEmptyState
                                 variant="no-active"
@@ -135,7 +121,7 @@ export function TimerContainer() {
                         )}
                     </TimerTabContent>
 
-                    <TimerTabContent value="completed">
+                    <TimerTabContent value="completed" className="flex flex-1 items-center justify-center">
                         {completedTimers.length === 0 ? (
                             <TimerEmptyState variant="no-completed" />
                         ) : (

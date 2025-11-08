@@ -22,7 +22,7 @@ export function TimerCard({
     onDeleteTimer
 }: TimerCardProps) {
     return (
-        <Card className="group hover:shadow-md transition-all duration-200 !flex !flex-col !gap-0 !py-0">
+    <Card className="group hover:shadow-md transition-all duration-200 !flex !flex-col !gap-0 !py-0 w-[300px] min-w-[300px] max-w-[300px]">
             <TimerHeader timer={timer} />
             <TimerStats timer={timer} />
             <TimerControls

@@ -40,17 +40,15 @@ export default function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <HashRouter>
-        <SidebarProvider>
+        <SidebarProvider className="ml-[3rem]">
           <AppSidebar routes={routes} />
-          <div className="ml-[16rem]">
-            <Routes>
-              {routes.map(route => (
-                <Route key={route.path} path={route.path} element={route.element} />
-              ))}
-              <Route path="*" element={<Timer />} />
-            </Routes>
-            <Toaster />
-          </div>
+          <Routes>
+            {routes.map(route => (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ))}
+            <Route path="*" element={<Timer />} />
+          </Routes>
+          <Toaster />
         </SidebarProvider>
       </HashRouter>
     </ThemeProvider>
