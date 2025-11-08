@@ -1,5 +1,5 @@
 // ...existing code...
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
     Sidebar,
     SidebarContent,
@@ -21,6 +21,8 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ ...props }: AppSidebarProps & React.ComponentProps<typeof Sidebar>) {
+    const location = useLocation();
+    
     // Asignar íconos según la ruta
     const iconMap: Record<string, React.ElementType> = {
         Timer: Clock,
@@ -52,7 +54,7 @@ export function AppSidebar({ ...props }: AppSidebarProps & React.ComponentProps<
                         <SidebarMenu>
                             {props.routes.map(route => {
                                 const Icon = iconMap[route.label] || Timer;
-                                const isActive = window.location.hash.replace('#', '') === route.path;
+                                const isActive = location.pathname === route.path;
                                 return (
                                     <SidebarMenuItem key={route.path}>
                                         <SidebarMenuButton
