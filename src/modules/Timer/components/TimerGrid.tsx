@@ -20,19 +20,21 @@ export function TimerGrid({
     onDeleteTimer
 }: TimerGridProps) {
     return (
-        <ScrollArea className="h-full w-full">
-            <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6 pl-24 place-items-center">
-                {timers.map((timer) => (
-                    <TimerCard
-                        key={timer.id}
-                        timer={timer}
-                        onStartTimer={onStartTimer}
-                        onPauseTimer={onPauseTimer}
-                        onStopTimer={onStopTimer}
-                        onEditTimer={onEditTimer}
-                        onDeleteTimer={onDeleteTimer}
-                    />
-                ))}
+        <ScrollArea className="h-full w-full max-h-full">
+            <div className="p-6 pb-8">
+                <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+                    {timers.map((timer) => (
+                        <TimerCard
+                            key={timer.id}
+                            timer={timer}
+                            onStartTimer={onStartTimer}
+                            onPauseTimer={onPauseTimer}
+                            onStopTimer={onStopTimer}
+                            onEditTimer={onEditTimer}
+                            onDeleteTimer={onDeleteTimer}
+                        />
+                    ))}
+                </div>
             </div>
         </ScrollArea>
     )

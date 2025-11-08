@@ -103,12 +103,14 @@ export function TimerContainer() {
                     handleCreateTimer={handleCreateTimer}
                     className="flex-1"
                 >
-                    <TimerTabContent value="active" className="flex flex-1 items-center justify-center">
+                    <TimerTabContent value="active" className="flex-1 h-full">
                         {activeTimers.length === 0 ? (
-                            <TimerEmptyState
-                                variant="no-active"
-                                onCreateExample={handleCreateTimer}
-                            />
+                            <div className="flex items-center justify-center h-full">
+                                <TimerEmptyState
+                                    variant="no-active"
+                                    onCreateExample={handleCreateTimer}
+                                />
+                            </div>
                         ) : (
                             <TimerGrid
                                 timers={activeTimers}
@@ -121,9 +123,11 @@ export function TimerContainer() {
                         )}
                     </TimerTabContent>
 
-                    <TimerTabContent value="completed" className="flex flex-1 items-center justify-center">
+                    <TimerTabContent value="completed" className="flex-1 h-full">
                         {completedTimers.length === 0 ? (
-                            <TimerEmptyState variant="no-completed" />
+                            <div className="flex items-center justify-center h-full">
+                                <TimerEmptyState variant="no-completed" />
+                            </div>
                         ) : (
                             <TimerGrid
                                 timers={completedTimers}

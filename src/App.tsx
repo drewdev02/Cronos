@@ -4,8 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { useTimerTrayIntegration } from "@/modules/Timer/hooks/use-timer-tray-integration.ts";
 import { Customer } from "./modules/Customer";
 import { HashRouter, Routes, Route } from "react-router-dom";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { SidebarRail } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 
 
@@ -40,14 +39,16 @@ export default function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <HashRouter>
-        <SidebarProvider className="ml-[3rem]">
+        <SidebarProvider>
           <AppSidebar routes={routes} />
-          <Routes>
-            {routes.map(route => (
-              <Route key={route.path} path={route.path} element={route.element} />
-            ))}
-            <Route path="*" element={<Timer />} />
-          </Routes>
+          <SidebarInset>
+            <Routes>
+              {routes.map(route => (
+                <Route key={route.path} path={route.path} element={route.element} />
+              ))}
+              <Route path="*" element={<Timer />} />
+            </Routes>
+          </SidebarInset>
           <Toaster />
         </SidebarProvider>
       </HashRouter>
