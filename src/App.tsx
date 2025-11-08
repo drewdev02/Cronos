@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "next-themes";
 import { useTimerTrayIntegration } from "@/modules/Timer/hooks/use-timer-tray-integration.ts";
 import { Customer } from "./modules/Customer";
+import ProjectModule from "./modules/Proyect";
 import { HashRouter, Routes, Route } from "react-router-dom";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
@@ -11,6 +12,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 enum AppRoute {
   Timer = "/timer",
   Customer = "/customer",
+  Project = "/project",
 }
 
 export type Route = {
@@ -29,6 +31,11 @@ const routes: Route[] = [
     path: AppRoute.Customer,
     label: "Customer",
     element: <Customer />,
+  },
+  {
+    path: AppRoute.Project,
+    label: "Project",
+    element: <ProjectModule />,
   },
 ];
 

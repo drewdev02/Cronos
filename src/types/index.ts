@@ -14,3 +14,6 @@ export * from './electron'
 // Customer types
 export * from './customer'
 
+// Project types
+export * from './project'
+
