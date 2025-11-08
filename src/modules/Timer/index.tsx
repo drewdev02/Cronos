@@ -1,6 +1,6 @@
 import { TimerContainer } from "./components/TimerContainer";
 
 
-export function Home() {
+export function Timer() {
     return <TimerContainer />
 }

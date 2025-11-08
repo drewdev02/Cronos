@@ -11,3 +11,6 @@ export * from './timer'
 // Electron types
 export * from './electron'
 
+// Customer types
+export * from './customer'
+

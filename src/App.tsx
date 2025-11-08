@@ -1,7 +1,8 @@
-import { Home } from "./modules/Timer";
+import { Timer } from "./modules/Timer";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "next-themes";
 import { useTimerTrayIntegration } from "@/modules/Timer/hooks/use-timer-tray-integration.ts";
+import { Customer } from "./modules/Customer";
 
 export default function App() {
   // Initialize tray integration
@@ -9,7 +10,7 @@ export default function App() {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <Home />
+      <Customer />
       <Toaster />
     </ThemeProvider>
   )
