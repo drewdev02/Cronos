@@ -20,7 +20,7 @@ interface AppSidebarProps {
     routes: Route[];
 }
 
-export function AppSidebar({ routes }: AppSidebarProps) {
+export function AppSidebar({ ...props }: AppSidebarProps & React.ComponentProps<typeof Sidebar>) {
     // Asignar íconos según la ruta
     const iconMap: Record<string, React.ElementType> = {
         Timer: Clock,
@@ -29,15 +29,12 @@ export function AppSidebar({ routes }: AppSidebarProps) {
     };
 
     return (
-        <Sidebar collapsible="icon" className="bg-primary">
+        <Sidebar collapsible="icon" {...props}>
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <div className="flex items-center justify-between gap-2 px-2">
                             <div className="flex items-center gap-2">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                                    <Clock className="h-4 w-4" />
-                                </div>
                                 <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                                     <span className="truncate font-semibold">Cronos</span>
                                     <span className="truncate text-xs text-muted-foreground">Time Tracker</span>
@@ -53,7 +50,7 @@ export function AppSidebar({ routes }: AppSidebarProps) {
                     <SidebarGroupLabel>Menú</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {routes.map(route => {
+                            {props.routes.map(route => {
                                 const Icon = iconMap[route.label] || Timer;
                                 const isActive = window.location.hash.replace('#', '') === route.path;
                                 return (
