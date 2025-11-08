@@ -1,5 +1,6 @@
-import { Users, Search } from "lucide-react"
+import { Plus } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 import {
     useCustomerStore,
     useRemoveCustomer,
@@ -10,7 +11,6 @@ import { Customer } from "@/types/customer"
 import { CustomerEmptyState } from "./CustomerEmptyState"
 import { CreateCustomerDialog } from "./CreateCustomerDialog"
 import { EditCustomerDialog } from "./EditCustomerDialog"
-import { CustomerHeader } from "./CustomerHeader"
 import { CustomerGrid } from "./CustomerGrid"
 
 
@@ -18,8 +18,6 @@ export function CustomerContainer() {
     // Use single Zustand store selector
     const {
         customers,
-        searchQuery,
-        setSearchQuery,
         selectedCustomer,
         getFilteredCustomers,
     } = useCustomerStore()
@@ -36,26 +34,6 @@ export function CustomerContainer() {
     // Memoized calculations to avoid recalculations
     const filteredCustomers = useMemo(() => getFilteredCustomers(), [getFilteredCustomers])
 
-    const stats = useMemo(() => {
-        const countries = [...new Set(customers.map(c => c.country))]
-        const currencies = [...new Set(customers.map(c => c.invoiceCurrency))]
-
-        return {
-            totalCustomers: customers.length,
-            uniqueCountries: countries.length,
-            uniqueCurrencies: currencies.length,
-            customersWithWebsite: customers.filter(c => c.website).length,
-            topCountries: countries.map(country => ({
-                country,
-                count: customers.filter(c => c.country === country).length
-            })).sort((a, b) => b.count - a.count).slice(0, 5),
-            topCurrencies: currencies.map(currency => ({
-                currency,
-                count: customers.filter(c => c.invoiceCurrency === currency).length
-            })).sort((a, b) => b.count - a.count).slice(0, 5)
-        }
-    }, [customers])
-
     // Handle edit customer
     const handleEditCustomer = (customer: Customer) => {
         setEditingCustomer(customer)
@@ -65,11 +43,6 @@ export function CustomerContainer() {
     // Handle create customer
     const handleCreateCustomer = () => {
         setIsCreateDialogOpen(true)
-    }
-
-    // Handle search
-    const handleSearchChange = (value: string) => {
-        setSearchQuery(value)
     }
 
     if (customers.length === 0) {
@@ -94,7 +67,18 @@ export function CustomerContainer() {
 
     return (
         <>
-            <div className="h-full">
+            <div className="h-full flex flex-col">
+                {/* Header */}
+                <div className="flex items-center justify-between p-6 border-b">
+                    <div>
+                        <h1 className="text-2xl font-semibold">Clientes</h1>
+                    </div>
+                    <Button onClick={handleCreateCustomer} className="flex items-center gap-2">
+                        <Plus className="h-4 w-4" />
+                        Crear Cliente
+                    </Button>
+                </div>
+
                 {/* Content */}
                 <div className="flex-1 overflow-auto">
                     {filteredCustomers.length === 0 ? (
