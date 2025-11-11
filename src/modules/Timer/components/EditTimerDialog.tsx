@@ -13,7 +13,7 @@ import {Textarea} from "@/components/ui/textarea"
 import {Badge} from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {X, FolderIcon} from "lucide-react"
-import {useUpdateTimer, useTimerById, useUpdateTimerProject} from "@/stores/timer-store"
+import {useUpdateTimer, useTimerById, useUpdateTimerProject, useStopTimer, useResetTimer} from "@/stores/timer-store"
 import { useProjects } from "@/stores/project-store"
 import {Timer, TimerStatus} from "@/types/timer"
 import {toast} from "sonner"
@@ -52,8 +52,13 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
 
     const updateTimer = useUpdateTimer()
     const updateTimerProject = useUpdateTimerProject()
+    const stopTimer = useStopTimer()
+    const resetTimer = useResetTimer()
     const timer = useTimerById(timerId || "")
     const projects = useProjects()
+
+    // Estado editable del timer
+    const [status, setStatus] = useState<TimerStatus>(TimerStatus.IDLE)
 
     // Load timer data when dialog opens
     useEffect(() => {
@@ -69,6 +74,8 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
             setHours(timeValues.hours)
             setMinutes(timeValues.minutes)
             setSeconds(timeValues.seconds)
+
+            setStatus(timer.status)
         }
     }, [open, timer])
 
@@ -106,7 +113,6 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
 
     const handleSubmit = async (e: React.FormEvent) => {
         console.log("Updating timer...");
-
         e.preventDefault()
 
         if (!title.trim()) {
@@ -151,6 +157,20 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
         try {
             const newTotalTime = timeToMilliseconds(hours, minutes, seconds)
 
+            // Si el estado cambió y es COMPLETED o IDLE, usar la acción correspondiente
+            if (status !== timer.status) {
+                if (status === TimerStatus.COMPLETED) {
+                    stopTimer(timerId)
+                } else if (status === TimerStatus.IDLE) {
+                    resetTimer(timerId)
+                } else {
+                    // Solo permitir cambiar a estos dos estados desde el editor
+                    toast.error("Solo puedes cambiar el estado a 'inactivo' o 'completado' desde el editor.")
+                    setIsLoading(false)
+                    return
+                }
+            }
+
             const updatedData: Partial<Timer> = {
                 title: title.trim(),
                 description: description.trim() || undefined,
@@ -168,12 +188,9 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                 updateTimerProject(timerId, projectId)
             }
 
-            // Mostrar toast de éxito
             toast.success("Timer actualizado exitosamente", {
                 description: `"${title}" ha sido modificado`
             })
-
-            // Cerrar diálogo
             onOpenChange(false)
 
         } catch (error) {
@@ -198,6 +215,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
             setHours(timeValues.hours)
             setMinutes(timeValues.minutes)
             setSeconds(timeValues.seconds)
+            setStatus(timer.status)
         }
         setNewTag("")
         onOpenChange(false)
@@ -429,9 +447,26 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                             </div>
                         )}
                     </div>
+
+                    {/* Selector de estado editable */}
+                    <div className="space-y-3">
+                        <Label htmlFor="status" className="text-sm font-medium">Estado</Label>
+                        <Select value={status} onValueChange={(value) => setStatus(value as TimerStatus)}>
+                            <SelectTrigger className="dialog-input h-11">
+                                <SelectValue>
+                                    {status === TimerStatus.IDLE ? "Inactivo" : status === TimerStatus.COMPLETED ? "Completado" : status}
+                                </SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={TimerStatus.IDLE}>Inactivo</SelectItem>
+                                <SelectItem value={TimerStatus.COMPLETED}>Completado</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <div className="text-xs text-muted-foreground">Solo puedes cambiar el estado a "inactivo" o "completado" desde el editor.</div>
+                    </div>
                 </form>
 
-                <DialogFooter className="gap-4 pt-8 !justify-center sm:!justify-center">
+                <DialogFooter className="gap-4 pt-8 justify-center! sm:justify-center!">
                     <Button
                         type="button"
                         variant="secondary"
