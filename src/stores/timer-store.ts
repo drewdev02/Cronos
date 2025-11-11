@@ -237,11 +237,23 @@ export const useTimerStore = create<TimerStore>()(
             ? now.getTime() - timer.currentSessionStart.getTime()
             : 0
 
+          // Calcular earnings
+          let earnings = 0
+          if (timer.projectId) {
+            const projectStore = useProjectStore.getState()
+            const project = projectStore.getProjectById(timer.projectId)
+            if (project) {
+              const sessionHours = sessionDuration / (1000 * 60 * 60)
+              earnings = sessionHours * project.hourlyRate
+            }
+          }
+
           const newHistoryEntry = {
             id: crypto.randomUUID(),
             startTime: timer.currentSessionStart || now,
             endTime: now,
-            duration: sessionDuration
+            duration: sessionDuration,
+            earnings
           }
 
           set(
@@ -283,13 +295,24 @@ export const useTimerStore = create<TimerStore>()(
           // If timer is currently running, add the current session to history
           if (timer.status === TimerStatus.RUNNING && timer.currentSessionStart) {
             sessionDuration = now.getTime() - timer.currentSessionStart.getTime()
+            // Calcular earnings
+            let earnings = 0
+            if (timer.projectId) {
+              const projectStore = useProjectStore.getState()
+              const project = projectStore.getProjectById(timer.projectId)
+              if (project) {
+                const sessionHours = sessionDuration / (1000 * 60 * 60)
+                earnings = sessionHours * project.hourlyRate
+              }
+            }
             newHistory = [
               ...timer.history,
               {
                 id: crypto.randomUUID(),
                 startTime: timer.currentSessionStart,
                 endTime: now,
-                duration: sessionDuration
+                duration: sessionDuration,
+                earnings
               }
             ]
           }

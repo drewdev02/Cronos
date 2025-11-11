@@ -20,6 +20,8 @@ export interface TimerHistoryEntry {
   endTime: Date | null
   /** Duración en milisegundos de este período */
   duration: number
+  /** Dinero generado en esta sesión */
+  earnings: number
   /** Notas opcionales sobre este período */
   notes?: string
 }
