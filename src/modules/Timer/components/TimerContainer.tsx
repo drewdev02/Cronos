@@ -27,9 +27,19 @@ export function TimerContainer() {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [editingTimerId, setEditingTimerId] = useState<string | null>(null)
 
-    // Filtrar timers por estado
-    const completedTimers = timers.filter(timer => timer.status === TimerStatus.COMPLETED)
-    const activeTimers = timers.filter(timer => timer.status !== TimerStatus.COMPLETED)
+        // Filtrar y ordenar timers por estado y fecha de creación (más recientes primero)
+        // Ordenar por la fecha de la última sesión (o createdAt si no hay sesiones)
+        const getLastSessionDate = (timer: { history: { endTime: Date | null }[]; createdAt: Date }) => {
+            if (timer.history.length > 0) {
+                // Buscar la última entrada con endTime definido
+                const lastEntry = [...timer.history].reverse().find(entry => entry.endTime)
+                if (lastEntry && lastEntry.endTime) return new Date(lastEntry.endTime).getTime();
+            }
+            return new Date(timer.createdAt).getTime();
+        };
+        const sortByLastSessionDesc = (a: { history: { endTime: Date | null }[]; createdAt: Date }, b: { history: { endTime: Date | null }[]; createdAt: Date }) => getLastSessionDate(b) - getLastSessionDate(a);
+        const completedTimers = timers.filter(timer => timer.status === TimerStatus.COMPLETED).sort(sortByLastSessionDesc);
+        const activeTimers = timers.filter(timer => timer.status !== TimerStatus.COMPLETED).sort(sortByLastSessionDesc);
 
     // Individual action hooks
     const startTimer = useStartTimer()
