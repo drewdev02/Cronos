@@ -12,9 +12,12 @@ import {
     SidebarGroupContent,
     SidebarTrigger,
     SidebarRail,
+    SidebarMenuSub,
+    SidebarMenuSubItem,
+    SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 import type { Route } from "../App";
-import { Timer, Clock, Users, Briefcase } from "lucide-react";
+import { Timer, Clock, Users, Briefcase, BarChart3 } from "lucide-react";
 
 interface AppSidebarProps {
     routes: Route[];
@@ -22,12 +25,13 @@ interface AppSidebarProps {
 
 export function AppSidebar({ ...props }: AppSidebarProps & React.ComponentProps<typeof Sidebar>) {
     const location = useLocation();
-    
+
     // Asignar íconos según la ruta
     const iconMap: Record<string, React.ElementType> = {
         Timer: Clock,
         Customer: Users,
         Project: Briefcase,
+        Statistics: BarChart3,
     };
 
     return (
@@ -49,12 +53,45 @@ export function AppSidebar({ ...props }: AppSidebarProps & React.ComponentProps<
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Menú</SidebarGroupLabel>
+                    <SidebarGroupLabel>Menu</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {props.routes.map(route => {
+                            {props.routes.filter(route => !["Monthly", "Weekly", "Daily"].includes(route.label)).map(route => {
                                 const Icon = iconMap[route.label] || Timer;
                                 const isActive = location.pathname === route.path;
+                                if (route.label === "Statistics") {
+                                    return (
+                                        <SidebarMenuItem key={route.path}>
+                                            <SidebarMenuButton
+                                                asChild
+                                                isActive={isActive}
+                                                tooltip={route.label}
+                                            >
+                                                <Link to={route.path} className="flex items-center gap-2">
+                                                    <Icon />
+                                                    <span>{route.label}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                            <SidebarMenuSub>
+                                                {props.routes.filter(r => ["Monthly", "Weekly", "Daily"].includes(r.label)).map(subroute => {
+                                                    const isSubActive = location.pathname === subroute.path;
+                                                    return (
+                                                        <SidebarMenuSubItem key={subroute.path}>
+                                                            <SidebarMenuSubButton
+                                                                asChild
+                                                                isActive={isSubActive}
+                                                            >
+                                                                <Link to={subroute.path} className="flex items-center gap-2">
+                                                                    <span>{subroute.label}</span>
+                                                                </Link>
+                                                            </SidebarMenuSubButton>
+                                                        </SidebarMenuSubItem>
+                                                    );
+                                                })}
+                                            </SidebarMenuSub>
+                                        </SidebarMenuItem>
+                                    );
+                                }
                                 return (
                                     <SidebarMenuItem key={route.path}>
                                         <SidebarMenuButton

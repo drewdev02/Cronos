@@ -13,6 +13,10 @@ enum AppRoute {
   Timer = "/timer",
   Customer = "/customer",
   Project = "/project",
+  Statistics = "/statistics",
+  StatisticsMonthly = "/statistics/monthly",
+  StatisticsWeekly = "/statistics/weekly",
+  StatisticsDaily = "/statistics/daily",
 }
 
 export type Route = {
@@ -20,6 +24,12 @@ export type Route = {
   label: string;
   element: JSX.Element;
 };
+
+
+import StatisticsModule from "./modules/Statistics";
+import MonthlyStatistics from "./modules/Statistics/components/MonthlyStatistics";
+import WeeklyStatistics from "./modules/Statistics/components/WeeklyStatistics";
+import DailyStatistics from "./modules/Statistics/components/DailyStatistics";
 
 const routes: Route[] = [
   {
@@ -36,6 +46,26 @@ const routes: Route[] = [
     path: AppRoute.Project,
     label: "Project",
     element: <ProjectModule />,
+  },
+  {
+    path: AppRoute.Statistics,
+    label: "Statistics",
+    element: <StatisticsModule />,
+  },
+  {
+    path: AppRoute.StatisticsMonthly,
+    label: "Monthly",
+    element: <MonthlyStatistics />,
+  },
+  {
+    path: AppRoute.StatisticsWeekly,
+    label: "Weekly",
+    element: <WeeklyStatistics />,
+  },
+  {
+    path: AppRoute.StatisticsDaily,
+    label: "Daily",
+    element: <DailyStatistics />,
   },
 ];
 
