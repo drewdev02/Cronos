@@ -55,7 +55,7 @@ export function TimerStats({ timer }: TimerStatsProps) {
                             className="p-1 rounded hover:bg-muted/60 transition"
                             aria-label="Copiar horas"
                             onClick={() => {
-                                navigator.clipboard.writeText(hoursValue)
+                                navigator.clipboard.writeText(hoursValue.toString())
                                 setCopied(true)
                                 toast.success('Copiado al portapapeles')
                                 setTimeout(() => setCopied(false), 1200)
