@@ -5,6 +5,8 @@ import {
     useStopTimer,
     useRemoveTimer
 } from "@/stores/timer-store"
+import { useProjects } from "@/stores/project-store"
+import { useElectronTray } from "@/modules/Timer/hooks/use-electron-tray"
 import { TimerStatus } from "@/types/timer"
 import { TimerGrid } from "./TimerGrid"
 import { TimerTabs, TimerTabContent } from "./TimerTabs"
@@ -12,48 +14,41 @@ import { TimerEmptyState } from "./TimerEmptyState"
 import { CreateTimerDialog } from "./CreateTimerDialog"
 import { EditTimerDialog } from "./EditTimerDialog"
 import { useState } from "react"
-import { useElectronTray } from "@/modules/Timer/hooks/use-electron-tray.ts"
-
 
 export function TimerContainer() {
-    // Use Zustand store
     const timers = useTimers()
+    const projects = useProjects()
+    const [selectedProjectId, setSelectedProjectId] = useState<string | "all">("all")
 
-    // Electron tray integration
     const { notifyTimerStarted, notifyTimerPaused, notifyTimerStopped } = useElectronTray()
 
-    // Estado local para los diálogos
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [editingTimerId, setEditingTimerId] = useState<string | null>(null)
 
-        // Filtrar y ordenar timers por estado y fecha de creación (más recientes primero)
-        // Ordenar por la fecha de la última sesión (o createdAt si no hay sesiones)
-        const getLastSessionDate = (timer: { history: { endTime: Date | null }[]; createdAt: Date }) => {
-            if (timer.history.length > 0) {
-                // Buscar la última entrada con endTime definido
-                const lastEntry = [...timer.history].reverse().find(entry => entry.endTime)
-                if (lastEntry && lastEntry.endTime) return new Date(lastEntry.endTime).getTime();
-            }
-            return new Date(timer.createdAt).getTime();
-        };
-        const sortByLastSessionDesc = (a: { history: { endTime: Date | null }[]; createdAt: Date }, b: { history: { endTime: Date | null }[]; createdAt: Date }) => getLastSessionDate(b) - getLastSessionDate(a);
-        const completedTimers = timers.filter(timer => timer.status === TimerStatus.COMPLETED).sort(sortByLastSessionDesc);
-        const activeTimers = timers.filter(timer => timer.status !== TimerStatus.COMPLETED).sort(sortByLastSessionDesc);
+    const getLastSessionDate = (timer: { history: { endTime: Date | null }[]; createdAt: Date }) => {
+        if (timer.history.length > 0) {
+            const lastEntry = [...timer.history].reverse().find(entry => entry.endTime)
+            if (lastEntry && lastEntry.endTime) return new Date(lastEntry.endTime).getTime();
+        }
+        return new Date(timer.createdAt).getTime();
+    };
+    const sortByLastSessionDesc = (a: { history: { endTime: Date | null }[]; createdAt: Date }, b: { history: { endTime: Date | null }[]; createdAt: Date }) => getLastSessionDate(b) - getLastSessionDate(a);
+    const filteredTimers = selectedProjectId === "all"
+        ? timers
+        : timers.filter(timer => timer.projectId === selectedProjectId)
+    const completedTimers = filteredTimers.filter(timer => timer.status === TimerStatus.COMPLETED).sort(sortByLastSessionDesc);
+    const activeTimers = filteredTimers.filter(timer => timer.status !== TimerStatus.COMPLETED).sort(sortByLastSessionDesc);
 
-    // Individual action hooks
     const startTimer = useStartTimer()
     const pauseTimer = usePauseTimer()
     const stopTimer = useStopTimer()
     const removeTimer = useRemoveTimer()
 
-    // Enhanced timer actions with Electron notifications
     const handleStartTimer = (timerId: string) => {
         const timer = timers.find(t => t.id === timerId)
         if (timer) {
             startTimer(timerId)
-
-            // Notify with current time as start time
             notifyTimerStarted({
                 id: timer.id,
                 title: timer.title,
@@ -73,13 +68,11 @@ export function TimerContainer() {
         notifyTimerStopped()
     }
 
-    // Handle edit timer
     const handleEditTimer = (timerId: string) => {
         setEditingTimerId(timerId)
         setIsEditDialogOpen(true)
     }
 
-    // Handle create timer
     const handleCreateTimer = () => {
         setIsCreateDialogOpen(true)
     }
@@ -107,6 +100,21 @@ export function TimerContainer() {
     return (
         <>
             <div className="h-full flex flex-col">
+                {/* Filtro por proyecto */}
+                <div className="flex items-center gap-2 px-6 pt-4 pb-2">
+                    <label htmlFor="project-filter" className="text-sm font-medium text-muted-foreground">Filtrar por proyecto:</label>
+                    <select
+                        id="project-filter"
+                        value={selectedProjectId}
+                        onChange={e => setSelectedProjectId(e.target.value)}
+                        className="border rounded px-2 py-1 text-sm bg-card"
+                    >
+                        <option value="all">Todos</option>
+                        {projects.map((project: { id: string; name: string }) => (
+                            <option key={project.id} value={project.id}>{project.name}</option>
+                        ))}
+                    </select>
+                </div>
                 <TimerTabs
                     activeCount={activeTimers.length}
                     completedCount={completedTimers.length}
