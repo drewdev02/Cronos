@@ -14,6 +14,7 @@ import { TimerEmptyState } from "./TimerEmptyState"
 import { CreateTimerDialog } from "./CreateTimerDialog"
 import { EditTimerDialog } from "./EditTimerDialog"
 import { useState } from "react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export function TimerContainer() {
     const timers = useTimers()
@@ -99,21 +100,21 @@ export function TimerContainer() {
 
     return (
         <>
-            <div className="h-full flex flex-col">
+            <div className="h-full w-full flex flex-col">
                 {/* Filtro por proyecto */}
                 <div className="flex items-center gap-2 px-6 pt-4 pb-2">
                     <label htmlFor="project-filter" className="text-sm font-medium text-muted-foreground">Filtrar por proyecto:</label>
-                    <select
-                        id="project-filter"
-                        value={selectedProjectId}
-                        onChange={e => setSelectedProjectId(e.target.value)}
-                        className="border rounded px-2 py-1 text-sm bg-card"
-                    >
-                        <option value="all">Todos</option>
-                        {projects.map((project: { id: string; name: string }) => (
-                            <option key={project.id} value={project.id}>{project.name}</option>
-                        ))}
-                    </select>
+                    <Select value={selectedProjectId} onValueChange={setSelectedProjectId}>
+                        <SelectTrigger className="bg-card w-40 h-9">
+                            <SelectValue placeholder="Seleccionar proyecto" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-card **:[[role=option]]:cursor-pointer">
+                            <SelectItem value="all">Todos</SelectItem>
+                            {projects.map((project: { id: string; name: string }) => (
+                                <SelectItem key={project.id} value={project.id}>{project.name}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
                 </div>
                 <TimerTabs
                     activeCount={activeTimers.length}

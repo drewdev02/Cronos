@@ -44,7 +44,7 @@ export function CustomerEmptyState({ variant, onCreateExample }: CustomerEmptySt
     const config = getEmptyConfig()
 
     return (
-        <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
+        <Empty className="from-muted/50 to-background h-full bg-linear-to-b from-30%">
             <EmptyHeader>
                 <EmptyMedia variant="icon">
                     <Users />
@@ -56,7 +56,7 @@ export function CustomerEmptyState({ variant, onCreateExample }: CustomerEmptySt
             </EmptyHeader>
             {config.showButton && onCreateExample && (
                 <EmptyContent>
-                    <Button onClick={onCreateExample} variant="outline" size="sm">
+                    <Button onClick={onCreateExample} variant="outline" size="sm" className="cursor-pointer">
                         <UserPlus className="h-4 w-4" />
                         {config.buttonText}
                     </Button>

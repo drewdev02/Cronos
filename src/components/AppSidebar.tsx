@@ -29,9 +29,9 @@ export function AppSidebar({ ...props }: AppSidebarProps & React.ComponentProps<
     // Asignar íconos según la ruta
     const iconMap: Record<string, React.ElementType> = {
         Timer: Clock,
-        Customer: Users,
-        Project: Briefcase,
-        Statistics: BarChart3,
+        Cliente: Users,
+        Proyecto: Briefcase,
+        Estadísticas: BarChart3,
     };
 
     return (
@@ -39,14 +39,14 @@ export function AppSidebar({ ...props }: AppSidebarProps & React.ComponentProps<
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <div className="flex items-center justify-between gap-2 px-2">
+                        <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
                                     <span className="truncate font-semibold">Cronos</span>
                                     <span className="truncate text-xs text-muted-foreground">Time Tracker</span>
                                 </div>
                             </div>
-                            <SidebarTrigger className="ml-auto" />
+                            <SidebarTrigger className="mx-auto cursor-pointer" />
                         </div>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -56,10 +56,10 @@ export function AppSidebar({ ...props }: AppSidebarProps & React.ComponentProps<
                     <SidebarGroupLabel>Menu</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {props.routes.filter(route => !["Monthly", "Weekly", "Daily"].includes(route.label)).map(route => {
+                            {props.routes.filter(route => !["Mensual", "Semanal", "Diario"].includes(route.label)).map(route => {
                                 const Icon = iconMap[route.label] || Timer;
                                 const isActive = location.pathname === route.path;
-                                if (route.label === "Statistics") {
+                                if (route.label === "Estadísticas") {
                                     return (
                                         <SidebarMenuItem key={route.path}>
                                             <SidebarMenuButton
@@ -73,7 +73,7 @@ export function AppSidebar({ ...props }: AppSidebarProps & React.ComponentProps<
                                                 </Link>
                                             </SidebarMenuButton>
                                             <SidebarMenuSub>
-                                                {props.routes.filter(r => ["Monthly", "Weekly", "Daily"].includes(r.label)).map(subroute => {
+                                                {props.routes.filter(r => ["Mensual", "Semanal", "Diario"].includes(r.label)).map(subroute => {
                                                     const isSubActive = location.pathname === subroute.path;
                                                     return (
                                                         <SidebarMenuSubItem key={subroute.path}>

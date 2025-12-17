@@ -20,6 +20,7 @@ import {
 import { useAddCustomer } from "@/stores/customer-store"
 import { CreateCustomerDto } from "@/types/customer"
 import { toast } from "sonner"
+import { countries, currencies } from "@/lib/values"
 
 interface CreateCustomerDialogProps {
     open: boolean
@@ -45,18 +46,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
     const [isLoading, setIsLoading] = useState(false)
 
     const addCustomer = useAddCustomer()
-
-    const countries = [
-        "Estados Unidos", "España", "México", "Argentina", "Colombia", "Chile",
-        "Perú", "Venezuela", "Ecuador", "Uruguay", "Paraguay", "Bolivia",
-        "Costa Rica", "Panamá", "Guatemala", "Honduras", "El Salvador", "Nicaragua",
-        "República Dominicana", "Cuba", "Puerto Rico", "Francia", "Alemania",
-        "Reino Unido", "Italia", "Portugal", "Brasil", "Canadá", "Australia"
-    ]
-
-    const currencies = [
-        "USD", "EUR",
-    ]
 
     const handleInputChange = (field: keyof CreateCustomerDto, value: string) => {
         setFormData(prev => ({
@@ -188,9 +177,9 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 <SelectTrigger className="h-11">
                                     <SelectValue placeholder="Seleccionar país..." />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-card max-h-80 overflow-y-auto">
                                     {countries.map((country) => (
-                                        <SelectItem key={country} value={country}>
+                                        <SelectItem key={country} value={country} className="cursor-pointer data-[state=checked]:bg-secondary/80">
                                             {country}
                                         </SelectItem>
                                     ))}
@@ -324,9 +313,9 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 <SelectTrigger className="h-11">
                                     <SelectValue placeholder="Seleccionar moneda..." />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-card">
                                     {currencies.map((currency) => (
-                                        <SelectItem key={currency} value={currency}>
+                                        <SelectItem key={currency} value={currency} className="cursor-pointer">
                                             {currency}
                                         </SelectItem>
                                     ))}
@@ -342,20 +331,20 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                             id="additionalInfo"
                             value={formData.additionalInfo}
                             onChange={(e) => handleInputChange("additionalInfo", e.target.value)}
-                            className="resize-none min-h-[80px]"
+                            className="resize-none min-h-20"
                             rows={3}
                             placeholder="Notas adicionales sobre el cliente..."
                         />
                     </div>
                 </form>
 
-                <DialogFooter className="gap-4 pt-6 !justify-center sm:!justify-center">
+                <DialogFooter className="gap-4 pt-6 justify-center">
                     <Button
                         type="button"
                         variant="secondary"
                         onClick={handleCancel}
                         disabled={isLoading}
-                        className="h-11 px-8"
+                        className="h-11 px-8 cursor-pointer"
                     >
                         Cancelar
                     </Button>
@@ -363,7 +352,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                         type="submit"
                         onClick={handleSubmit}
                         disabled={isLoading}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm h-11 px-8"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm h-11 px-8 cursor-pointer"
                     >
                         {isLoading ? "Creando..." : "Crear cliente"}
                     </Button>

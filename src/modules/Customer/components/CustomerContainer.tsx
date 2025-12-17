@@ -12,7 +12,6 @@ import { CreateCustomerDialog } from "./CreateCustomerDialog"
 import { EditCustomerDialog } from "./EditCustomerDialog"
 import { CustomerGrid } from "./CustomerGrid"
 
-
 export function CustomerContainer() {
     // Use single Zustand store selector
     const {
