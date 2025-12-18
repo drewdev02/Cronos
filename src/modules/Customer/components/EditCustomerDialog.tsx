@@ -20,6 +20,7 @@ import {
 import { useUpdateCustomer } from "@/stores/customer-store"
 import { Customer, UpdateCustomerDto } from "@/types/customer"
 import { toast } from "sonner"
+import { clientCurrencies, countries } from "@/lib/values"
 
 interface EditCustomerDialogProps {
     open: boolean
@@ -47,20 +48,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
     const [isLoading, setIsLoading] = useState(false)
 
     const updateCustomer = useUpdateCustomer()
-
-    const countries = [
-        "Estados Unidos", "España", "México", "Argentina", "Colombia", "Chile",
-        "Perú", "Venezuela", "Ecuador", "Uruguay", "Paraguay", "Bolivia",
-        "Costa Rica", "Panamá", "Guatemala", "Honduras", "El Salvador", "Nicaragua",
-        "República Dominicana", "Cuba", "Puerto Rico", "Francia", "Alemania",
-        "Reino Unido", "Italia", "Portugal", "Brasil", "Canadá", "Australia"
-    ]
-
-    const currencies = [
-        "USD", "EUR", "MXN", "ARS", "COP", "CLP", "PEN", "VES", "UYU", "PYG",
-        "BOB", "CRC", "PAB", "GTQ", "HNL", "SVC", "NIO", "DOP", "CUP", "GBP",
-        "CAD", "AUD", "BRL", "JPY", "CHF", "SEK", "NOK", "DKK", "PLN", "CZK"
-    ]
 
     // Load customer data when dialog opens
     useEffect(() => {
@@ -202,7 +189,7 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="sm:max-w-2xl">
                 <DialogHeader className="space-y-4 pb-6">
                     <DialogTitle className="text-xl font-medium">Editar cliente</DialogTitle>
                 </DialogHeader>
@@ -219,7 +206,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                                 value={formData.companyName}
                                 onChange={(e) => handleInputChange("companyName", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 required
                             />
                         </div>
@@ -227,10 +213,10 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                         <div className="space-y-2">
                             <Label htmlFor="country" className="text-sm font-medium">País *</Label>
                             <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
-                                <SelectTrigger className="h-11">
+                                <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar país..." />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent className="bg-secondary max-h-80">
                                     {countries.map((country) => (
                                         <SelectItem key={country} value={country}>
                                             {country}
@@ -250,7 +236,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                                 value={formData.firstName}
                                 onChange={(e) => handleInputChange("firstName", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 required
                             />
                         </div>
@@ -262,7 +247,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                                 value={formData.lastName}
                                 onChange={(e) => handleInputChange("lastName", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 required
                             />
                         </div>
@@ -278,7 +262,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                                 value={formData.email}
                                 onChange={(e) => handleInputChange("email", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 required
                             />
                         </div>
@@ -291,7 +274,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                                 value={formData.phoneNumber}
                                 onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 placeholder="+1234567890"
                             />
                         </div>
@@ -306,7 +288,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                                 value={formData.addressLine1}
                                 onChange={(e) => handleInputChange("addressLine1", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 required
                             />
                         </div>
@@ -318,7 +299,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                                 value={formData.addressLine2}
                                 onChange={(e) => handleInputChange("addressLine2", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                             />
                         </div>
                     </div>
@@ -332,7 +312,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                                 value={formData.postalCode}
                                 onChange={(e) => handleInputChange("postalCode", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 required
                             />
                         </div>
@@ -344,7 +323,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                                 value={formData.city}
                                 onChange={(e) => handleInputChange("city", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 required
                             />
                         </div>
@@ -360,7 +338,6 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                                 value={formData.website}
                                 onChange={(e) => handleInputChange("website", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 placeholder="https://example.com"
                             />
                         </div>
@@ -368,12 +345,12 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                         <div className="space-y-2">
                             <Label htmlFor="invoiceCurrency" className="text-sm font-medium">Moneda de facturación *</Label>
                             <Select value={formData.invoiceCurrency} onValueChange={(value) => handleInputChange("invoiceCurrency", value)}>
-                                <SelectTrigger className="h-11">
+                                <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar moneda..." />
                                 </SelectTrigger>
-                                <SelectContent>
-                                    {currencies.map((currency) => (
-                                        <SelectItem key={currency} value={currency}>
+                                <SelectContent className="bg-secondary">
+                                    {clientCurrencies.map((currency) => (
+                                        <SelectItem key={currency} value={currency} className="cursor-pointer">
                                             {currency}
                                         </SelectItem>
                                     ))}
@@ -389,20 +366,20 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                             id="additionalInfo"
                             value={formData.additionalInfo}
                             onChange={(e) => handleInputChange("additionalInfo", e.target.value)}
-                            className="resize-none min-h-[80px]"
+                            className="resize-none min-h-20"
                             rows={3}
                             placeholder="Notas adicionales sobre el cliente..."
                         />
                     </div>
                 </form>
 
-                <DialogFooter className="gap-4 pt-6 !justify-center sm:!justify-center">
+                <DialogFooter className="gap-4 pt-6 justify-center!">
                     <Button
                         type="button"
-                        variant="secondary"
+                        variant="ghost"
                         onClick={handleCancel}
                         disabled={isLoading}
-                        className="h-11 px-8"
+                        className="cursor-pointer"
                     >
                         Cancelar
                     </Button>
@@ -410,7 +387,7 @@ export function EditCustomerDialog({ open, onOpenChange, customer }: EditCustome
                         type="submit"
                         onClick={handleSubmit}
                         disabled={isLoading}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm h-11 px-8"
+                        className="cursor-pointer"
                     >
                         {isLoading ? "Actualizando..." : "Guardar cambios"}
                     </Button>

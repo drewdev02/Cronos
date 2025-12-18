@@ -100,9 +100,9 @@ export function TimerContainer() {
 
     return (
         <>
-            <div className="h-full w-full flex flex-col">
+            <div className="flex flex-col h-full relative">
                 {/* Filtro por proyecto */}
-                <div className="flex items-center gap-2 px-6 pt-4 pb-2">
+                <div className="relative flex items-center gap-2 px-6 pt-4 pb-2 z-20">
                     <label htmlFor="project-filter" className="text-sm font-medium text-muted-foreground">Filtrar por proyecto:</label>
                     <Select value={selectedProjectId} onValueChange={setSelectedProjectId}>
                         <SelectTrigger className="bg-card w-40 h-9">
@@ -120,7 +120,7 @@ export function TimerContainer() {
                     activeCount={activeTimers.length}
                     completedCount={completedTimers.length}
                     handleCreateTimer={handleCreateTimer}
-                    className="flex-1"
+                    className="relative flex-1 z-20"
                 >
                     <TimerTabContent value="active" className="flex-1 h-full">
                         {activeTimers.length === 0 ? (

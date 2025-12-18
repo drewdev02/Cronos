@@ -21,7 +21,7 @@ export function TimerTabs({
     handleCreateTimer
 }: TimerTabsProps) {
     return (
-        <Tabs defaultValue={defaultValue} className={cn("h-full flex flex-col z-50", className)}>
+        <Tabs defaultValue={defaultValue} className={cn("h-full flex flex-col", className)}>
             <div className="w-full flex justify-center pt-6 pb-4">
                 <div className="flex items-center justify-center gap-4 px-6 max-w-xl">
                     <TabsList className="grid grid-cols-2 gap-x-2 items-center h-full w-fit min-w-[320px] bg-muted/50 p-1 rounded-lg">

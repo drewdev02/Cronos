@@ -115,7 +115,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-xl max-w-xl bg-secondary">
+      <DialogContent className="sm:max-w-xl max-w-xl">
         <DialogHeader className="space-y-4 pb-6">
           <DialogTitle className="text-xl font-medium">Crear nuevo timer</DialogTitle>
         </DialogHeader>
@@ -145,7 +145,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
                   handleSubmit(syntheticEvent)
                 }
               }}
-              className="resize-none min-h-[90px]"
+              className="resize-none min-h-40"
               rows={3}
             />
           </div>
@@ -153,7 +153,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
           <div className="space-y-3">
             <Label htmlFor="project" className="text-sm font-medium">Proyecto</Label>
             <Select value={projectId || "no-project"} onValueChange={(value) => setProjectId(value === "no-project" ? undefined : value)}>
-              <SelectTrigger className="dialog-input h-11">
+              <SelectTrigger>
                 <SelectValue placeholder="Seleccionar proyecto (opcional)">
                   {projectId && projects.find(p => p.id === projectId) ? (
                     <div className="flex items-center gap-2">
@@ -165,7 +165,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
                   )}
                 </SelectValue>
               </SelectTrigger>
-              <SelectContent className="bg-secondary max-h-80">
+              <SelectContent className="max-h-80">
                 <SelectItem value="no-project" className="cursor-pointer">Sin proyecto</SelectItem>
                 {projects.map((project) => (
                   <SelectItem key={project.id} value={project.id} className="cursor-pointer">
@@ -209,7 +209,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
           </div>
         </form>
 
-        <DialogFooter className="flex flex-row gap-4 pt-8 sm:justify-center">
+        <DialogFooter className="flex flex-row gap-4 pt-6 justify-center!">
           <Button
             type="button"
             variant="ghost"

@@ -50,7 +50,7 @@ export function TimerEmptyState({ variant, onCreateExample }: TimerEmptyStatePro
   const config = getEmptyConfig()
 
   return (
-    <Empty className="from-muted/50 to-background bg-linear-to-b from-30%">
+    <Empty className="from-muted/50 to-background bg-linear-to-b h-full w-full from-30% z-0 relative">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <IconBell />

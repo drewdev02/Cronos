@@ -23,14 +23,14 @@ export function TimerHeader({ timer }: TimerHeaderProps) {
                         </CardDescription>
                     )}
                 </div>
-                <Badge variant={getStatusVariant(timer.status)} className="ml-3 flex-shrink-0">
+                <Badge variant={getStatusVariant(timer.status)} className="ml-3 shrink-0">
                     {getStatusLabel(timer.status)}
                 </Badge>
             </div>
 
             {timer.config?.tags && timer.config.tags.length > 0 && (
                 <div className="flex items-center gap-2 flex-wrap">
-                    <TagIcon className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <TagIcon className="w-4 h-4 text-muted-foreground shrink-0" />
                     <div className="flex gap-1 flex-wrap">
                         {timer.config.tags.slice(0, 3).map((tag, index) => (
                             <Badge key={index} variant="outline" className="text-xs">
