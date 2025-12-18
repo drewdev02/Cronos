@@ -115,7 +115,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-xl max-w-xl" style={{ backgroundColor: '#1e1e1e' }}>
+      <DialogContent className="sm:max-w-xl max-w-xl bg-secondary">
         <DialogHeader className="space-y-4 pb-6">
           <DialogTitle className="text-xl font-medium">Crear nuevo timer</DialogTitle>
         </DialogHeader>
@@ -128,7 +128,6 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="dialog-input h-11"
               required
             />
           </div>
@@ -146,7 +145,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
                   handleSubmit(syntheticEvent)
                 }
               }}
-              className="dialog-input resize-none min-h-[90px]"
+              className="resize-none min-h-[90px]"
               rows={3}
             />
           </div>
@@ -166,10 +165,10 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
                   )}
                 </SelectValue>
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="no-project">Sin proyecto</SelectItem>
+              <SelectContent className="bg-secondary max-h-80">
+                <SelectItem value="no-project" className="cursor-pointer">Sin proyecto</SelectItem>
                 {projects.map((project) => (
-                  <SelectItem key={project.id} value={project.id}>
+                  <SelectItem key={project.id} value={project.id} className="cursor-pointer">
                     <div className="flex items-center gap-2">
                       <FolderIcon className="w-4 h-4" />
                       <span>{project.name}</span>
@@ -190,7 +189,6 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
               value={newTag}
               onChange={(e) => setNewTag(e.target.value)}
               onKeyDown={handleAddTag}
-              className="dialog-input h-11"
             />
             {tags.length > 0 && (
               <div className="flex gap-2 flex-wrap mt-4">
@@ -211,20 +209,20 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
           </div>
         </form>
 
-        <DialogFooter className="gap-4 pt-8 !justify-center sm:!justify-center">
+        <DialogFooter className="flex flex-row gap-4 pt-8 sm:justify-center">
           <Button
             type="button"
-            variant="secondary"
+            variant="ghost"
             onClick={handleCancel}
             disabled={isLoading}
-            className="h-11 px-8"
+            className="h-11 px-8 cursor-pointer"
           >
             Cancelar
           </Button>
           <Button
             type="submit"
             onClick={handleSubmit}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm h-11 px-8"
+            className="h-11 px-8 cursor-pointer"
           >
             {isLoading ? "Creando..." : "Crear timer"}
           </Button>

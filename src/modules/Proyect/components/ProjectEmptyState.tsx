@@ -56,7 +56,7 @@ export function ProjectEmptyState({ variant, onCreateExample }: ProjectEmptyStat
             </EmptyHeader>
             {config.showButton && onCreateExample && (
                 <EmptyContent>
-                    <Button onClick={onCreateExample} variant="outline" size="sm">
+                    <Button onClick={onCreateExample} variant="outline" size="sm" className="cursor-pointer">
                         <FolderPlus className="h-4 w-4" />
                         {config.buttonText}
                     </Button>

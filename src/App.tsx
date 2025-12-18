@@ -39,32 +39,32 @@ const routes: Route[] = [
   },
   {
     path: AppRoute.Customer,
-    label: "Customer",
+    label: "Cliente",
     element: <Customer />,
   },
   {
     path: AppRoute.Project,
-    label: "Project",
+    label: "Proyecto",
     element: <ProjectModule />,
   },
   {
     path: AppRoute.Statistics,
-    label: "Statistics",
+    label: "Estadísticas",
     element: <StatisticsModule />,
   },
   {
     path: AppRoute.StatisticsMonthly,
-    label: "Monthly",
+    label: "Mensual",
     element: <MonthlyStatistics />,
   },
   {
     path: AppRoute.StatisticsWeekly,
-    label: "Weekly",
+    label: "Semanal",
     element: <WeeklyStatistics />,
   },
   {
     path: AppRoute.StatisticsDaily,
-    label: "Daily",
+    label: "Diario",
     element: <DailyStatistics />,
   },
 ];

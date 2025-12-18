@@ -21,6 +21,7 @@ import { useAddProject } from "@/stores/project-store"
 import { useCustomers } from "@/stores/customer-store"
 import { CreateProjectDto, ProjectStatus } from "@/types/project"
 import { toast } from "sonner"
+import { clientCurrencies } from "@/lib/values"
 
 interface CreateProjectDialogProps {
     open: boolean
@@ -41,10 +42,6 @@ export function CreateProjectDialog({ open, onOpenChange }: CreateProjectDialogP
 
     const addProject = useAddProject()
     const customers = useCustomers()
-
-    const currencies = [
-        "USD", "EUR", "MXN", "ARS", "COP", "CLP", "PEN", "BRL"
-    ]
 
     const statusOptions = [
         { value: ProjectStatus.PLANNING, label: "Planificando" },
@@ -213,8 +210,8 @@ export function CreateProjectDialog({ open, onOpenChange }: CreateProjectDialogP
                                 <SelectTrigger className="h-11">
                                     <SelectValue placeholder="Seleccionar moneda..." />
                                 </SelectTrigger>
-                                <SelectContent>
-                                    {currencies.map((currency) => (
+                                <SelectContent className="bg-primary">
+                                    {clientCurrencies.map((currency) => (
                                         <SelectItem key={currency} value={currency}>
                                             {currency}
                                         </SelectItem>

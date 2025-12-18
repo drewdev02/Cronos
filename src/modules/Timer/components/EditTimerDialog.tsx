@@ -228,7 +228,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-xl max-w-xl" style={{backgroundColor: '#1e1e1e'}}>
+            <DialogContent className="sm:max-w-xl max-w-xl bg-secondary">
                 <DialogHeader className="space-y-4 pb-6">
                     <DialogTitle className="text-xl font-medium">Editar timer</DialogTitle>
                 </DialogHeader>
@@ -241,7 +241,6 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             onKeyDown={handleKeyDown}
-                            className="dialog-input h-11"
                             required
                         />
                     </div>
@@ -262,7 +261,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                                     handleSubmit(syntheticEvent)
                                 }
                             }}
-                            className="dialog-input resize-none min-h-[90px]"
+                            className="resize-none min-h-[90px]"
                             rows={3}
                         />
                     </div>
@@ -270,7 +269,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                     <div className="space-y-3">
                         <Label htmlFor="project" className="text-sm font-medium">Proyecto</Label>
                         <Select value={projectId || "no-project"} onValueChange={(value) => setProjectId(value === "no-project" ? undefined : value)}>
-                            <SelectTrigger className="dialog-input h-11">
+                            <SelectTrigger className="dialog-input">
                                 <SelectValue placeholder="Seleccionar proyecto (opcional)">
                                     {projectId && projects.find(p => p.id === projectId) ? (
                                         <div className="flex items-center gap-2">
@@ -282,7 +281,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                                     )}
                                 </SelectValue>
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-secondary">
                                 <SelectItem value="no-project">Sin proyecto</SelectItem>
                                 {projects.map((project) => (
                                     <SelectItem key={project.id} value={project.id}>
@@ -306,7 +305,6 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                             value={newTag}
                             onChange={(e) => setNewTag(e.target.value)}
                             onKeyDown={handleAddTag}
-                            className="dialog-input h-11"
                             placeholder="Presiona Enter para agregar una etiqueta"
                         />
                         {tags.length > 0 && (
@@ -343,7 +341,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                                         const value = parseInt(e.target.value) || 0
                                         setHours(Math.max(0, Math.min(999, value)))
                                     }}
-                                    className="dialog-input h-11 text-center"
+                                    className="text-center"
                                     placeholder="0"
                                     disabled={timer?.status === TimerStatus.RUNNING}
                                 />
@@ -360,7 +358,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                                         const value = parseInt(e.target.value) || 0
                                         setMinutes(Math.max(0, Math.min(59, value)))
                                     }}
-                                    className="dialog-input h-11 text-center"
+                                    className="text-center"
                                     placeholder="0"
                                     disabled={timer?.status === TimerStatus.RUNNING}
                                 />
@@ -377,7 +375,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                                         const value = parseInt(e.target.value) || 0
                                         setSeconds(Math.max(0, Math.min(59, value)))
                                     }}
-                                    className="dialog-input h-11 text-center"
+                                    className="text-center"
                                     placeholder="0"
                                     disabled={timer?.status === TimerStatus.RUNNING}
                                 />
@@ -397,7 +395,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                                     variant="outline"
                                     size="sm"
                                     onClick={() => addQuickTime(15)}
-                                    className="text-xs h-8 px-3"
+                                    className="text-xs h-8 cursor-pointer hover:bg-(--bg-secondary) px-3"
                                     disabled={timer?.status === TimerStatus.RUNNING}
                                 >
                                     +15min
@@ -407,7 +405,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                                     variant="outline"
                                     size="sm"
                                     onClick={() => addQuickTime(30)}
-                                    className="text-xs h-8 px-3"
+                                    className="text-xs h-8 cursor-pointer hover:bg-(--bg-secondary) px-3"
                                     disabled={timer?.status === TimerStatus.RUNNING}
                                 >
                                     +30min
@@ -417,7 +415,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                                     variant="outline"
                                     size="sm"
                                     onClick={() => addQuickTime(60)}
-                                    className="text-xs h-8 px-3"
+                                    className="text-xs h-8 cursor-pointer hover:bg-(--bg-secondary) px-3"
                                     disabled={timer?.status === TimerStatus.RUNNING}
                                 >
                                     +1h
@@ -431,7 +429,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                                         setMinutes(0)
                                         setSeconds(0)
                                     }}
-                                    className="text-xs h-8 px-3 text-destructive hover:text-destructive"
+                                    className="text-xs h-8 cursor-pointer hover:bg-(--bg-secondary) px-3 text-destructive hover:text-destructive"
                                     disabled={timer?.status === TimerStatus.RUNNING}
                                 >
                                     Reset
@@ -452,12 +450,12 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                     <div className="space-y-3">
                         <Label htmlFor="status" className="text-sm font-medium">Estado</Label>
                         <Select value={status} onValueChange={(value) => setStatus(value as TimerStatus)}>
-                            <SelectTrigger className="dialog-input h-11">
+                            <SelectTrigger>
                                 <SelectValue>
                                     {status === TimerStatus.IDLE ? "Inactivo" : status === TimerStatus.COMPLETED ? "Completado" : status}
                                 </SelectValue>
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="bg-secondary **:[[role=option]]:cursor-pointer">
                                 <SelectItem value={TimerStatus.IDLE}>Inactivo</SelectItem>
                                 <SelectItem value={TimerStatus.COMPLETED}>Completado</SelectItem>
                             </SelectContent>
@@ -472,7 +470,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                         variant="secondary"
                         onClick={handleCancel}
                         disabled={isLoading}
-                        className="h-11 px-8"
+                        className="cursor-pointer"
                     >
                         Cancelar
                     </Button>
@@ -480,7 +478,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
                         type="submit"
                         onClick={handleSubmit}
                         disabled={isLoading}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm h-11 px-8"
+                        className="cursor-pointer"
                     >
                         {isLoading ? "Actualizando..." : "Guardar cambios"}
                     </Button>

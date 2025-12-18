@@ -21,13 +21,13 @@ export function TimerTabs({
     handleCreateTimer
 }: TimerTabsProps) {
     return (
-        <Tabs defaultValue={defaultValue} className={cn("h-full flex flex-col", className)}>
-            <div className="w-full flex justify-center">
-                <div className="flex items-center justify-center gap-4 px-6 pt-6 pb-4 max-w-xl w-full">
-                    <TabsList className="grid grid-cols-2 w-fit min-w-[320px] bg-muted/50 p-1 rounded-lg">
+        <Tabs defaultValue={defaultValue} className={cn("h-full flex flex-col z-50", className)}>
+            <div className="w-full flex justify-center pt-6 pb-4">
+                <div className="flex items-center justify-center gap-4 px-6 max-w-xl">
+                    <TabsList className="grid grid-cols-2 gap-x-2 items-center h-full w-fit min-w-[320px] bg-muted/50 p-1 rounded-lg">
                         <TabsTrigger
                             value="active"
-                            className="flex items-center gap-2 px-6 py-2.5 rounded-md transition-all duration-200 
+                            className="flex cursor-pointer border border-transparent items-center justify-center gap-2 px-6 py-2.5 rounded-md transition-all duration-200 
                          timer-tab-active data-[state=active]:shadow-md 
                          data-[state=active]:text-foreground data-[state=active]:border 
                          data-[state=inactive]:text-muted-foreground hover:text-foreground"
@@ -41,7 +41,7 @@ export function TimerTabs({
                         </TabsTrigger>
                         <TabsTrigger
                             value="completed"
-                            className="flex items-center gap-2 px-6 py-2.5 rounded-md transition-all duration-200
+                            className="flex cursor-pointer items-center border border-transparent justify-center gap-2 px-6 py-2.5 rounded-md transition-all duration-200
                          timer-tab-active data-[state=active]:shadow-md 
                          data-[state=active]:text-foreground data-[state=active]:border
                          data-[state=inactive]:text-muted-foreground hover:text-foreground"
@@ -58,7 +58,7 @@ export function TimerTabs({
                         onClick={handleCreateTimer}
                         size="icon"
                         variant="outline"
-                        className="!rounded-xl bg-card text-card-foreground border shadow-sm"
+                        className="rounded-xl hover:bg-(--bg-secondary) cursor-pointer text-card-foreground border shadow-sm"
                     >
                         <Plus className="h-4 w-4" />
                     </Button>

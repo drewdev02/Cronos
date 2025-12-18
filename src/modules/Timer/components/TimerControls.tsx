@@ -25,9 +25,9 @@ export function TimerControls({
     onDeleteTimer
 }: TimerControlsProps) {
     return (
-        <CardFooter className="flex flex-col gap-3 !px-6 !py-4 mt-auto">
+        <CardFooter className="flex flex-col gap-3 px-6 py-4">
             {/* Controles principales */}
-            <div className="flex justify-center gap-2 w-full">
+            <div className="flex justify-center gap-2 w-full [&>button]:cursor-pointer">
                 {timer.status === TimerStatus.IDLE || timer.status === TimerStatus.PAUSED ? (
                     <Button
                         size="sm"
@@ -69,7 +69,7 @@ export function TimerControls({
                         size="sm"
                         variant="ghost"
                         onClick={() => onEditTimer?.(timer.id)}
-                        className="text-xs"
+                        className="text-xs cursor-pointer"
                     >
                         Editar
                     </Button>
@@ -78,7 +78,7 @@ export function TimerControls({
                     size="sm"
                     variant="ghost"
                     onClick={() => onDeleteTimer?.(timer.id)}
-                    className="text-xs text-destructive hover:text-destructive"
+                    className="text-xs text-destructive hover:text-destructive cursor-pointer"
                     style={{ marginLeft: timer.status === TimerStatus.RUNNING ? 'auto' : undefined }}
                 >
                     Eliminar

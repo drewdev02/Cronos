@@ -49,7 +49,7 @@ export function TimerStats({ timer }: TimerStatsProps) {
                 <div className="flex flex-col items-center gap-1 mt-2">
                     <span className="text-xs text-muted-foreground">Horas totales</span>
                     <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-foreground">{hoursValue}h</span>
+                        <span className="text-sm font-semibold text-foreground">{hoursValue.toFixed(3)}h</span>
                         <button
                             type="button"
                             className="p-1 rounded hover:bg-muted/60 transition"

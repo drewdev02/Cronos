@@ -22,12 +22,14 @@ export function TimerEmptyState({ variant, onCreateExample }: TimerEmptyStatePro
         return {
           title: "No hay timers",
           description: "No tienes timers creados. Crea tu primer timer para comenzar.",
+          buttonText: "Crear tu primer timer",
           showButton: true,
         }
       case "no-active":
         return {
           title: "No hay timers activos",
           description: "No tienes timers activos. Crea tu primer timer para comenzar.",
+          buttonText: "Crear tu primer timer",
           showButton: true,
         }
       case "no-completed":
@@ -48,7 +50,7 @@ export function TimerEmptyState({ variant, onCreateExample }: TimerEmptyStatePro
   const config = getEmptyConfig()
 
   return (
-    <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
+    <Empty className="from-muted/50 to-background bg-linear-to-b from-30%">
       <EmptyHeader>
         <EmptyMedia variant="icon">
           <IconBell />
@@ -60,9 +62,9 @@ export function TimerEmptyState({ variant, onCreateExample }: TimerEmptyStatePro
       </EmptyHeader>
       {config.showButton && onCreateExample && (
         <EmptyContent>
-          <Button onClick={onCreateExample} variant="outline" size="sm">
+          <Button onClick={onCreateExample} variant="outline" size="sm" className="cursor-pointer hover:bg-(--bg-secondary)">
             <RefreshCcwIcon />
-            Crear timer de ejemplo
+            {config.buttonText}
           </Button>
         </EmptyContent>
       )}
