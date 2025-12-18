@@ -50,11 +50,6 @@ export function CustomerContainer() {
                     open={isCreateDialogOpen}
                     onOpenChange={setIsCreateDialogOpen}
                 />
-                <EditCustomerDialog
-                    open={isEditDialogOpen}
-                    onOpenChange={setIsEditDialogOpen}
-                    customer={editingCustomer}
-                />
             </>
         )
     }

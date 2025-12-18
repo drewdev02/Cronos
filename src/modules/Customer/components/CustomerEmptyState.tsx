@@ -56,7 +56,7 @@ export function CustomerEmptyState({ variant, onCreateExample }: CustomerEmptySt
             </EmptyHeader>
             {config.showButton && onCreateExample && (
                 <EmptyContent>
-                    <Button onClick={onCreateExample} variant="outline" size="sm" className="cursor-pointer">
+                    <Button onClick={onCreateExample} variant="outline" size="sm" className="cursor-pointer hover:bg-(--bg-secondary)">
                         <UserPlus className="h-4 w-4" />
                         {config.buttonText}
                     </Button>

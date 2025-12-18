@@ -209,7 +209,7 @@ export function CreateTimerDialog({ open, onOpenChange }: CreateTimerDialogProps
           </div>
         </form>
 
-        <DialogFooter className="flex flex-row gap-4 pt-8 sm:justify-center">
+        <DialogFooter className="flex flex-row gap-4 pt-6 justify-center!">
           <Button
             type="button"
             variant="ghost"

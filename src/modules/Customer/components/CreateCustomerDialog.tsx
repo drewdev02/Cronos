@@ -149,7 +149,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="sm:max-w-2xl bg-secondary">
                 <DialogHeader className="space-y-4 pb-6">
                     <DialogTitle className="text-xl font-medium">Crear nuevo cliente</DialogTitle>
                 </DialogHeader>
@@ -166,7 +166,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 value={formData.companyName}
                                 onChange={(e) => handleInputChange("companyName", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 required
                             />
                         </div>
@@ -174,7 +173,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                         <div className="space-y-2">
                             <Label htmlFor="country" className="text-sm font-medium">País</Label>
                             <Select value={formData.country} onValueChange={(value) => handleInputChange("country", value)}>
-                                <SelectTrigger className="h-11">
+                                <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar país..." />
                                 </SelectTrigger>
                                 <SelectContent className="bg-card max-h-80 overflow-y-auto">
@@ -197,7 +196,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 value={formData.firstName}
                                 onChange={(e) => handleInputChange("firstName", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                             />
                         </div>
 
@@ -208,7 +206,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 value={formData.lastName}
                                 onChange={(e) => handleInputChange("lastName", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                             />
                         </div>
                     </div>
@@ -223,7 +220,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 value={formData.email}
                                 onChange={(e) => handleInputChange("email", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 required
                             />
                         </div>
@@ -236,7 +232,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 value={formData.phoneNumber}
                                 onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 placeholder="+1234567890"
                             />
                         </div>
@@ -251,7 +246,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 value={formData.addressLine1}
                                 onChange={(e) => handleInputChange("addressLine1", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                             />
                         </div>
 
@@ -262,7 +256,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 value={formData.addressLine2}
                                 onChange={(e) => handleInputChange("addressLine2", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                             />
                         </div>
                     </div>
@@ -276,7 +269,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 value={formData.postalCode}
                                 onChange={(e) => handleInputChange("postalCode", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                             />
                         </div>
 
@@ -287,7 +279,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 value={formData.city}
                                 onChange={(e) => handleInputChange("city", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                             />
                         </div>
                     </div>
@@ -302,7 +293,6 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 value={formData.website}
                                 onChange={(e) => handleInputChange("website", e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="h-11"
                                 placeholder="https://example.com"
                             />
                         </div>
@@ -310,7 +300,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                         <div className="space-y-2">
                             <Label htmlFor="invoiceCurrency" className="text-sm font-medium">Moneda de facturación</Label>
                             <Select value={formData.invoiceCurrency} onValueChange={(value) => handleInputChange("invoiceCurrency", value)}>
-                                <SelectTrigger className="h-11">
+                                <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar moneda..." />
                                 </SelectTrigger>
                                 <SelectContent className="bg-card">
@@ -338,13 +328,13 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                     </div>
                 </form>
 
-                <DialogFooter className="gap-4 pt-6 justify-center">
+                <DialogFooter className="flex flex-row gap-4 pt-6 justify-center!">
                     <Button
                         type="button"
-                        variant="secondary"
+                        variant="ghost"
                         onClick={handleCancel}
                         disabled={isLoading}
-                        className="h-11 px-8 cursor-pointer"
+                        className="cursor-pointer"
                     >
                         Cancelar
                     </Button>
@@ -352,7 +342,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                         type="submit"
                         onClick={handleSubmit}
                         disabled={isLoading}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm h-11 px-8 cursor-pointer"
+                        className="cursor-pointer"
                     >
                         {isLoading ? "Creando..." : "Crear cliente"}
                     </Button>
