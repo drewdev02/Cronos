@@ -5,7 +5,7 @@
   =========================================
 */
 @theme {
-  /* --- COLORES SHADCN (Canales -> necesitan envoltorio HSL) --- */
+  /* --- COLORES SHADCN (Canales HSL) --- */
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -26,7 +26,7 @@
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
 
-  /* --- TUS COLORES PERSONALIZADOS (Hex/Oklch -> pasan directo con var) --- */
+  /* --- COLORES PERSONALIZADOS (Coherentes con Shadcn) --- */
   --color-bg-primary: var(--bg-primary);
   --color-bg-secondary: var(--bg-secondary);
   --color-bg-tertiary: var(--bg-tertiary);
@@ -47,7 +47,7 @@
   --color-border-color: var(--border-color);
   --color-border-light: var(--border-light);
 
-  /* --- SIDEBAR (OKLCH completo) --- */
+  /* --- SIDEBAR --- */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -82,34 +82,46 @@
 */
 @layer base {
   :root {
-    /* macOS Palette (Hex) */
-    --bg-primary: #1e1e1e;
-    --bg-secondary: #2c2c2e;
-    --bg-tertiary: #3a3a3c;
-    --bg-card: #323232;
-    --bg-dialog: #1e1e1e;
-    --bg-button-secondary: #272727;
+    /* --- DEFINICIÓN DE PALETA MACOS "PURE DARK" --- */
+    
+    /* Nivel 1: Fondo Base - NEGRO PURO */
+    --bg-primary: #000000; 
+    
+    /* Nivel 2: Cards - Gris muy profundo (Casi negro) */
+    --bg-secondary: #161618; 
+    --bg-card: #161618;
+    
+    /* Nivel 3: Inputs/Botones - Un tono más arriba para visibilidad */
+    --bg-tertiary: #262629;
+    --bg-button-secondary: #262629;
+    
+    /* Especiales */
+    --bg-dialog: #161618;
+    
+    /* Textos (Mantenemos contraste alto) */
+    --text-primary: #FFFFFF;
+    --text-secondary: #A1A1A6; /* System Gray optimizado para negro */
+    --text-muted: #6C6C70;     /* System Gray 2 */
 
-    --text-primary: #ffffff;
-    --text-secondary: #8e8e93;
-    --text-muted: #636366;
+    /* Acentos (Iguales, resaltan más sobre negro) */
+    --accent-blue: #0A84FF;
+    --accent-blue-hover: #0077ED;
+    --accent-green: #30D158;
+    --accent-orange: #FF9F0A;
+    --accent-red: #FF453A;
 
-    --accent-blue: #007aff;
-    --accent-blue-hover: #0056b3;
-    --accent-green: #34c759;
-    --accent-orange: #ff9500;
-    --accent-red: #ff3b30;
+    /* Bordes (Más oscuros para mezclarse) */
+    --border-color: #27272A;
+    --border-light: #3F3F46;
 
-    --border-color: #48484a;
-    --border-light: #636366;
+    /* Sombras */
+    --shadow-sm: 0 1px 2px rgba(255, 255, 255, 0.05); /* Sombra blanca sutil para separar capas oscuras */
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.8);
 
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
-    --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --radius: 0.75rem;
 
-    --radius: 0.5rem;
-
-    /* Sidebar (OKLCH) */
+    /* Sidebar Defaults (Light mode placeholder) */
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
@@ -119,61 +131,76 @@
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
 
-    /* Shadcn System Colors (Light Mode Default - HSL Channels) */
+    /* --- SHADCN LIGHT MODE DEFAULT --- */
     --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
   }
 
-  /* Dark Mode Overrides */
+  /* --- DARK MODE OVERRIDES (ULTRA DARK) --- */
   .dark {
-    /* Shadcn System Colors (Dark Mode - HSL Channels) */
-    /* Nota: He ajustado esto para que coincida con tu paleta macOS donde era posible */
-    --background: 0 0% 12%;       /* Tu --bg-primary en HSL aprox */
-    --foreground: 0 0% 98%;
-    --card: 0 0% 20%;             /* Tu --bg-card en HSL aprox */
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 12%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 213 100% 50%;      /* Tu --accent-blue */
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 220 13% 22%;
-    --muted-foreground: 220 9% 56%;
-    --accent: 220 13% 22%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 220 13% 28%;
-    --input: 220 13% 22%;
-    --ring: 213 100% 50%;
+    /* Background: #000000 (Negro Puro) */
+    --background: 0 0% 0%;
+    
+    --foreground: 0 0% 100%;
+    
+    /* Card: #161618 (HSL 240 5% 9%) - Apenas distinguible del negro */
+    --card: 240 5% 9%;
+    --card-foreground: 0 0% 100%;
+    
+    --popover: 240 5% 9%;
+    --popover-foreground: 0 0% 100%;
+    
+    /* Primary: #0A84FF */
+    --primary: 210 100% 52%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary: #262629 (HSL 240 4% 16%) */
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 100%;
+    
+    /* Muted: #1F1F22 */
+    --muted: 240 5% 13%;
+    --muted-foreground: 240 5% 65%;
+    
+    /* Accent: Un poco más claro que Card */
+    --accent: 240 4% 16%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 100% 61%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Border: #27272A (Muy oscuro) */
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    
+    --ring: 210 100% 52%;
 
-    /* Sidebar Dark Variables */
-    --sidebar: oklch(0.205 0 0);
+    /* Sidebar Ultra Dark */
+    --sidebar: oklch(0.13 0 0); /* ~#161618 */
     --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary: oklch(0.623 0.214 259.815);
     --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent: oklch(0.20 0 0);
     --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.439 0 0);
+    --sidebar-border: oklch(0.20 0 0);
+    --sidebar-ring: oklch(0.623 0.214 259.815);
   }
 
   /* Reset Global */
@@ -190,112 +217,33 @@
 }
 
 /* =========================================
-  3. COMPONENTES Y UTILIDADES
-  =========================================
-*/
-@layer components {
-  /* Clases Legacy / Personalizadas */
-  .btn {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-all duration-200 ease-in-out border-none rounded-md outline-none cursor-pointer;
-  }
-
-  .btn-primary {
-    background-color: var(--accent-green);
-    color: white;
-  }
-  .btn-primary:hover {
-    background-color: var(--accent-green-hover); /* Necesitas definir esta var si no existe, o usar un color fijo */
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-  }
-  .btn-primary:active {
-    transform: translateY(0);
-  }
-
-  .btn-secondary {
-    @apply bg-bg-tertiary text-text-primary border border-border-color;
-  }
-  .btn-secondary:hover {
-    @apply bg-border-color border-border-light;
-  }
-
-  .btn-ghost {
-    @apply bg-transparent text-text-secondary border-transparent;
-  }
-  .btn-ghost:hover {
-    @apply bg-bg-secondary text-text-primary;
-  }
-
-  .card {
-    @apply bg-bg-secondary border border-border-color p-6 shadow-sm rounded-xl;
-  }
-
-  .input {
-    @apply w-full px-4 py-3 text-sm transition-colors duration-200 border rounded-md bg-bg-tertiary border-border-color text-text-primary placeholder:text-text-muted focus:outline-none;
-  }
-  .input:focus {
-    border-color: var(--accent-green);
-    box-shadow: 0 0 0 3px rgba(50, 215, 75, 0.1);
-  }
-
-  .nav-tab {
-    @apply px-6 py-3 text-sm font-medium transition-all duration-200 bg-transparent border-none cursor-pointer text-text-secondary rounded-md hover:bg-bg-secondary hover:text-text-primary;
-  }
-  .nav-tab.active {
-    @apply bg-bg-tertiary text-text-primary;
-  }
-  
-  /* Utilidades específicas */
-  .digital-display {
-    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-  }
-  .digital-display-large { @apply text-6xl leading-none; }
-  .digital-display-medium { @apply text-4xl leading-snug; }
-  .digital-display-small { @apply text-xl leading-snug; }
-
-  /* Correcciones para Radix UI / Dialogs */
-  .dialog-input {
-    @apply border border-white bg-[#2a2a2a] px-4 py-3 text-white rounded-md focus:border-[#0066cc] focus:outline-none focus:ring-2 focus:ring-[#0066cc]/20;
-  }
-
-  [data-radix-select-content] {
-    @apply bg-[#232323] text-white border border-[#444] shadow-2xl;
-  }
-  
-  .focus-ring {
-    outline: 2px solid var(--accent-green);
-    outline-offset: 2px;
-  }
-}
-
-/* =========================================
-  4. UTILIDADES SUELTAS (Custom)
+  4. UTILIDADES SUELTAS
   =========================================
 */
 @layer utilities {
   .standard-card-radius {
-    border-radius: var(--radius-xl); /* Asegúrate de que --radius-xl esté definido en root */
+    border-radius: var(--radius-lg);
   }
   
-  /* Scrollbars estilo macOS */
+  /* Scrollbars estilo macOS "OLED" */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
+    background-color: transparent;
   }
   ::-webkit-scrollbar-track {
-    background: var(--bg-primary);
+    background-color: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--bg-tertiary);
-    border-radius: 6px;
+    background-color: var(--bg-tertiary);
+    border-radius: 10px;
+    border: 2px solid var(--bg-primary); 
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--border-light);
+    background-color: var(--text-muted);
   }
+  
   ::selection {
-    background-color: rgba(50, 215, 75, 0.3);
-    color: var(--text-primary);
+    background-color: rgba(10, 132, 255, 0.4);
+    color: white;
   }
 }

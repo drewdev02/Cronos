@@ -149,7 +149,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-2xl bg-secondary">
+            <DialogContent className="sm:max-w-2xl">
                 <DialogHeader className="space-y-4 pb-6">
                     <DialogTitle className="text-xl font-medium">Crear nuevo cliente</DialogTitle>
                 </DialogHeader>

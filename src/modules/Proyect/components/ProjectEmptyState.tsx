@@ -44,7 +44,7 @@ export function ProjectEmptyState({ variant, onCreateExample }: ProjectEmptyStat
     const config = getEmptyConfig()
 
     return (
-        <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
+        <Empty className="from-muted/50 to-background h-full w-full bg-linear-to-b from-30%">
             <EmptyHeader>
                 <EmptyMedia variant="icon">
                     <FolderOpen />

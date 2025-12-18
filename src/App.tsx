@@ -78,7 +78,7 @@ export default function App() {
       <HashRouter>
         <SidebarProvider >
           <AppSidebar variant="inset" routes={routes} />
-          <SidebarInset>
+          <SidebarInset className="pl-4">
             <Routes>
               {routes.map(route => (
                 <Route key={route.path} path={route.path} element={route.element} />

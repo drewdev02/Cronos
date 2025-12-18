@@ -228,7 +228,7 @@ export function EditTimerDialog({open, onOpenChange, timerId}: EditTimerDialogPr
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-xl max-w-xl bg-secondary">
+            <DialogContent className="sm:max-w-xl max-w-xl">
                 <DialogHeader className="space-y-4 pb-6">
                     <DialogTitle className="text-xl font-medium">Editar timer</DialogTitle>
                 </DialogHeader>
