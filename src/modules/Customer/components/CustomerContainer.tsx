@@ -62,7 +62,7 @@ export function CustomerContainer() {
                     <div>
                         <h1 className="text-2xl font-semibold">Clientes</h1>
                     </div>
-                    <Button onClick={handleCreateCustomer} className="flex items-center gap-2">
+                    <Button variant="outline" className="cursor-pointer hover:bg-(--bg-secondary)" onClick={handleCreateCustomer}>
                         <Plus className="h-4 w-4" />
                         Crear Cliente
                     </Button>

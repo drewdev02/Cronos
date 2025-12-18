@@ -77,7 +77,7 @@ export function CustomerCard({
                                 e.stopPropagation()
                                 onEditCustomer?.(customer)
                             }}
-                            className="h-8 w-8 p-0"
+                            className="h-8 w-8 cursor-pointer"
                         >
                             <Edit className="h-3 w-3" />
                         </Button>
@@ -92,7 +92,7 @@ export function CustomerCard({
                                     onDeleteCustomer?.(customer.id)
                                 }
                             }}
-                            className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                            className="h-8 w-8 p-0 hover:text-destructive cursor-pointer"
                         >
                             <Trash2 className="h-3 w-3" />
                         </Button>
@@ -104,7 +104,7 @@ export function CustomerCard({
                 {/* Contact Info */}
                 <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Mail className="h-3 w-3 flex-shrink-0" />
+                        <Mail className="h-3 w-3 shrink-0" />
                         <span className="line-clamp-1" title={customer.email}>
                             {customer.email}
                         </span>
@@ -112,7 +112,7 @@ export function CustomerCard({
 
                     {customer.phoneNumber && (
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Phone className="h-3 w-3 flex-shrink-0" />
+                            <Phone className="h-3 w-3 shrink-0" />
                             <span>{customer.phoneNumber}</span>
                         </div>
                     )}
@@ -120,7 +120,7 @@ export function CustomerCard({
 
                 {/* Location */}
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <MapPin className="h-3 w-3 flex-shrink-0" />
+                    <MapPin className="h-3 w-3 shrink-0" />
                     <span className="line-clamp-1" title={`${customer.city}, ${customer.country}`}>
                         {customer.city}, {customer.country}
                     </span>
@@ -129,7 +129,7 @@ export function CustomerCard({
                 {/* Website */}
                 {customer.website && (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Globe className="h-3 w-3 flex-shrink-0" />
+                        <Globe className="h-3 w-3 shrink-0" />
                         <a
                             href={customer.website}
                             target="_blank"

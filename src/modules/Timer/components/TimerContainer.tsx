@@ -100,7 +100,7 @@ export function TimerContainer() {
 
     return (
         <>
-            <div className="h-full w-full flex flex-col">
+            <div className="flex flex-col mx-10">
                 {/* Filtro por proyecto */}
                 <div className="flex items-center gap-2 px-6 pt-4 pb-2">
                     <label htmlFor="project-filter" className="text-sm font-medium text-muted-foreground">Filtrar por proyecto:</label>

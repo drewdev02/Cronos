@@ -77,7 +77,7 @@ export default function App() {
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <HashRouter>
         <SidebarProvider >
-          <AppSidebar variant='inset' routes={routes} />
+          <AppSidebar variant="inset" routes={routes} />
           <SidebarInset>
             <Routes>
               {routes.map(route => (
