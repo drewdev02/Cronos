@@ -176,7 +176,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar país..." />
                                 </SelectTrigger>
-                                <SelectContent className="bg-card max-h-80 overflow-y-auto">
+                                <SelectContent className="bg-secondary max-h-80">
                                     {countries.map((country) => (
                                         <SelectItem key={country} value={country} className="cursor-pointer data-[state=checked]:bg-secondary/80">
                                             {country}
@@ -303,7 +303,7 @@ export function CreateCustomerDialog({ open, onOpenChange }: CreateCustomerDialo
                                 <SelectTrigger>
                                     <SelectValue placeholder="Seleccionar moneda..." />
                                 </SelectTrigger>
-                                <SelectContent className="bg-card">
+                                <SelectContent className="bg-secondary">
                                     {currencies.map((currency) => (
                                         <SelectItem key={currency} value={currency} className="cursor-pointer">
                                             {currency}
