@@ -1,137 +1,75 @@
-# Cronos - Timer Application
-Una aplicación de temporizadores moderna construida con Electron, React, TypeScript y Tailwind CSS.
+# cronos
 
-## 🚀 Características
+An Electron application with React and TypeScript, using `better-sqlite3`, Drizzle ORM, and MobX.
 
-- ⏱️ Múltiples temporizadores simultáneos
-- 🎨 Interfaz moderna y responsiva
-- 💾 Persistencia de datos local
-- 🔔 Notificaciones del sistema
-- 📊 Estadísticas de uso
-- 🌙 Modo oscuro/claro
+## Recommended IDE Setup
 
-## 🛠️ Tecnologías
+- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-- **Electron** - Framework para aplicaciones de escritorio
-- **React 18** - Biblioteca de interfaz de usuario
-- **TypeScript** - Tipado estático
-- **Tailwind CSS** - Framework de CSS utilitario
-- **Vite** - Herramienta de build y desarrollo
-- **Zustand** - Gestión de estado
-- **Shadcn/ui** - Componentes de UI
+## Project Setup y Ciclo de Vida de Desarrollo
 
-## 📥 Instalación
+### Instalar Dependencias
 
-### Desarrollo
+Para iniciar con el desarrollo por primera vez, clona el repositorio e instala todos los paquetes:
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/username/cronos.git
-cd cronos
-
-# Instalar dependencias
-npm install
-
-# Ejecutar en modo desarrollo
-npm run dev
+$ npm install
 ```
-
-### Construir para Producción
-
-```bash
-# Construir la aplicación
-npm run build
-
-# Construir y crear instaladores
-npm run dist
-```
-
-## 🔄 CI/CD y Releases
-
-Este proyecto incluye un pipeline completo de CI/CD usando GitHub Actions.
-
-### Crear un Release
-
-```bash
-# Para versión patch (1.0.0 -> 1.0.1)
-npm run release:patch
-
-# Para versión minor (1.0.0 -> 1.1.0)
-npm run release:minor
-
-# Para versión major (1.0.0 -> 2.0.0)
-npm run release:major
-```
-
-### Pre-releases
-
-```bash
-# Desde la rama develop
-npm run pre-release
-```
-
-Para más información sobre el CI/CD, consulta la [documentación completa](docs/CICD.md).
-
-## 📋 Scripts Disponibles
-
-```bash
-npm run dev          # Ejecutar en modo desarrollo
-npm run build        # Construir la aplicación
-npm run dist         # Construir y crear instaladores
-npm run lint         # Ejecutar linter
-npm run preview      # Vista previa de la build
-npm run release      # Crear un release oficial
-npm run pre-release  # Crear un pre-release
-```
-
-## 🏗️ Estructura del Proyecto
-
-```
-cronos/
-├── electron/           # Código del proceso principal de Electron
-├── src/               # Código fuente de React
-│   ├── components/    # Componentes reutilizables
-│   ├── modules/       # Módulos de funcionalidad
-│   ├── stores/        # Gestión de estado
-│   └── types/         # Definiciones de tipos
-├── scripts/           # Scripts de automatización
-├── docs/              # Documentación
-└── .github/           # Workflows de CI/CD
-```
-
-## 🤝 Contribuir
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -am 'Agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
 
-## 🔧 Configuración Técnica
+## 💾 Base de Datos y Migraciones
 
-### ESLint Configuration
+El proyecto usa **SQLite** local con `better-sqlite3` y **Drizzle ORM** para el esquema.
 
-Para desarrollo en producción, se recomienda actualizar la configuración para habilitar reglas de lint conscientes del tipo:
+Debido a que SQLite es un binario nativo que requiere recompilarse para el entorno en el cual se ejecutará (Node local vs Electron), es común que surja un desajuste de versiones (NODE_MODULE_VERSION).
 
-- Configurar la propiedad `parserOptions` de nivel superior así:
+Para solucionar esto y mantener tu base de datos y esquemas en sincronía cuando haces cambios a `schema.ts`, utiliza el siguiente script:
 
-```js
-export default {
-  // otras reglas...
-  parserOptions: {
-    ecmaVersion: 'latest', 
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```bash
+$ npm run db:sync
 ```
 
-- Reemplazar `plugin:@typescript-eslint/recommended` por `plugin:@typescript-eslint/recommended-type-checked`
-- Opcionalmente agregar `plugin:@typescript-eslint/stylistic-type-checked`
+**¿Qué hace `db:sync`?**
+
+1. Recompila la librería nativa (`better-sqlite3`) para usar temporalmente la versión de Node.js actual.
+2. Sincroniza el esquema de Drizzle hacia el archivo SQLite (`npm run db:push`).
+3. Recompila nuevamente la librería para Electron a través de `electron-builder` (`npm run postinstall`) resolviendo cualquier error de versión de módulos (NODE_MODULE_VERSION mismatches).
+
+**Otros scripts de Drizzle disponibles:**
+
+- `npm run db:generate`: Para generar archivos de migraciones si prefieres un historial estricto en lugar de `push`.
+- `npm run db:studio`: Abre una vista web de configuración y administración de la base de datos local.
+
+---
+
+## 🛠 Entorno de Desarrollo
+
+Para correr la aplicación en forma local utilizando Electron-Vite:
+
+```bash
+$ npm run dev
+```
+
+Este comando levanta tanto el entorno para el renderizador (React) con auto-recarga, como el compilado automático para el Main Process de Electron.
+
+---
+
+## 📦 Compilación y Producción
+
+Una vez que el proyecto esté listo, necesitas compilar el código (React, TypeScript y configuraciones de Main) de Electron a código minificado de Producción para después empaquetar los instaladores nativos.
+
+El proceso de empaquetado para el sistema operativo en el cual quieras la aplicación se ejecuta en dos pasos combinados vía NPM (primero el Type Checking y Vite Build, después Electron Builder):
+
+```bash
+# Para Windows (.exe)
+$ npm run build:win
+
+# Para macOS (.dmg)
+$ npm run build:mac
+
+# Para Linux (.AppImage / .deb)
+$ npm run build:linux
+```
+
+Una vez que se haya terminado, puedes encontrar los compilados dentro de la carpeta `dist/`. No confundir con la compilación interna de Vite generada en `out/`, la cual es solo temporal para la ejecución o durante el proceso de build.
