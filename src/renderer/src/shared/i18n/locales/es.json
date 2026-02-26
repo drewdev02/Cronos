@@ -35,6 +35,13 @@
     "totalTime": "Tiempo Total",
     "activeProjects": "Proyectos Activos",
     "loading": "Cargando..."
+    ,
+    "recentTasks": {
+      "title": "Tareas Recientes",
+      "seeAll": "Ver todas",
+      "loading": "Cargando...",
+      "noTasks": "No hay tareas registradas aún."
+    }
   },
   "clients": {
     "title": "Clientes",

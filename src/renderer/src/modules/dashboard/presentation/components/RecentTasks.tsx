@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'wouter'
+import { useTranslation } from 'react-i18next'
 import { useInjection } from '@/shared/hooks/useInjection'
 import { TasksViewModel } from '@/modules/tasks/presentation/viewmodels/TasksViewModel'
 import { Card, CardContent } from '@/shared/components/ui/card'
@@ -15,6 +16,7 @@ function formatDuration(totalSeconds: number) {
 
 export const RecentTasks = observer(function RecentTasks() {
   const vm = useInjection<TasksViewModel>(TasksViewModel)
+  const { t } = useTranslation()
   const [, navigate] = useLocation()
 
   useEffect(() => {
@@ -33,19 +35,19 @@ export const RecentTasks = observer(function RecentTasks() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center px-1">
-        <h2 className="text-lg font-semibold text-foreground">Tareas Recientes</h2>
+        <h2 className="text-lg font-semibold text-foreground">{t('dashboard.recentTasks.title')}</h2>
         <Button variant="link" className="text-sm" onClick={() => navigate('/tasks')}>
-          Ver todas
+          {t('dashboard.recentTasks.seeAll')}
         </Button>
       </div>
 
       {vm.loading && items.length === 0 ? (
-        <Card className="border-dashed border-2 bg-transparent border-border/40 min-h-50 flex items-center justify-center">
-          <CardContent className="p-0 text-muted-foreground font-medium">Cargando...</CardContent>
+          <Card className="border-dashed border-2 bg-transparent border-border/40 min-h-50 flex items-center justify-center">
+          <CardContent className="p-0 text-muted-foreground font-medium">{t('dashboard.recentTasks.loading')}</CardContent>
         </Card>
       ) : items.length === 0 ? (
         <Card className="border-dashed border-2 bg-transparent border-border/40 min-h-50 flex items-center justify-center">
-          <CardContent className="p-0 text-muted-foreground font-medium">No hay tareas registradas aún.</CardContent>
+          <CardContent className="p-0 text-muted-foreground font-medium">{t('dashboard.recentTasks.noTasks')}</CardContent>
         </Card>
       ) : (
         <div className="space-y-2">
@@ -54,7 +56,7 @@ export const RecentTasks = observer(function RecentTasks() {
               <div className="flex items-center justify-between">
                 <div>
                   <div className="font-medium text-foreground">{t.title}</div>
-                  <div className="text-xs text-muted-foreground">{t.projectId ? t.projectId : 'Sin proyecto'}</div>
+                  <div className="text-xs text-muted-foreground">{t.projectId ? t.projectId : t('tasks.noProject')}</div>
                 </div>
                 <div className="text-sm text-muted-foreground">{formatDuration(t.duration || 0)}</div>
               </div>

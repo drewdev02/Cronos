@@ -35,6 +35,13 @@
     "totalTime": "Total Time",
     "activeProjects": "Active Projects",
     "loading": "Loading..."
+    ,
+    "recentTasks": {
+      "title": "Recent Tasks",
+      "seeAll": "See all",
+      "loading": "Loading...",
+      "noTasks": "You don't have any tasks registered."
+    }
   },
   "clients": {
     "title": "Clients",
