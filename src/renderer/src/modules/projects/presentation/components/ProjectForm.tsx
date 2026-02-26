@@ -29,7 +29,7 @@ export const ProjectForm: React.FC<{
       setRate(String(initial.rate ?? ''))
       setColor(initial.color ?? '')
     }
-  }, [open, clientsVm, initial])
+  }, [open, clientsVm]) // Quitamos "initial" para evitar reseteos involuntarios
 
   function handleSubmit(e?: React.FormEvent) {
     e?.preventDefault()

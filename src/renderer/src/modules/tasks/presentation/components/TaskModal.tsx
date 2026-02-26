@@ -4,6 +4,7 @@ import { LucidePlus } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -90,6 +91,7 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{task ? t('tasks.editTask') : t('tasks.createTask')}</DialogTitle>
+          <DialogDescription className="sr-only">{task ? t('tasks.editTask') : t('tasks.createTask')}</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="space-y-2">

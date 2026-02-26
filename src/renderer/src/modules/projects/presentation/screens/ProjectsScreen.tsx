@@ -37,7 +37,13 @@ export const ProjectsScreen = observer(() => {
               className="pl-9 bg-card/40 border-border/50 focus:border-primary/50 transition-colors"
             />
           </div>
-          <Button onClick={() => { setEditing(null); setFormOpen(true) }} className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl">
+          <Button
+            onClick={() => {
+              setEditing(null)
+              setFormOpen(true)
+            }}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl"
+          >
             <LucidePlus className="w-4 h-4" />
             Nuevo project
           </Button>
@@ -50,7 +56,7 @@ export const ProjectsScreen = observer(() => {
           <div className="flex-1 flex items-center justify-center text-muted-foreground animate-pulse">
             Cargando...
           </div>
-        ) : vm.projects.length === 0 ? (
+        ) : vm.projects.length === 0 && !vm.loading ? (
           <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-[400px] flex items-center justify-center transition-all hover:border-border/60">
             <CardContent className="flex flex-col items-center justify-center p-0 space-y-6">
               <div className="bg-muted/20 p-5 rounded-full ring-8 ring-muted/5">
@@ -60,7 +66,14 @@ export const ProjectsScreen = observer(() => {
                 <p className="text-muted-foreground font-medium text-lg">
                   No tienes proyectos registrados.
                 </p>
-                <Button variant="ghost" onClick={() => { setEditing(null); setFormOpen(true) }} className="text-primary hover:text-primary/80 transition-colors font-semibold group flex items-center gap-2 mx-auto">
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setEditing(null)
+                    setFormOpen(true)
+                  }}
+                  className="text-primary hover:text-primary/80 transition-colors font-semibold group flex items-center gap-2 mx-auto"
+                >
                   Crear mi primer proyecto
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </Button>
@@ -69,18 +82,14 @@ export const ProjectsScreen = observer(() => {
           </Card>
         ) : (
           <div className="grid gap-4">
-            <div className="flex justify-end">
-              <Button onClick={() => { setEditing(null); setFormOpen(true) }} className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl">
-                <LucidePlus className="w-4 h-4" />
-                Nuevo project
-              </Button>
-            </div>
-
             {vm.projects.map((p) => (
               <ProjectCard
                 key={p.id}
                 project={p}
-                onEdit={() => { setEditing(p.id); setFormOpen(true) }}
+                onEdit={() => {
+                  setEditing(p.id)
+                  setFormOpen(true)
+                }}
                 onDelete={() => vm.deleteProject(p.id)}
               />
             ))}
@@ -90,7 +99,7 @@ export const ProjectsScreen = observer(() => {
         <ProjectForm
           open={formOpen}
           onClose={() => setFormOpen(false)}
-          initial={editing ? vm.projects.find((x) => x.id === editing) ?? undefined : undefined}
+          initial={editing ? (vm.projects.find((x) => x.id === editing) ?? undefined) : undefined}
           onSubmit={(project) => {
             if (editing) vm.updateProject(editing, project)
             else vm.createProject(project)
