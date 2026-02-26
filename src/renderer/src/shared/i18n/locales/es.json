@@ -1,0 +1,18 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "clients": "Clientes",
+    "projects": "Proyectos",
+    "tasks": "Tareas"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Gestiona tu tiempo y productividad",
+    "search": "Buscar...",
+    "newTask": "Nueva Tarea",
+    "totalEarned": "Total Ganado",
+    "totalTime": "Tiempo Total",
+    "activeProjects": "Proyectos Activos",
+    "loading": "Cargando..."
+  }
+}

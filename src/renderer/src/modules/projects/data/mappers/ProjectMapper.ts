@@ -1,0 +1,26 @@
+import { Project } from '../../domain/models/Project'
+import { ProjectDTO } from '@/../../shared/types'
+
+export class ProjectMapper {
+  static toDomain(dto: ProjectDTO): Project {
+    return {
+      id: dto.id,
+      name: dto.name,
+      clientId: dto.clientId ?? undefined,
+      color: dto.color ?? undefined,
+      rate: dto.rate ?? undefined
+    }
+  }
+
+  static toDTO(domain: Project): ProjectDTO {
+    return {
+      id: domain.id,
+      name: domain.name,
+      clientId: domain.clientId ?? null,
+      color: domain.color ?? null,
+      rate: domain.rate ?? null,
+      createdAt: new Date().toISOString(), // This should ideally come from domain if needed
+      updatedAt: new Date().toISOString()
+    }
+  }
+}

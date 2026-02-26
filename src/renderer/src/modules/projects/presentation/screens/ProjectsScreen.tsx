@@ -1,0 +1,72 @@
+import { useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
+import { LucideSearch, LucidePlus, LucideBriefcase } from 'lucide-react'
+import { useInjection } from '@/shared/hooks/useInjection'
+import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
+import { Card, CardContent } from '@/shared/components/ui/card'
+import { ProjectsViewModel } from '../viewmodels/ProjectsViewModel'
+
+export const ProjectsScreen = observer(() => {
+  const vm = useInjection<ProjectsViewModel>(ProjectsViewModel)
+
+  useEffect(() => {
+    vm.loadProjects()
+  }, [vm])
+
+  return (
+    <div className="flex-1 flex flex-col min-h-screen bg-background text-foreground">
+      {/* Header */}
+      <header className="p-6 md:px-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-bold">Projects</h1>
+          <p className="text-sm text-muted-foreground font-medium opacity-80">
+            Gestiona tu tiempo y productividad
+          </p>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div className="relative w-full md:w-64">
+            <LucideSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Buscar..."
+              className="pl-9 bg-card/40 border-border/50 focus:border-primary/50 transition-colors"
+            />
+          </div>
+          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl">
+            <LucidePlus className="w-4 h-4" />
+            Nuevo project
+          </Button>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-1 p-6 md:px-8 max-w-7xl mx-auto w-full flex flex-col">
+        {vm.loading ? (
+          <div className="flex-1 flex items-center justify-center text-muted-foreground animate-pulse">
+            Cargando...
+          </div>
+        ) : vm.projects.length === 0 ? (
+          <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-[400px] flex items-center justify-center transition-all hover:border-border/60">
+            <CardContent className="flex flex-col items-center justify-center p-0 space-y-6">
+              <div className="bg-muted/20 p-5 rounded-full ring-8 ring-muted/5">
+                <LucideBriefcase className="w-12 h-12 text-muted-foreground" />
+              </div>
+              <div className="text-center space-y-2">
+                <p className="text-muted-foreground font-medium text-lg">
+                  No tienes proyectos registrados.
+                </p>
+                <button className="text-primary hover:text-primary/80 transition-colors font-semibold group flex items-center gap-2 mx-auto cursor-pointer">
+                  Crear mi primer proyecto
+                  <span className="group-hover:translate-x-1 transition-transform">→</span>
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid gap-4">{/* List projects here when data exists */}</div>
+        )}
+      </main>
+    </div>
+  )
+})

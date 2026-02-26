@@ -1,55 +1,7 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
 node_modules
 dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+out
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Build outputs
-release
-dist-electron
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# macOS specific
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Windows specific
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# IDE
-*.swp
-*.swo
-*~
-
-# Certificate files (never commit these!)
-*.p12
-*.pem
-*.crt
-*.key
-dist-electron/
+.eslintcache
+*.log*
+local.db
