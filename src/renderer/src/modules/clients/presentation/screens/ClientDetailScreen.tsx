@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams, Link } from 'wouter'
 import { LucideArrowLeft } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useInjection } from '@/shared/hooks/useInjection'
 import { Button } from '@/shared/components/ui/button'
 import { ClientDetailViewModel } from '../viewmodels/ClientDetailViewModel'
@@ -11,14 +12,15 @@ export const ClientDetailScreen = observer(() => {
   const params = useParams<{ id: string }>()
   const id = params.id
   const vm = useInjection<ClientDetailViewModel>(ClientDetailViewModel)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (id) vm.loadClient(id)
   }, [id, vm])
 
-  if (vm.loading) return <div className="p-6">Cargando cliente...</div>
+  if (vm.loading) return <div className="p-6">{t('clients.loading')}</div>
   if (vm.error) return <div className="p-6 text-red-500">{vm.error}</div>
-  if (!vm.client) return <div className="p-6">Cliente no encontrado</div>
+  if (!vm.client) return <div className="p-6">{t('clients.notFound')}</div>
 
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-background text-foreground">
@@ -26,12 +28,12 @@ export const ClientDetailScreen = observer(() => {
         <Link href="/clients">
           <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
             <LucideArrowLeft className="w-4 h-4" />
-            Volver
+            {t('clients.back')}
           </Button>
         </Link>
         <div className="space-y-1">
           <h1 className="text-2xl font-bold">{vm.client.name}</h1>
-          <p className="text-sm text-muted-foreground font-medium opacity-80">Detalle del cliente</p>
+          <p className="text-sm text-muted-foreground font-medium opacity-80">{t('clients.detail')}</p>
         </div>
       </header>
 
@@ -40,7 +42,7 @@ export const ClientDetailScreen = observer(() => {
           <CardContent className="p-6">
             <h2 className="text-2xl font-bold">{vm.client.name}</h2>
             <p className="text-sm text-muted-foreground mt-2">{vm.client.email}</p>
-            <div className="mt-4 text-sm text-muted-foreground">Proyectos: 0</div>
+            <div className="mt-4 text-sm text-muted-foreground">{t('clients.projects')}: 0</div>
           </CardContent>
         </Card>
       </main>

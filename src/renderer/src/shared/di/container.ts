@@ -9,6 +9,7 @@ import { GetClientsUseCase } from '@/modules/clients/domain/usecases/GetClientsU
 import { CreateClientUseCase } from '@/modules/clients/domain/usecases/CreateClientUseCase'
 import { GetClientByIdUseCase } from '@/modules/clients/domain/usecases/GetClientByIdUseCase'
 import { UpdateClientUseCase } from '@/modules/clients/domain/usecases/UpdateClientUseCase'
+import { DeleteClientUseCase } from '@/modules/clients/domain/usecases/DeleteClientUseCase'
 import { ClientRepository } from '@/modules/clients/domain/repositories/ClientRepository'
 import { ClientRepositoryImpl } from '@/modules/clients/data/repositories/ClientRepositoryImpl'
 import { ProjectsViewModel } from '@/modules/projects/presentation/viewmodels/ProjectsViewModel'
@@ -68,8 +69,17 @@ container.bind(UpdateClientUseCase).toDynamicValue(() => {
   return new UpdateClientUseCase(container.get(ClientRepository))
 })
 
+container.bind(DeleteClientUseCase).toDynamicValue(() => {
+  return new DeleteClientUseCase(container.get(ClientRepository))
+})
+
 container.bind(ClientsViewModel).toDynamicValue(() => {
-  return new ClientsViewModel(container.get(GetClientsUseCase), container.get(CreateClientUseCase))
+  return new ClientsViewModel(
+    container.get(GetClientsUseCase),
+    container.get(CreateClientUseCase),
+    container.get(UpdateClientUseCase),
+    container.get(DeleteClientUseCase)
+  )
 })
 
 container.bind(ClientDetailViewModel).toDynamicValue(() => {

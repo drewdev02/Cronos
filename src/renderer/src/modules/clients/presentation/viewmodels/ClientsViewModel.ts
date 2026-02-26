@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { GetClientsUseCase } from '../../domain/usecases/GetClientsUseCase'
 import { CreateClientUseCase } from '../../domain/usecases/CreateClientUseCase'
 import { UpdateClientUseCase } from '../../domain/usecases/UpdateClientUseCase'
+import { DeleteClientUseCase } from '../../domain/usecases/DeleteClientUseCase'
 import { Client } from '../../domain/models/Client'
 
 export class ClientsViewModel {
@@ -11,7 +12,8 @@ export class ClientsViewModel {
   constructor(
     private readonly getClientsUseCase: GetClientsUseCase,
     private readonly createClientUseCase: CreateClientUseCase,
-    private readonly updateClientUseCase: UpdateClientUseCase
+    private readonly updateClientUseCase: UpdateClientUseCase,
+    private readonly deleteClientUseCase: DeleteClientUseCase
   ) {
     makeAutoObservable(this)
   }
@@ -63,6 +65,23 @@ export class ClientsViewModel {
       }
     } catch (error) {
       console.error('Error updating client:', error)
+    } finally {
+      runInAction(() => (this.loading = false))
+    }
+  }
+
+  async deleteClient(id: string): Promise<void> {
+    
+    this.loading = true
+    try {
+      const ok = await this.deleteClientUseCase.execute(id)
+      if (ok) {
+        runInAction(() => {
+          this.clients = this.clients.filter((c) => c.id !== id)
+        })
+      }
+    } catch (error) {
+      console.error('Error deleting client:', error)
     } finally {
       runInAction(() => (this.loading = false))
     }

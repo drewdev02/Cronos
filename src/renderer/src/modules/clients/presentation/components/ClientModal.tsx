@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { LucidePlus } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import {
   Dialog,
   DialogContent,
@@ -27,6 +28,7 @@ export const ClientModal = observer(({ children, client }: Props) => {
   const [email, setEmail] = useState('')
 
   const vm = useInjection<ClientsViewModel>(ClientsViewModel)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (client && open) {
@@ -58,29 +60,29 @@ export const ClientModal = observer(({ children, client }: Props) => {
         {children || (
           <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl">
             <LucidePlus className="w-4 h-4" />
-            Nuevo client
+            {t('clients.newClient')}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{client ? 'Editar Cliente' : 'Crear Nuevo Cliente'}</DialogTitle>
+          <DialogTitle>{client ? t('clients.editClient') : t('clients.createClient')}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Nombre</Label>
+            <Label htmlFor="name">{t('clients.name')}</Label>
             <Input id="name" value={name} onChange={(e) => setName(e.target.value)} autoFocus />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t('clients.email')}</Label>
             <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
 
           <DialogFooter className="pt-4">
             <Button type="submit" disabled={vm.loading || !name.trim() || !email.trim()} className="w-full">
-              {vm.loading ? (client ? 'Guardando...' : 'Creando...') : client ? 'Guardar Cambios' : 'Crear Cliente'}
+              {vm.loading ? (client ? t('clients.saving') : t('clients.creating')) : client ? t('clients.saveChanges') : t('clients.create')}
             </Button>
           </DialogFooter>
         </form>

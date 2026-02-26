@@ -14,5 +14,29 @@
     "totalTime": "Total Time",
     "activeProjects": "Active Projects",
     "loading": "Loading..."
+  },
+  "clients": {
+    "title": "Clients",
+    "subtitle": "Manage your clients",
+    "search": "Search...",
+    "loading": "Loading...",
+    "emptyTitle": "You don't have any clients yet.",
+    "emptyAction": "Add my first client",
+    "newClient": "New client",
+    "editClient": "Edit client",
+    "createClient": "Create new client",
+    "name": "Name",
+    "email": "Email",
+    "saveChanges": "Save changes",
+    "create": "Create client",
+    "saving": "Saving...",
+    "creating": "Creating...",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete client {{name}}?",
+    "notFound": "Client not found",
+    "back": "Back",
+    "detail": "Client details",
+    "projects": "Projects"
   }
 }

@@ -26,4 +26,8 @@ export class ClientRepositoryImpl extends ClientRepository {
     const updated = await window.api.clients.update(id, dto)
     return updated ? ClientMapper.toDomain(updated) : null
   }
+
+  async deleteClient(id: string): Promise<boolean> {
+    return window.api.clients.delete(id)
+  }
 }
