@@ -1,0 +1,129 @@
+import { Container } from 'inversify'
+import { DashboardRepository } from '@/modules/dashboard/domain/repositories/DashboardRepository'
+import { DashboardRepositoryImpl } from '@/modules/dashboard/data/repositories/DashboardRepositoryImpl'
+import { GetDashboardStatsUseCase } from '@/modules/dashboard/domain/usecases/GetDashboardStatsUseCase'
+import { DashboardViewModel } from '@/modules/dashboard/presentation/viewmodels/DashboardViewModel'
+import { ClientsViewModel } from '@/modules/clients/presentation/viewmodels/ClientsViewModel'
+import { GetClientsUseCase } from '@/modules/clients/domain/usecases/GetClientsUseCase'
+import { ClientRepository } from '@/modules/clients/domain/repositories/ClientRepository'
+import { ClientRepositoryImpl } from '@/modules/clients/data/repositories/ClientRepositoryImpl'
+import { ProjectsViewModel } from '@/modules/projects/presentation/viewmodels/ProjectsViewModel'
+import { GetProjectsUseCase } from '@/modules/projects/domain/usecases/GetProjectsUseCase'
+import { ProjectRepository } from '@/modules/projects/domain/repositories/ProjectRepository'
+import { ProjectRepositoryImpl } from '@/modules/projects/data/repositories/ProjectRepositoryImpl'
+import { TasksViewModel } from '@/modules/tasks/presentation/viewmodels/TasksViewModel'
+import { GetTasksUseCase } from '@/modules/tasks/domain/usecases/GetTasksUseCase'
+import { CreateTaskUseCase } from '@/modules/tasks/domain/usecases/CreateTaskUseCase'
+import { UpdateTaskUseCase } from '@/modules/tasks/domain/usecases/UpdateTaskUseCase'
+import { DeleteTaskUseCase } from '@/modules/tasks/domain/usecases/DeleteTaskUseCase'
+import { TaskRepository } from '@/modules/tasks/domain/repositories/TaskRepository'
+import { TaskRepositoryImpl } from '@/modules/tasks/data/repositories/TaskRepositoryImpl'
+import { GetTaskByIdUseCase } from '@/modules/tasks/domain/usecases/GetTaskByIdUseCase'
+import { CalculateTaskEarningsUseCase } from '@/modules/tasks/domain/usecases/CalculateTaskEarningsUseCase'
+import { TaskDetailViewModel } from '@/modules/tasks/presentation/viewmodels/TaskDetailViewModel'
+import { TrayRepository } from '@/modules/tasks/domain/repositories/TrayRepository'
+import { TrayRepositoryImpl } from '@/modules/tasks/data/repositories/TrayRepositoryImpl'
+import { StartTaskTimerUseCase } from '@/modules/tasks/domain/usecases/StartTaskTimerUseCase'
+import { StopTaskTimerUseCase } from '@/modules/tasks/domain/usecases/StopTaskTimerUseCase'
+
+export const container = new Container({
+  defaultScope: 'Singleton'
+})
+
+// Dashboard Module
+container.bind<DashboardRepository>(DashboardRepository).toDynamicValue(() => {
+  return new DashboardRepositoryImpl()
+})
+
+container.bind(GetDashboardStatsUseCase).toDynamicValue(() => {
+  return new GetDashboardStatsUseCase(container.get(DashboardRepository))
+})
+
+container.bind(DashboardViewModel).toDynamicValue(() => {
+  return new DashboardViewModel(container.get(GetDashboardStatsUseCase))
+})
+
+// Clients Module
+container.bind<ClientRepository>(ClientRepository).toDynamicValue(() => {
+  return new ClientRepositoryImpl()
+})
+
+container.bind(GetClientsUseCase).toDynamicValue(() => {
+  return new GetClientsUseCase(container.get(ClientRepository))
+})
+
+container.bind(ClientsViewModel).toDynamicValue(() => {
+  return new ClientsViewModel(container.get(GetClientsUseCase))
+})
+
+// Projects Module
+container.bind<ProjectRepository>(ProjectRepository).toDynamicValue(() => {
+  return new ProjectRepositoryImpl()
+})
+
+container.bind(GetProjectsUseCase).toDynamicValue(() => {
+  return new GetProjectsUseCase(container.get(ProjectRepository))
+})
+
+container.bind(ProjectsViewModel).toDynamicValue(() => {
+  return new ProjectsViewModel(container.get(GetProjectsUseCase))
+})
+
+// Tasks Module
+container.bind<TaskRepository>(TaskRepository).toDynamicValue(() => {
+  return new TaskRepositoryImpl()
+})
+
+container.bind(GetTasksUseCase).toDynamicValue(() => {
+  return new GetTasksUseCase(container.get(TaskRepository))
+})
+
+container.bind(CreateTaskUseCase).toDynamicValue(() => {
+  return new CreateTaskUseCase(container.get(TaskRepository))
+})
+
+container.bind(UpdateTaskUseCase).toDynamicValue(() => {
+  return new UpdateTaskUseCase(container.get(TaskRepository))
+})
+
+container.bind(DeleteTaskUseCase).toDynamicValue(() => {
+  return new DeleteTaskUseCase(container.get(TaskRepository))
+})
+
+container.bind<TrayRepository>(TrayRepository).toDynamicValue(() => {
+  return new TrayRepositoryImpl()
+})
+
+container.bind(StartTaskTimerUseCase).toDynamicValue(() => {
+  return new StartTaskTimerUseCase(container.get(TrayRepository))
+})
+
+container.bind(StopTaskTimerUseCase).toDynamicValue(() => {
+  return new StopTaskTimerUseCase(container.get(TrayRepository))
+})
+
+container.bind(TasksViewModel).toDynamicValue(() => {
+  return new TasksViewModel(
+    container.get(GetTasksUseCase),
+    container.get(CreateTaskUseCase),
+    container.get(UpdateTaskUseCase),
+    container.get(DeleteTaskUseCase),
+    container.get(StartTaskTimerUseCase),
+    container.get(StopTaskTimerUseCase)
+  )
+})
+
+container.bind(GetTaskByIdUseCase).toDynamicValue(() => {
+  return new GetTaskByIdUseCase(container.get(TaskRepository))
+})
+
+container.bind(CalculateTaskEarningsUseCase).toDynamicValue(() => {
+  return new CalculateTaskEarningsUseCase(container.get(ProjectRepository))
+})
+
+container.bind(TaskDetailViewModel).toDynamicValue(() => {
+  return new TaskDetailViewModel(
+    container.get(GetTaskByIdUseCase),
+    container.get(CalculateTaskEarningsUseCase)
+  )
+})

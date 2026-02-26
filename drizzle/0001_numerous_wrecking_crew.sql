@@ -1,0 +1,1 @@
+ALTER TABLE `projects` ADD `rate` real DEFAULT 0;
