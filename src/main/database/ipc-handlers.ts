@@ -108,15 +108,31 @@ export function registerDatabaseHandlers(): void {
   ipcMain.handle('db:dashboard:getStats', async () => {
     const totalProjects = db.select().from(schema.projects).all().length
     const allTasks = db.select().from(schema.tasks).all()
+    const allProjects = db.select().from(schema.projects).all()
 
-    const totalDuration = allTasks.reduce((acc, task) => acc + (task.duration ?? 0), 0)
+    // Build project rate map
+    const rateMap: Record<string, number> = {}
+    for (const p of allProjects) {
+      rateMap[p.id] = Number(p.rate ?? 0)
+    }
+
+    // totalDuration in seconds
+    const totalDuration = allTasks.reduce((acc, task) => acc + (Number(task.duration) || 0), 0)
+
+    // totalEarned = sum over tasks of (duration_seconds / 3600) * project.rate
+    const totalEarned = allTasks.reduce((acc, task) => {
+      const dur = Number(task.duration) || 0
+      const rate = task.projectId ? rateMap[task.projectId] ?? 0 : 0
+      return acc + (dur / 3600) * rate
+    }, 0)
+
     const hours = Math.floor(totalDuration / 3600)
     const minutes = Math.floor((totalDuration % 3600) / 60)
     const seconds = Math.floor(totalDuration % 60)
     const totalTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
 
     return {
-      totalEarned: 0,
+      totalEarned: totalEarned,
       totalTime,
       activeProjects: totalProjects
     }

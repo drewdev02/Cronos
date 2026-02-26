@@ -10,7 +10,8 @@ export class TaskMapper {
       duration: dto.duration,
       startTime: dto.startTime ? new Date(dto.startTime) : undefined,
       endTime: dto.endTime ? new Date(dto.endTime) : undefined,
-      status: dto.status
+      status: dto.status,
+      createdAt: dto.createdAt ? new Date(dto.createdAt) : undefined
     }
   }
 
