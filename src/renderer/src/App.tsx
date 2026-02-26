@@ -5,6 +5,7 @@ import { SidebarProvider, SidebarInset } from '@/shared/components/ui/sidebar'
 import { AppSidebar } from '@/shared/components/app-sidebar'
 import { DashboardScreen } from '@/modules/dashboard/presentation/screens/DashboardScreen'
 import { ClientsScreen } from '@/modules/clients/presentation/screens/ClientsScreen'
+import { ClientDetailScreen } from '@/modules/clients/presentation/screens/ClientDetailScreen'
 import { ProjectsScreen } from '@/modules/projects/presentation/screens/ProjectsScreen'
 import { TasksScreen } from '@/modules/tasks/presentation/screens/TasksScreen'
 import { TaskDetailScreen } from '@/modules/tasks/presentation/screens/TaskDetailScreen'
@@ -18,6 +19,7 @@ function App(): React.ReactNode {
           <Switch>
             <Route path="/" component={DashboardScreen} />
             <Route path="/clients" component={ClientsScreen} />
+            <Route path="/clients/:id" component={ClientDetailScreen} />
             <Route path="/projects" component={ProjectsScreen} />
             <Route path="/tasks" component={TasksScreen} />
             <Route path="/tasks/:id" component={TaskDetailScreen} />

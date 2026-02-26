@@ -4,7 +4,11 @@ import { DashboardRepositoryImpl } from '@/modules/dashboard/data/repositories/D
 import { GetDashboardStatsUseCase } from '@/modules/dashboard/domain/usecases/GetDashboardStatsUseCase'
 import { DashboardViewModel } from '@/modules/dashboard/presentation/viewmodels/DashboardViewModel'
 import { ClientsViewModel } from '@/modules/clients/presentation/viewmodels/ClientsViewModel'
+import { ClientDetailViewModel } from '@/modules/clients/presentation/viewmodels/ClientDetailViewModel'
 import { GetClientsUseCase } from '@/modules/clients/domain/usecases/GetClientsUseCase'
+import { CreateClientUseCase } from '@/modules/clients/domain/usecases/CreateClientUseCase'
+import { GetClientByIdUseCase } from '@/modules/clients/domain/usecases/GetClientByIdUseCase'
+import { UpdateClientUseCase } from '@/modules/clients/domain/usecases/UpdateClientUseCase'
 import { ClientRepository } from '@/modules/clients/domain/repositories/ClientRepository'
 import { ClientRepositoryImpl } from '@/modules/clients/data/repositories/ClientRepositoryImpl'
 import { ProjectsViewModel } from '@/modules/projects/presentation/viewmodels/ProjectsViewModel'
@@ -52,8 +56,24 @@ container.bind(GetClientsUseCase).toDynamicValue(() => {
   return new GetClientsUseCase(container.get(ClientRepository))
 })
 
+container.bind(CreateClientUseCase).toDynamicValue(() => {
+  return new CreateClientUseCase(container.get(ClientRepository))
+})
+
+container.bind(GetClientByIdUseCase).toDynamicValue(() => {
+  return new GetClientByIdUseCase(container.get(ClientRepository))
+})
+
+container.bind(UpdateClientUseCase).toDynamicValue(() => {
+  return new UpdateClientUseCase(container.get(ClientRepository))
+})
+
 container.bind(ClientsViewModel).toDynamicValue(() => {
-  return new ClientsViewModel(container.get(GetClientsUseCase))
+  return new ClientsViewModel(container.get(GetClientsUseCase), container.get(CreateClientUseCase))
+})
+
+container.bind(ClientDetailViewModel).toDynamicValue(() => {
+  return new ClientDetailViewModel(container.get(GetClientByIdUseCase))
 })
 
 // Projects Module

@@ -6,6 +6,8 @@ import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Card, CardContent } from '@/shared/components/ui/card'
 import { ClientsViewModel } from '../viewmodels/ClientsViewModel'
+import { ClientCard } from '../components/ClientCard'
+import { ClientModal } from '../components/ClientModal'
 
 export const ClientsScreen = observer(() => {
   const vm = useInjection<ClientsViewModel>(ClientsViewModel)
@@ -33,10 +35,7 @@ export const ClientsScreen = observer(() => {
               className="pl-9 bg-card/40 border-border/50 focus:border-primary/50 transition-colors"
             />
           </div>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl">
-            <LucidePlus className="w-4 h-4" />
-            Nuevo client
-          </Button>
+          <ClientModal />
         </div>
       </header>
 
@@ -64,7 +63,13 @@ export const ClientsScreen = observer(() => {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-4">{/* List clients here when data exists */}</div>
+          <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}>
+            {vm.clients.map((c) => (
+              <div key={c.id} className="max-w-xs">
+                <ClientCard client={c} />
+              </div>
+            ))}
+          </div>
         )}
       </main>
     </div>
