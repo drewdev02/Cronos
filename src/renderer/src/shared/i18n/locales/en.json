@@ -39,4 +39,42 @@
     "detail": "Client details",
     "projects": "Projects"
   }
+ ,
+  "tasks": {
+    "title": "Tasks",
+    "subtitle": "Manage your time and productivity",
+    "search": "Search...",
+    "loading": "Loading...",
+    "emptyTitle": "You don't have any tasks registered.",
+    "emptyAction": "Add my first task",
+    "newTask": "New Task",
+    "editTask": "Edit Task",
+    "createTask": "Create new task",
+    "saveChanges": "Save changes",
+    "creating": "Creating...",
+    "saving": "Saving...",
+    "project": "Project #{{id}}",
+    "noProject": "No project",
+    "today": "Today",
+    "timeTotal": "Total time recorded",
+    "moneyGenerated": "${{amount}}",
+    "generatedAtRate": "Money generated at ${{rate}}/h",
+    "noRate": "No rate / project",
+    "id": "ID",
+    "projectId": "Project ID",
+    "status": "Status",
+    "details": "Task details",
+    "notFound": "Task not found",
+    "back": "Back"
+    ,
+    "labelTitle": "Title",
+    "placeholderTitle": "What will you work on?",
+    "labelProjectOptional": "Project (Optional)",
+    "placeholderHH": "HH",
+    "placeholderMM": "MM",
+    "placeholderSS": "SS",
+    "labelTime": "Time (HH:MM:SS)",
+    "create": "Create Task",
+    "save": "Save"
+  }
 }

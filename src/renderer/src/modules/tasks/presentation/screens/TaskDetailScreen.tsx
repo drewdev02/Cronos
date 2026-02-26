@@ -5,10 +5,12 @@ import { LucideArrowLeft, LucideClock, LucideDollarSign } from 'lucide-react'
 import { useInjection } from '@/shared/hooks/useInjection'
 import { Button } from '@/shared/components/ui/button'
 import { TaskDetailViewModel } from '../viewmodels/TaskDetailViewModel'
+import { useTranslation } from 'react-i18next'
 
 export const TaskDetailScreen = observer(() => {
   const { id } = useParams<{ id: string }>()
   const vm = useInjection<TaskDetailViewModel>(TaskDetailViewModel)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (id) {
@@ -26,7 +28,7 @@ export const TaskDetailScreen = observer(() => {
   if (vm.loading) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-screen text-muted-foreground animate-pulse">
-        Cargando tarea...
+        {t('tasks.loading')}
       </div>
     )
   }
@@ -38,11 +40,11 @@ export const TaskDetailScreen = observer(() => {
           <Link href="/tasks">
             <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground">
               <LucideArrowLeft className="w-4 h-4" />
-              Volver
+              {t('tasks.back')}
             </Button>
           </Link>
         </div>
-        <div className="text-center text-destructive">{vm.error || 'Tarea no encontrada'}</div>
+        <div className="text-center text-destructive">{vm.error || t('tasks.notFound')}</div>
       </div>
     )
   }
@@ -65,7 +67,7 @@ export const TaskDetailScreen = observer(() => {
           <div className="space-y-1">
             <h1 className="text-2xl font-bold">{task.title}</h1>
             <p className="text-sm text-muted-foreground font-medium opacity-80">
-              Detalles de la tarea
+              {t('tasks.details')}
             </p>
           </div>
         </div>
@@ -76,19 +78,19 @@ export const TaskDetailScreen = observer(() => {
           {/* Informacion basica */}
           <div className="bg-card border border-border rounded-xl p-6 shadow-sm space-y-4">
             <h2 className="text-lg font-semibold border-b border-border pb-2">
-              Información de la Tarea
+              {t('tasks.details')}
             </h2>
             <div className="space-y-3">
               <div>
-                <span className="text-sm text-muted-foreground block">ID</span>
+                <span className="text-sm text-muted-foreground block">{t('tasks.id')}</span>
                 <span className="font-mono text-sm">{task.id}</span>
               </div>
               <div>
-                <span className="text-sm text-muted-foreground block">ID Proyecto</span>
-                <span className="font-mono text-sm">{task.projectId || 'Sin proyecto'}</span>
+                <span className="text-sm text-muted-foreground block">{t('tasks.projectId')}</span>
+                <span className="font-mono text-sm">{task.projectId || t('tasks.noProject')}</span>
               </div>
               <div>
-                <span className="text-sm text-muted-foreground block">Estado</span>
+                <span className="text-sm text-muted-foreground block">{t('tasks.status')}</span>
                 <span className="capitalize">{task.status.replace('_', ' ')}</span>
               </div>
             </div>
@@ -104,7 +106,7 @@ export const TaskDetailScreen = observer(() => {
                 {formatTime(task.currentDuration ?? task.duration)}
               </div>
               <div className="text-sm text-muted-foreground font-medium mt-1">
-                Tiempo total registrado
+                {t('tasks.timeTotal')}
               </div>
             </div>
           </div>
@@ -120,8 +122,8 @@ export const TaskDetailScreen = observer(() => {
               </div>
               <div className="text-sm text-muted-foreground font-medium mt-1">
                 {vm.projectRate > 0
-                  ? `Dinero generado a $${vm.projectRate.toFixed(2)}/h`
-                  : 'Sin tarifa / proyecto'}
+                  ? t('tasks.generatedAtRate', { rate: vm.projectRate.toFixed(2) })
+                  : t('tasks.noRate')}
               </div>
             </div>
           </div>

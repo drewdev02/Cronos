@@ -14,6 +14,9 @@ import { ClientRepository } from '@/modules/clients/domain/repositories/ClientRe
 import { ClientRepositoryImpl } from '@/modules/clients/data/repositories/ClientRepositoryImpl'
 import { ProjectsViewModel } from '@/modules/projects/presentation/viewmodels/ProjectsViewModel'
 import { GetProjectsUseCase } from '@/modules/projects/domain/usecases/GetProjectsUseCase'
+import { CreateProjectUseCase } from '@/modules/projects/domain/usecases/CreateProjectUseCase'
+import { UpdateProjectUseCase } from '@/modules/projects/domain/usecases/UpdateProjectUseCase'
+import { DeleteProjectUseCase } from '@/modules/projects/domain/usecases/DeleteProjectUseCase'
 import { ProjectRepository } from '@/modules/projects/domain/repositories/ProjectRepository'
 import { ProjectRepositoryImpl } from '@/modules/projects/data/repositories/ProjectRepositoryImpl'
 import { TasksViewModel } from '@/modules/tasks/presentation/viewmodels/TasksViewModel'
@@ -95,8 +98,25 @@ container.bind(GetProjectsUseCase).toDynamicValue(() => {
   return new GetProjectsUseCase(container.get(ProjectRepository))
 })
 
+container.bind(CreateProjectUseCase).toDynamicValue(() => {
+  return new CreateProjectUseCase(container.get(ProjectRepository))
+})
+
+container.bind(UpdateProjectUseCase).toDynamicValue(() => {
+  return new UpdateProjectUseCase(container.get(ProjectRepository))
+})
+
+container.bind(DeleteProjectUseCase).toDynamicValue(() => {
+  return new DeleteProjectUseCase(container.get(ProjectRepository))
+})
+
 container.bind(ProjectsViewModel).toDynamicValue(() => {
-  return new ProjectsViewModel(container.get(GetProjectsUseCase))
+  return new ProjectsViewModel(
+    container.get(GetProjectsUseCase),
+    container.get(CreateProjectUseCase),
+    container.get(UpdateProjectUseCase),
+    container.get(DeleteProjectUseCase)
+  )
 })
 
 // Tasks Module

@@ -39,4 +39,42 @@
     "detail": "Detalle del cliente",
     "projects": "Proyectos"
   }
+ ,
+  "tasks": {
+    "title": "Tareas",
+    "subtitle": "Gestiona tu tiempo y productividad",
+    "search": "Buscar...",
+    "loading": "Cargando...",
+    "emptyTitle": "No tienes tareas registradas.",
+    "emptyAction": "Añadir mi primera tarea",
+    "newTask": "Nueva Tarea",
+    "editTask": "Editar Tarea",
+    "createTask": "Crear nueva tarea",
+    "saveChanges": "Guardar cambios",
+    "creating": "Creando...",
+    "saving": "Guardando...",
+    "project": "Proyecto #{{id}}",
+    "noProject": "Sin proyecto",
+    "today": "Hoy",
+    "timeTotal": "Tiempo total registrado",
+    "moneyGenerated": "${{amount}}",
+    "generatedAtRate": "Dinero generado a ${{rate}}/h",
+    "noRate": "Sin tarifa / proyecto",
+    "id": "ID",
+    "projectId": "ID Proyecto",
+    "status": "Estado",
+    "details": "Detalles de la tarea",
+    "notFound": "Tarea no encontrada",
+    "back": "Volver"
+    ,
+    "labelTitle": "Título",
+    "placeholderTitle": "¿En qué vas a trabajar?",
+    "labelProjectOptional": "Proyecto (Opcional)",
+    "placeholderHH": "HH",
+    "placeholderMM": "MM",
+    "placeholderSS": "SS",
+    "labelTime": "Tiempo (HH:MM:SS)",
+    "create": "Crear tarea",
+    "save": "Guardar"
+  }
 }

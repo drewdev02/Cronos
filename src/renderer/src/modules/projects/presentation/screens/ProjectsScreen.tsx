@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { LucideSearch, LucidePlus, LucideBriefcase } from 'lucide-react'
 import { useInjection } from '@/shared/hooks/useInjection'
@@ -6,9 +6,13 @@ import { Button } from '@/shared/components/ui/button'
 import { Input } from '@/shared/components/ui/input'
 import { Card, CardContent } from '@/shared/components/ui/card'
 import { ProjectsViewModel } from '../viewmodels/ProjectsViewModel'
+import { ProjectCard } from '../components/ProjectCard'
+import { ProjectForm } from '../components/ProjectForm'
 
 export const ProjectsScreen = observer(() => {
   const vm = useInjection<ProjectsViewModel>(ProjectsViewModel)
+  const [formOpen, setFormOpen] = useState(false)
+  const [editing, setEditing] = useState<string | null>(null)
 
   useEffect(() => {
     vm.loadProjects()
@@ -33,7 +37,7 @@ export const ProjectsScreen = observer(() => {
               className="pl-9 bg-card/40 border-border/50 focus:border-primary/50 transition-colors"
             />
           </div>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl">
+          <Button onClick={() => { setEditing(null); setFormOpen(true) }} className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl">
             <LucidePlus className="w-4 h-4" />
             Nuevo project
           </Button>
@@ -56,16 +60,42 @@ export const ProjectsScreen = observer(() => {
                 <p className="text-muted-foreground font-medium text-lg">
                   No tienes proyectos registrados.
                 </p>
-                <button className="text-primary hover:text-primary/80 transition-colors font-semibold group flex items-center gap-2 mx-auto cursor-pointer">
+                <Button variant="ghost" onClick={() => { setEditing(null); setFormOpen(true) }} className="text-primary hover:text-primary/80 transition-colors font-semibold group flex items-center gap-2 mx-auto">
                   Crear mi primer proyecto
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </button>
+                </Button>
               </div>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-4">{/* List projects here when data exists */}</div>
+          <div className="grid gap-4">
+            <div className="flex justify-end">
+              <Button onClick={() => { setEditing(null); setFormOpen(true) }} className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl">
+                <LucidePlus className="w-4 h-4" />
+                Nuevo project
+              </Button>
+            </div>
+
+            {vm.projects.map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                onEdit={() => { setEditing(p.id); setFormOpen(true) }}
+                onDelete={() => vm.deleteProject(p.id)}
+              />
+            ))}
+          </div>
         )}
+
+        <ProjectForm
+          open={formOpen}
+          onClose={() => setFormOpen(false)}
+          initial={editing ? vm.projects.find((x) => x.id === editing) ?? undefined : undefined}
+          onSubmit={(project) => {
+            if (editing) vm.updateProject(editing, project)
+            else vm.createProject(project)
+          }}
+        />
       </main>
     </div>
   )

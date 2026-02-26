@@ -17,6 +17,7 @@ import { NativeSelect, NativeSelectOption } from '@/shared/components/ui/native-
 import { TasksViewModel } from '../viewmodels/TasksViewModel'
 import { ProjectsViewModel } from '@/modules/projects/presentation/viewmodels/ProjectsViewModel'
 import { Task } from '../../domain/models/Task'
+import { useTranslation } from 'react-i18next'
 
 interface TaskModalProps {
   children?: React.ReactNode
@@ -33,6 +34,7 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
 
   const tasksVm = useInjection<TasksViewModel>(TasksViewModel)
   const projectsVm = useInjection<ProjectsViewModel>(ProjectsViewModel)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (open) {
@@ -81,34 +83,34 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
         {children || (
           <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl">
             <LucidePlus className="w-4 h-4" />
-            Nuevo task
+            {t('tasks.newTask')}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{task ? 'Editar Task' : 'Crear Nuevo Task'}</DialogTitle>
+          <DialogTitle>{task ? t('tasks.editTask') : t('tasks.createTask')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Título</Label>
+            <Label htmlFor="title">{t('tasks.labelTitle')}</Label>
             <Input
               id="title"
-              placeholder="¿En qué vas a trabajar?"
+              placeholder={t('tasks.placeholderTitle')}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               autoFocus
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="project">Proyecto (Opcional)</Label>
+            <Label htmlFor="project">{t('tasks.labelProjectOptional')}</Label>
             <NativeSelect
               id="project"
               className="w-full"
               value={projectId}
               onChange={(e) => setProjectId(e.target.value)}
             >
-              <NativeSelectOption value="">Sin proyecto</NativeSelectOption>
+              <NativeSelectOption value="">{t('tasks.noProject')}</NativeSelectOption>
               {projectsVm.projects.map((p) => (
                 <NativeSelectOption key={p.id} value={p.id}>
                   {p.name}
@@ -118,13 +120,13 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Tiempo (HH:MM:SS)</Label>
+            <Label>{t('tasks.labelTime')}</Label>
             <div className="grid grid-cols-3 gap-2">
               <div className="space-y-1">
                 <Input
                   type="number"
                   min={0}
-                  placeholder="HH"
+                  placeholder={t('tasks.placeholderHH')}
                   value={hours}
                   onChange={(e) => setHours(Math.max(0, parseInt(e.target.value) || 0))}
                 />
@@ -134,7 +136,7 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
                   type="number"
                   min={0}
                   max={59}
-                  placeholder="MM"
+                  placeholder={t('tasks.placeholderMM')}
                   value={minutes}
                   onChange={(e) =>
                     setMinutes(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))
@@ -146,7 +148,7 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
                   type="number"
                   min={0}
                   max={59}
-                  placeholder="SS"
+                  placeholder={t('tasks.placeholderSS')}
                   value={seconds}
                   onChange={(e) =>
                     setSeconds(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))
@@ -160,11 +162,11 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
             <Button type="submit" disabled={tasksVm.loading || !title.trim()} className="w-full">
               {tasksVm.loading
                 ? task
-                  ? 'Guardando...'
-                  : 'Creando...'
+                  ? t('tasks.saving')
+                  : t('tasks.creating')
                 : task
-                  ? 'Guardar Cambios'
-                  : 'Crear Task'}
+                  ? t('tasks.saveChanges')
+                  : t('tasks.createTask')}
             </Button>
           </DialogFooter>
         </form>

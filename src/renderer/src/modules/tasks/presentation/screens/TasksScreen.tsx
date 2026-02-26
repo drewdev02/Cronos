@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Link } from 'wouter'
+import { useTranslation } from 'react-i18next'
 import {
   LucideSearch,
   LucideClock,
@@ -18,6 +19,7 @@ import { TaskModal } from '../components/TaskModal'
 
 export const TasksScreen = observer(() => {
   const vm = useInjection<TasksViewModel>(TasksViewModel)
+  const { t } = useTranslation()
 
   useEffect(() => {
     vm.loadTasks()
@@ -35,9 +37,9 @@ export const TasksScreen = observer(() => {
       {/* Header */}
       <header className="p-6 md:px-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold">Tasks</h1>
+          <h1 className="text-2xl font-bold">{t('tasks.title')}</h1>
           <p className="text-sm text-muted-foreground font-medium opacity-80">
-            Gestiona tu tiempo y productividad
+            {t('tasks.subtitle')}
           </p>
         </div>
 
@@ -45,7 +47,7 @@ export const TasksScreen = observer(() => {
           <div className="relative w-full md:w-64">
             <LucideSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Buscar..."
+              placeholder={t('tasks.search')}
               className="pl-9 bg-card/40 border-border/50 focus:border-primary/50 transition-colors"
             />
           </div>
@@ -57,7 +59,7 @@ export const TasksScreen = observer(() => {
       <main className="flex-1 p-6 md:px-8 max-w-7xl mx-auto w-full flex flex-col gap-4">
         {vm.loading && vm.tasks.length === 0 ? (
           <div className="flex-1 flex items-center justify-center text-muted-foreground animate-pulse">
-            Cargando...
+            {t('tasks.loading')}
           </div>
         ) : vm.tasks.length === 0 ? (
           <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-[400px] flex items-center justify-center transition-all hover:border-border/60">
@@ -67,11 +69,11 @@ export const TasksScreen = observer(() => {
               </div>
               <div className="text-center space-y-2">
                 <p className="text-muted-foreground font-medium text-lg">
-                  No tienes tareas registradas.
+                  {t('tasks.emptyTitle')}
                 </p>
                 <TaskModal>
                   <button className="text-primary hover:text-primary/80 transition-colors font-semibold group flex items-center gap-2 mx-auto cursor-pointer">
-                    Añadir mi primera tarea
+                    {t('tasks.emptyAction')}
                     <span className="group-hover:translate-x-1 transition-transform">→</span>
                   </button>
                 </TaskModal>
@@ -109,10 +111,10 @@ export const TasksScreen = observer(() => {
                         </h3>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
                           <span className="truncate">
-                            Proyecto #{task.projectId?.slice(0, 4) || 'Sin proyecto'}
+                            {task.projectId ? t('tasks.project', { id: task.projectId.slice(0, 4) }) : t('tasks.noProject')}
                           </span>
                           <span>•</span>
-                          <span>Hoy</span>
+                          <span>{t('tasks.today')}</span>
                         </div>
                       </div>
                     </Link>
