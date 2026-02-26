@@ -7,6 +7,7 @@ import { Label } from '@/shared/components/ui/label'
 import { useInjection } from '@/shared/hooks/useInjection'
 import { ClientsViewModel } from '@/modules/clients/presentation/viewmodels/ClientsViewModel'
 import { Project } from '../../domain/models/Project'
+import { useTranslation } from 'react-i18next'
 
 export const ProjectForm: React.FC<{
   initial?: Partial<Project>
@@ -20,6 +21,7 @@ export const ProjectForm: React.FC<{
   const [color, setColor] = useState(initial.color ?? '')
 
   const clientsVm = useInjection<ClientsViewModel>(ClientsViewModel)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (open) {
@@ -48,19 +50,19 @@ export const ProjectForm: React.FC<{
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{initial.id ? 'Editar proyecto' : 'Nuevo proyecto'}</DialogTitle>
+          <DialogTitle>{initial.id ? t('projects.editProject') : t('projects.createProject')}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label className="text-sm text-muted-foreground">Nombre</label>
+            <label className="text-sm text-muted-foreground">{t('projects.name')}</label>
             <Input value={name} onChange={(e) => setName(e.target.value)} />
           </div>
 
           <div>
-            <Label htmlFor="client" className="text-sm text-muted-foreground">Cliente (opcional)</Label>
+            <Label htmlFor="client" className="text-sm text-muted-foreground">{t('projects.clientOptional')}</Label>
             <NativeSelect id="client" className="w-full" value={clientId} onChange={(e) => setClientId(e.target.value)}>
-              <NativeSelectOption value="">Sin cliente</NativeSelectOption>
+              <NativeSelectOption value="">{t('projects.noClient')}</NativeSelectOption>
               {clientsVm.clients.map((c) => (
                 <NativeSelectOption key={c.id} value={c.id}>
                   {c.name}
@@ -70,17 +72,17 @@ export const ProjectForm: React.FC<{
           </div>
 
           <div>
-            <label className="text-sm text-muted-foreground">Tarifa (USD/h)</label>
+            <label className="text-sm text-muted-foreground">{t('projects.rateLabel')}</label>
             <Input value={rate} onChange={(e) => setRate(e.target.value)} />
           </div>
 
           <div>
-            <label className="text-sm text-muted-foreground">Color</label>
+            <label className="text-sm text-muted-foreground">{t('projects.color')}</label>
             <Input value={color} onChange={(e) => setColor(e.target.value)} placeholder="#1f2937" />
           </div>
 
           <DialogFooter>
-            <Button type="submit">Guardar</Button>
+            <Button type="submit">{t('projects.save')}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

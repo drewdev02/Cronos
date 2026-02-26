@@ -5,6 +5,27 @@
     "projects": "Proyectos",
     "tasks": "Tareas"
   },
+  "projects": {
+    "title": "Proyectos",
+    "subtitle": "Gestiona tu tiempo y productividad",
+    "search": "Buscar...",
+    "newProject": "Nuevo proyecto",
+    "loading": "Cargando...",
+    "emptyTitle": "No tienes proyectos registrados.",
+    "emptyAction": "Crear mi primer proyecto",
+    "createProject": "Crear proyecto",
+    "editProject": "Editar proyecto",
+    "name": "Nombre",
+    "clientOptional": "Cliente (opcional)",
+    "noClient": "Sin cliente",
+    "rateLabel": "Tarifa (USD/h)",
+    "rate": "Tarifa",
+    "color": "Color",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "confirmDelete": "¿Eliminar proyecto {{name}}?"
+  },
   "dashboard": {
     "title": "Dashboard",
     "subtitle": "Gestiona tu tiempo y productividad",
