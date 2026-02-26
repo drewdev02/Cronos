@@ -62,7 +62,7 @@ export const TasksScreen = observer(() => {
             {t('tasks.loading')}
           </div>
         ) : vm.tasks.length === 0 ? (
-          <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-[400px] flex items-center justify-center transition-all hover:border-border/60">
+          <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-100 flex items-center justify-center transition-all hover:border-border/60">
             <CardContent className="flex flex-col items-center justify-center p-0 space-y-6">
               <div className="bg-muted/20 p-5 rounded-full ring-8 ring-muted/5">
                 <LucideClock className="w-12 h-12 text-muted-foreground" />
@@ -121,7 +121,7 @@ export const TasksScreen = observer(() => {
                   </div>
 
                   <div className="flex items-center gap-6">
-                    <div className="text-center min-w-[80px]">
+                    <div className="text-center min-w-20">
                       <div
                         className={`text-xl font-mono font-bold tracking-tight ${
                           task.status === 'in_progress' ? 'text-primary' : 'text-foreground'

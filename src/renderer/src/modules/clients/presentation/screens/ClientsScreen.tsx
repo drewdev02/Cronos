@@ -46,7 +46,7 @@ export const ClientsScreen = observer(() => {
             {t('clients.loading')}
           </div>
         ) : vm.clients.length === 0 ? (
-          <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-[400px] flex items-center justify-center transition-all hover:border-border/60">
+          <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-100 flex items-center justify-center transition-all hover:border-border/60">
             <CardContent className="flex flex-col items-center justify-center p-0 space-y-6">
               <div className="bg-muted/20 p-5 rounded-full ring-8 ring-muted/5">
                 <LucideUsers className="w-12 h-12 text-muted-foreground" />

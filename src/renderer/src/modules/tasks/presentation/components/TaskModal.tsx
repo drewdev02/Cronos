@@ -82,13 +82,13 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {children || (
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl">
+          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95">
             <LucidePlus className="w-4 h-4" />
             {t('tasks.newTask')}
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
           <DialogTitle>{task ? t('tasks.editTask') : t('tasks.createTask')}</DialogTitle>
           <DialogDescription className="sr-only">{task ? t('tasks.editTask') : t('tasks.createTask')}</DialogDescription>

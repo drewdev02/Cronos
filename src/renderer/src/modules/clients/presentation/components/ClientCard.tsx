@@ -21,7 +21,7 @@ export const ClientCard: React.FC<Props> = ({ client }) => {
       <a className="block no-underline">
         <Card className="w-full md:w-80 rounded-lg border-border/40 hover:border-border/60 transition-colors">
           <CardContent className="flex items-start gap-4 p-6">
-        <div className="flex-shrink-0 bg-primary/10 rounded-md p-3 ring-1 ring-primary/10">
+        <div className="shrink-0 bg-primary/10 rounded-md p-3 ring-1 ring-primary/10">
           <div className="w-8 h-8 rounded-md bg-primary-90 flex items-center justify-center text-primary-foreground">
             <LucideUsers className="w-4 h-4" />
           </div>
