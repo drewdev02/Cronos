@@ -6,13 +6,20 @@ import { DeleteTaskUseCase } from '../../domain/usecases/DeleteTaskUseCase'
 import { StartTaskTimerUseCase } from '../../domain/usecases/StartTaskTimerUseCase'
 import { StopTaskTimerUseCase } from '../../domain/usecases/StopTaskTimerUseCase'
 import { Task } from '../../domain/models/Task'
+import { GetProjectsUseCase } from '@/modules/projects/domain/usecases/GetProjectsUseCase'
+import { Project } from '@/modules/projects/domain/models/Project'
+import { CalculateTaskEarningsUseCase } from '../../domain/usecases/CalculateTaskEarningsUseCase'
 
 export class TasksViewModel {
   tasks: Task[] = []
+  private projects: Project[] = []
+  private tasksAugmented: Array<Task & { projectName?: string; earnings?: number; rate?: number }> = []
   loading = false
   private timer: NodeJS.Timeout | null = null
 
   constructor(
+    private readonly getProjectsUseCase: GetProjectsUseCase,
+    private readonly calculateTaskEarningsUseCase: CalculateTaskEarningsUseCase,
     private readonly getTasksUseCase: GetTasksUseCase,
     private readonly createTaskUseCase: CreateTaskUseCase,
     private readonly updateTaskUseCase: UpdateTaskUseCase,
@@ -26,9 +33,28 @@ export class TasksViewModel {
   async loadTasks(): Promise<void> {
     this.loading = true
     try {
-      const result = await this.getTasksUseCase.execute()
+      const [projects, result] = await Promise.all([
+        this.getProjectsUseCase.execute(),
+        this.getTasksUseCase.execute()
+      ])
+
+      // compute earnings for each task
+      const augmented = await Promise.all(
+        result.map(async (t) => {
+          const earningsRes = await this.calculateTaskEarningsUseCase.execute(t)
+          return {
+            ...t,
+            projectName: t.projectId ? projects.find((p) => p.id === t.projectId)?.name : undefined,
+            earnings: earningsRes.earnings,
+            rate: earningsRes.rate
+          }
+        })
+      )
+
       runInAction(() => {
+        this.projects = projects
         this.tasks = result
+        this.tasksAugmented = augmented
         this.checkRunningTasks()
       })
     } catch (error) {
@@ -38,6 +64,10 @@ export class TasksViewModel {
         this.loading = false
       })
     }
+  }
+
+  get tasksWithProject(): Array<Task & { projectName?: string; earnings?: number; rate?: number }> {
+    return this.tasksAugmented
   }
 
   private checkRunningTasks(): void {

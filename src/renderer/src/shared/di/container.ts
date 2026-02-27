@@ -158,6 +158,8 @@ container.bind(StopTaskTimerUseCase).toDynamicValue(() => {
 
 container.bind(TasksViewModel).toDynamicValue(() => {
   return new TasksViewModel(
+    container.get(GetProjectsUseCase),
+    container.get(CalculateTaskEarningsUseCase),
     container.get(GetTasksUseCase),
     container.get(CreateTaskUseCase),
     container.get(UpdateTaskUseCase),

@@ -16,6 +16,7 @@ import { Input } from '@/shared/components/ui/input'
 import { Card, CardContent } from '@/shared/components/ui/card'
 import { Button } from '@/shared/components/ui/button'
 import { TasksViewModel } from '../viewmodels/TasksViewModel'
+import { formatCurrency } from '@/shared/lib/formatCurrency'
 import { TaskModal } from '../components/TaskModal'
 
 export const TasksScreen = observer(() => {
@@ -83,7 +84,7 @@ export const TasksScreen = observer(() => {
           </Card>
         ) : (
           <div className="flex flex-col gap-3">
-            {vm.tasks.map((task) => (
+            {vm.tasksWithProject.map((task) => (
               <Card
                 key={task.id}
                 className={`transition-all duration-300 border-l-4 ${
@@ -112,7 +113,7 @@ export const TasksScreen = observer(() => {
                         </h3>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
                           <span className="truncate">
-                            {task.projectId ? t('tasks.project', { id: task.projectId.slice(0, 4) }) : t('tasks.noProject')}
+                            {task.projectName ?? (task.projectId ? task.projectId.slice(0, 4) : t('tasks.noProject'))}
                           </span>
                           {task.createdAt && (
                             <>
@@ -134,7 +135,7 @@ export const TasksScreen = observer(() => {
                       >
                         {formatTime(task.currentDuration ?? task.duration)}
                       </div>
-                      <div className="text-[10px] text-primary/80 font-bold">$0.00</div>
+                      <div className="text-[10px] text-primary/80 font-bold">{formatCurrency(task.earnings ?? 0)}</div>
                     </div>
 
                     <div className="flex items-center gap-1">
