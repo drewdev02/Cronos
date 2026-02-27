@@ -105,5 +105,18 @@
     "labelTime": "Time (HH:MM:SS)",
     "create": "Create Task",
     "save": "Save"
+  },
+  "statistics": {
+    "title": "Statistics",
+    "subtitle": "Summary of earnings, time and trends",
+    "loading": "Loading...",
+    "earningsByClient": "Earnings by Client",
+    "timeDistribution": "Time Distribution",
+    "trend": "Earnings Trend (Last 7 days)",
+    "labels": {
+      "earnings": "Earnings",
+      "time": "Time",
+      "trend": "Earnings"
+    }
   }
 }

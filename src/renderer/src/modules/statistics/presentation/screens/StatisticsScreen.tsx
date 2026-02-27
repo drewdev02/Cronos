@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useTranslation } from 'react-i18next'
 import { useInjection } from '@/shared/hooks/useInjection'
 import { StatisticsViewModel } from '../viewmodels/StatisticsViewModel'
 import { ChartContainer, ChartTooltipContent, ChartLegendContent } from '@/shared/components/ui/chart'
@@ -7,13 +8,14 @@ import * as Recharts from 'recharts'
 
 export const StatisticsScreen = observer(() => {
   const vm = useInjection<StatisticsViewModel>(StatisticsViewModel)
+  const { t } = useTranslation()
 
   useEffect(() => {
     vm.load()
   }, [vm])
 
   if (vm.loading && !vm.stats) {
-    return <div className="flex-1 p-8 flex items-center justify-center text-muted-foreground">Cargando...</div>
+    return <div className="flex-1 p-8 flex items-center justify-center text-muted-foreground">{t('statistics.loading')}</div>
   }
 
   const earnings = vm.stats?.earningsByClient ?? []
@@ -24,16 +26,16 @@ export const StatisticsScreen = observer(() => {
     <div className="flex-1 flex flex-col min-h-screen bg-background">
       <header className="p-6 md:px-8 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Estadísticas</h1>
-          <p className="text-sm text-muted-foreground">Resumen de ingresos, tiempo y tendencia</p>
+          <h1 className="text-2xl font-bold text-foreground">{t('statistics.title')}</h1>
+          <p className="text-sm text-muted-foreground">{t('statistics.subtitle')}</p>
         </div>
       </header>
 
       <main className="flex-1 p-6 md:px-8 space-y-8 max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-card p-4 rounded-lg">
-            <h3 className="text-lg font-semibold text-foreground mb-3">Ingresos por Cliente</h3>
-            <ChartContainer id="earnings-by-client" config={{ earnings: { color: 'var(--color-earnings,#2b82ff)', label: 'Ingresos' } }} className="h-72">
+            <h3 className="text-lg font-semibold text-foreground mb-3">{t('statistics.earningsByClient')}</h3>
+            <ChartContainer id="earnings-by-client" config={{ earnings: { color: 'var(--color-earnings,#2b82ff)', label: t('statistics.labels.earnings') } }} className="h-72">
               <Recharts.BarChart data={earnings}>
                 <Recharts.CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <Recharts.XAxis dataKey="clientName" tick={{ fill: 'var(--muted-foreground)' }} />
@@ -45,8 +47,8 @@ export const StatisticsScreen = observer(() => {
           </div>
 
           <div className="bg-card p-4 rounded-lg">
-            <h3 className="text-lg font-semibold text-foreground mb-3">Distribución de Tiempo</h3>
-            <ChartContainer id="time-distribution" config={{ time: { color: 'var(--color-time,#10b981)', label: 'Tiempo' } }} className="h-72">
+            <h3 className="text-lg font-semibold text-foreground mb-3">{t('statistics.timeDistribution')}</h3>
+            <ChartContainer id="time-distribution" config={{ time: { color: 'var(--color-time,#10b981)', label: t('statistics.labels.time') } }} className="h-72">
               <Recharts.PieChart>
                 <Recharts.Pie data={timeDist} dataKey="value" nameKey="name" innerRadius={60} outerRadius={90} paddingAngle={4}>
                   {timeDist.map((_entry, idx) => (
@@ -61,8 +63,8 @@ export const StatisticsScreen = observer(() => {
         </div>
 
         <div className="bg-card p-4 rounded-lg">
-          <h3 className="text-lg font-semibold text-foreground mb-3">Tendencia de Ingresos (Últimos 7 días)</h3>
-          <ChartContainer id="trend" config={{ trend: { color: 'var(--color-trend,#10b981)', label: 'Ingresos' } }} className="h-96">
+          <h3 className="text-lg font-semibold text-foreground mb-3">{t('statistics.trend')}</h3>
+          <ChartContainer id="trend" config={{ trend: { color: 'var(--color-trend,#10b981)', label: t('statistics.labels.trend') } }} className="h-96">
             <Recharts.LineChart data={trend}>
               <Recharts.CartesianGrid strokeDasharray="3 3" vertical={false} />
               <Recharts.XAxis dataKey="day" />
