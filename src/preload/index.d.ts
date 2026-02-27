@@ -1,5 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import { ClientDTO, ProjectDTO, TaskDTO, DashboardStatsDTO } from '../shared/types'
+import { ClientDTO, ProjectDTO, TaskDTO, DashboardStatsDTO, StatisticsDTO } from '../shared/types'
 
 interface CrudAPI<T> {
   getAll: () => Promise<T[]>
@@ -18,6 +18,9 @@ interface DatabaseAPI {
   projects: CrudAPI<ProjectDTO>
   tasks: CrudAPI<TaskDTO>
   dashboard: DashboardAPI
+  statistics: {
+    getStats: () => Promise<StatisticsDTO>
+  }
 }
 
 declare global {

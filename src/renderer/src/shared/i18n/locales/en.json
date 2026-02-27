@@ -3,7 +3,8 @@
     "dashboard": "Dashboard",
     "clients": "Clients",
     "projects": "Projects",
-    "tasks": "Tasks"
+    "tasks": "Tasks",
+    "statistics": "Statistics"
   },
   "projects": {
     "title": "Projects",

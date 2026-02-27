@@ -29,6 +29,9 @@ const databaseAPI = {
   },
   dashboard: {
     getStats: () => ipcRenderer.invoke('db:dashboard:getStats')
+  },
+  statistics: {
+    getStats: () => ipcRenderer.invoke('db:statistics:getStats')
   }
 }
 

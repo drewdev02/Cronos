@@ -3,7 +3,8 @@
     "dashboard": "Dashboard",
     "clients": "Clientes",
     "projects": "Proyectos",
-    "tasks": "Tareas"
+    "tasks": "Tareas",
+    "statistics": "Estadísticas"
   },
   "projects": {
     "title": "Proyectos",
