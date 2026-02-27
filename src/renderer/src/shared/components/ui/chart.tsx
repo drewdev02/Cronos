@@ -281,7 +281,7 @@ function ChartLegendContent({
                 />
               )}
              {/* TODO:Revisa como se hace esto */}
-              {itemConfig?.label || (item?.payload?.name) || item?.name || item.dataKey}
+              {itemConfig?.label || (item?.payload as any)?.name}
             </div>
           )
         })}
