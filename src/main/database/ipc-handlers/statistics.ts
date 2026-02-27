@@ -1,11 +1,15 @@
 import { ipcMain } from 'electron'
 import { getDatabase, schema } from '../index'
 import { eq, sql } from 'drizzle-orm'
+import { weekdayShortFromString } from '../../lib/dateUtils'
 
 export function registerStatisticsHandlers(): void {
   const db = getDatabase()
 
   ipcMain.handle('db:statistics:getStats', async () => {
+    const nowLog = new Date()
+    console.log('[stats] getStats called at', nowLog.toISOString())
+
     const earningsRows = await db
       .select({
         clientId: schema.clients.id,
@@ -37,17 +41,23 @@ export function registerStatisticsHandlers(): void {
     start.setDate(now.getDate() - 6)
     const startDate = start.toISOString().slice(0, 10)
 
+    console.log('[stats] date range', { startDate, endDate })
+
+    // Use startTime when available, otherwise fall back to createdAt so tasks
+    // without a startTime are still included in the trend calculation.
+    // Use startTime when available, otherwise fall back to createdAt so tasks
+    // without a startTime are still included in the trend calculation.
     const trendRows = await db
       .select({
-        day: sql`date(${schema.tasks.startTime})`,
+        day: sql`date(COALESCE(${schema.tasks.startTime}, ${schema.tasks.createdAt}))`,
         earned: sql`
           SUM((COALESCE(${schema.tasks.duration}, 0) / 3600.0) * COALESCE(${schema.projects.rate}, 0))
         `
       })
       .from(schema.tasks)
       .leftJoin(schema.projects, eq(schema.tasks.projectId, schema.projects.id))
-      .where(sql`date(${schema.tasks.startTime}) BETWEEN ${startDate} AND ${endDate}`)
-      .groupBy(sql`date(${schema.tasks.startTime})`)
+      .where(sql`date(COALESCE(${schema.tasks.startTime}, ${schema.tasks.createdAt})) BETWEEN ${startDate} AND ${endDate}`)
+      .groupBy(sql`date(COALESCE(${schema.tasks.startTime}, ${schema.tasks.createdAt}))`)
       .all()
 
     const earningsByClient = earningsRows.map((r) => ({
@@ -74,10 +84,11 @@ export function registerStatisticsHandlers(): void {
     }
 
     const trend = days.map((k) => {
-      const d = new Date(k)
-      const dayName = d.toLocaleDateString(undefined, { weekday: 'short' })
-      return { day: dayName, earned: trendMap[k] ?? 0 }
+      const dayName = weekdayShortFromString(k)
+      const entry = { day: dayName, earned: trendMap[k] ?? 0 }
+      return entry
     })
+
 
     return {
       earningsByClient,

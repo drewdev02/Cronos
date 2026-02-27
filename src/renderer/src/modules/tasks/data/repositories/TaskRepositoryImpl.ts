@@ -20,7 +20,7 @@ export class TaskRepositoryImpl extends TaskRepository {
     const dto = {
       ...TaskMapper.toDTO(task),
       id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
+      createdAt: task.createdAt ? task.createdAt.toISOString() : new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
     const result = await window.api.tasks.create(dto)
@@ -32,6 +32,7 @@ export class TaskRepositoryImpl extends TaskRepository {
     if (task.title !== undefined) dtoUpdate.title = task.title
     if (task.projectId !== undefined) dtoUpdate.projectId = task.projectId ?? null
     if (task.duration !== undefined) dtoUpdate.duration = task.duration
+    if (task.createdAt !== undefined) dtoUpdate.createdAt = task.createdAt?.toISOString() ?? null
     if (task.startTime !== undefined) dtoUpdate.startTime = task.startTime?.toISOString() ?? null
     if (task.endTime !== undefined) dtoUpdate.endTime = task.endTime?.toISOString() ?? null
     if (task.status !== undefined) dtoUpdate.status = task.status

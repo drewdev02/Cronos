@@ -11,6 +11,7 @@ import {
   LucideTrash2
 } from 'lucide-react'
 import { useInjection } from '@/shared/hooks/useInjection'
+import { formatDate } from '@/shared/lib/formatDate'
 import { Input } from '@/shared/components/ui/input'
 import { Card, CardContent } from '@/shared/components/ui/card'
 import { Button } from '@/shared/components/ui/button'
@@ -113,8 +114,12 @@ export const TasksScreen = observer(() => {
                           <span className="truncate">
                             {task.projectId ? t('tasks.project', { id: task.projectId.slice(0, 4) }) : t('tasks.noProject')}
                           </span>
-                          <span>•</span>
-                          <span>{t('tasks.today')}</span>
+                          {task.createdAt && (
+                            <>
+                              <span>•</span>
+                              <span>{formatDate(task.createdAt)}</span>
+                            </>
+                          )}
                         </div>
                       </div>
                     </Link>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { LucidePlus } from 'lucide-react'
+import { ChevronDownIcon } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -15,6 +16,9 @@ import { Input } from '@/shared/components/ui/input'
 import { Label } from '@/shared/components/ui/label'
 import { useInjection } from '@/shared/hooks/useInjection'
 import { NativeSelect, NativeSelectOption } from '@/shared/components/ui/native-select'
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover'
+import { Calendar } from '@/shared/components/ui/calendar'
+import { format } from 'date-fns'
 import { TasksViewModel } from '../viewmodels/TasksViewModel'
 import { ProjectsViewModel } from '@/modules/projects/presentation/viewmodels/ProjectsViewModel'
 import { Task } from '../../domain/models/Task'
@@ -32,6 +36,7 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
   const [hours, setHours] = useState(0)
   const [minutes, setMinutes] = useState(0)
   const [seconds, setSeconds] = useState(0)
+  const [date, setDate] = useState<Date | undefined>(task?.createdAt ? new Date(task.createdAt) : new Date())
 
   const tasksVm = useInjection<TasksViewModel>(TasksViewModel)
   const projectsVm = useInjection<ProjectsViewModel>(ProjectsViewModel)
@@ -43,6 +48,7 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
       if (task) {
         setTitle(task.title)
         setProjectId(task.projectId || '')
+        setDate(task.createdAt ? new Date(task.createdAt) : new Date())
         const d = task.duration
         setHours(Math.floor(d / 3600))
         setMinutes(Math.floor((d % 3600) / 60))
@@ -50,6 +56,7 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
       } else {
         setTitle('')
         setProjectId('')
+        setDate(new Date())
         setHours(0)
         setMinutes(0)
         setSeconds(0)
@@ -67,10 +74,11 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
       await tasksVm.updateTask(task.id, {
         title,
         projectId: projectId || undefined,
-        duration: totalSeconds
+        duration: totalSeconds,
+        createdAt: date
       })
     } else {
-      await tasksVm.createTask(title, projectId || undefined)
+      await tasksVm.createTask(title, projectId || undefined, date)
       // Note: createTask in VM currently hardcodes 0 duration,
       // but if we wanted to support initial duration we'd change it there too.
     }
@@ -103,6 +111,30 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
               onChange={(e) => setTitle(e.target.value)}
               autoFocus
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label>{t('tasks.labelDate')}</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  data-empty={!date}
+                  className="data-[empty=true]:text-muted-foreground w-[212px] justify-between text-left font-normal"
+                >
+                  {date ? format(date, 'PPP') : <span>{t('tasks.pickDate')}</span>}
+                  <ChevronDownIcon />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={(d) => setDate(d as Date | undefined)}
+                  defaultMonth={date}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           <div className="space-y-2">
             <Label htmlFor="project">{t('tasks.labelProjectOptional')}</Label>
