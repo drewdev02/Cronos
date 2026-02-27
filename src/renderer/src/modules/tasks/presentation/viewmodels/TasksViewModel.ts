@@ -30,6 +30,21 @@ export class TasksViewModel {
     makeAutoObservable(this)
   }
 
+  private recomputeAugmented(): void {
+    this.tasksAugmented = this.tasks.map((t) => {
+      const project = t.projectId ? this.projects.find((p) => p.id === t.projectId) : undefined
+      const rate = project?.rate ?? 0
+      const durationInSeconds = t.currentDuration ?? t.duration
+      const earnings = (durationInSeconds / 3600) * rate
+      return {
+        ...t,
+        projectName: project?.name,
+        earnings,
+        rate
+      }
+    })
+  }
+
   async loadTasks(): Promise<void> {
     this.loading = true
     try {
@@ -84,6 +99,21 @@ export class TasksViewModel {
       (updatedTasks) => {
         runInAction(() => {
           this.tasks = updatedTasks
+
+          // Recompute augmented view (projectName, earnings, rate) synchronously
+          // so the UI shows updated `currentDuration` on task cards every tick.
+          this.tasksAugmented = updatedTasks.map((t) => {
+            const project = t.projectId ? this.projects.find((p) => p.id === t.projectId) : undefined
+            const rate = project?.rate ?? 0
+            const durationInSeconds = t.currentDuration ?? t.duration
+            const earnings = (durationInSeconds / 3600) * rate
+            return {
+              ...t,
+              projectName: project?.name,
+              earnings,
+              rate
+            }
+          })
         })
       }
     )
@@ -101,6 +131,7 @@ export class TasksViewModel {
       })
       runInAction(() => {
         this.tasks.push(newTask)
+        this.recomputeAugmented()
       })
     } catch (error) {
       console.error('Error creating task:', error)
@@ -133,6 +164,7 @@ export class TasksViewModel {
     runInAction(() => {
       const index = this.tasks.findIndex((t) => t.id === task.id)
       if (index !== -1) this.tasks[index] = updated
+      this.recomputeAugmented()
       this.startTimer()
     })
   }
@@ -158,6 +190,7 @@ export class TasksViewModel {
         this.stopTaskTimerUseCase.execute(this.timer)
         this.timer = null
       }
+      this.recomputeAugmented()
     })
   }
 
@@ -171,6 +204,7 @@ export class TasksViewModel {
     await this.deleteTaskUseCase.execute(id)
     runInAction(() => {
       this.tasks = this.tasks.filter((t) => t.id !== id)
+      this.recomputeAugmented()
     })
   }
 
@@ -179,6 +213,7 @@ export class TasksViewModel {
     runInAction(() => {
       const index = this.tasks.findIndex((t) => t.id === id)
       if (index !== -1) this.tasks[index] = updated
+      this.recomputeAugmented()
     })
   }
 }
