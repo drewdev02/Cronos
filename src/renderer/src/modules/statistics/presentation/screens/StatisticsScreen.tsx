@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useInjection } from '@/shared/hooks/useInjection'
 import { StatisticsViewModel } from '../viewmodels/StatisticsViewModel'
@@ -49,7 +49,7 @@ export const StatisticsScreen = observer(() => {
             <ChartContainer id="time-distribution" config={{ time: { color: 'var(--color-time,#10b981)', label: 'Tiempo' } }} className="h-72">
               <Recharts.PieChart>
                 <Recharts.Pie data={timeDist} dataKey="value" nameKey="name" innerRadius={60} outerRadius={90} paddingAngle={4}>
-                  {timeDist.map((entry, idx) => (
+                  {timeDist.map((_entry, idx) => (
                     <Recharts.Cell key={`cell-${idx}`} fill={['#2b82ff', '#10b981', '#f59e0b', '#ef4444'][idx % 4]} />
                   ))}
                 </Recharts.Pie>
