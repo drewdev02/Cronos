@@ -17,7 +17,7 @@ export const StatisticsScreen = observer(() => {
   }
 
   const earnings = vm.stats?.earningsByClient ?? []
-  const timeDist = vm.stats?.timeDistribution ?? []
+  const timeDist = (vm.stats?.timeDistribution ?? []).map((i) => ({...i, value: i.value /3600 }))
   const trend = vm.stats?.trend ?? []
 
   return (
