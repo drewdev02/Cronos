@@ -8,4 +8,5 @@ export interface Project {
   }
   color?: string
   rate?: number
+  totalEarned?: number | null
 }

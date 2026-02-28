@@ -18,6 +18,7 @@ export interface ProjectDTO {
   color: string | null
   client?: ClientLiteDTO | null
   rate: number | null
+  totalEarned?: number | null
   createdAt: string
   updatedAt: string
 }

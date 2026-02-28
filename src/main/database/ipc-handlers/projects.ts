@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron'
 import { getDatabase, schema } from '../index'
+import { sql } from 'drizzle-orm'
 import { eq } from 'drizzle-orm'
 
 export function registerProjectsHandlers(): void {
@@ -15,7 +16,13 @@ export function registerProjectsHandlers(): void {
         createdAt: schema.projects.createdAt,
         updatedAt: schema.projects.updatedAt,
         client_id: schema.clients.id,
-        client_name: schema.clients.name
+        client_name: schema.clients.name,
+        totalEarned: sql`(
+          SELECT COALESCE(SUM((t.duration / 3600.0) * COALESCE(p.rate, 0)), 0)
+          FROM ${schema.tasks} t
+          JOIN ${schema.projects} p ON t.project_id = p.id
+          WHERE p.id = ${schema.projects.id}
+        )`
       })
       .from(schema.projects)
       .leftJoin(schema.clients, eq(schema.clients.id, schema.projects.clientId))
@@ -29,7 +36,8 @@ export function registerProjectsHandlers(): void {
       rate: r.rate ?? null,
       createdAt: r.createdAt,
       updatedAt: r.updatedAt,
-      client: r.client_id ? { id: r.client_id, name: r.client_name } : null
+      client: r.client_id ? { id: r.client_id, name: r.client_name } : null,
+      totalEarned: r.totalEarned ?? null
     }))
   })
 
@@ -44,7 +52,13 @@ export function registerProjectsHandlers(): void {
         createdAt: schema.projects.createdAt,
         updatedAt: schema.projects.updatedAt,
         client_id: schema.clients.id,
-        client_name: schema.clients.name
+        client_name: schema.clients.name,
+        totalEarned: sql`(
+          SELECT COALESCE(SUM((t.duration / 3600.0) * COALESCE(p.rate, 0)), 0)
+          FROM ${schema.tasks} t
+          JOIN ${schema.projects} p ON t.project_id = p.id
+          WHERE p.id = ${schema.projects.id}
+        )`
       })
       .from(schema.projects)
       .leftJoin(schema.clients, eq(schema.clients.id, schema.projects.clientId))
@@ -61,7 +75,8 @@ export function registerProjectsHandlers(): void {
       rate: r.rate ?? null,
       createdAt: r.createdAt,
       updatedAt: r.updatedAt,
-      client: r.client_id ? { id: r.client_id, name: r.client_name } : null
+      client: r.client_id ? { id: r.client_id, name: r.client_name } : null,
+      totalEarned: r.totalEarned ?? null
     }
   })
 

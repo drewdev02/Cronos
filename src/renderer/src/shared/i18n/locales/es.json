@@ -21,6 +21,7 @@
     "noClient": "Sin cliente",
     "rateLabel": "Tarifa (USD/h)",
     "rate": "Tarifa",
+    "totalEarned": "Total Ganado",
     "color": "Color",
     "save": "Guardar",
     "edit": "Editar",

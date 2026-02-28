@@ -10,7 +10,7 @@ export const ProjectCard: React.FC<{
 }> = ({ project, onEdit, onDelete }) => {
   const { t } = useTranslation()
   return (
-    <div className="flex items-center justify-between p-4 bg-card rounded-xl border border-border">
+    <div className="flex items-center justify-between p-4 bg-card rounded-xl border border-border group">
       <div className="flex items-center gap-4">
         <div
           className="w-12 h-12 rounded-lg flex items-center justify-center"
@@ -33,7 +33,10 @@ export const ProjectCard: React.FC<{
         <div className="text-sm text-muted-foreground flex items-center gap-1">
           {t('projects.rate')}:<Badge variant="secondary">${project.rate ?? 0}/h</Badge>
         </div>
-        <div className="flex gap-2">
+        <div className="text-sm text-muted-foreground flex items-center gap-1">
+          {t('projects.totalEarned')}:<Badge variant="secondary">${project.totalEarned != null ? project.totalEarned.toLocaleString(undefined, { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }) : '—'}</Badge>
+        </div>
+        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button onClick={onEdit} className="text-primary hover:underline text-sm font-medium">
             {t('projects.edit')}
           </button>
