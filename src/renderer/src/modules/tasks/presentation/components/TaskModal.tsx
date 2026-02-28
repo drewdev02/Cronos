@@ -78,9 +78,7 @@ export const TaskModal = observer(({ children, task }: TaskModalProps) => {
         createdAt: date
       })
     } else {
-      await tasksVm.createTask(title, projectId || undefined, date)
-      // Note: createTask in VM currently hardcodes 0 duration,
-      // but if we wanted to support initial duration we'd change it there too.
+      await tasksVm.createTask(title, projectId || undefined, date, totalSeconds)
     }
 
     setOpen(false)

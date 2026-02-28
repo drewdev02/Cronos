@@ -84,4 +84,13 @@ Quick checklist for AI agents before generating code
 - For UI, use shadcn primitives and Tailwind classes; put state in ViewModel and wrap consumers with `observer`.
 - For routing, add routes to the central router and use `ROUTES` constants.
 
+Testing (Vitest)
+- Use `Vitest` as the standard test runner for the renderer code. Prefer `pnpm vitest` / `pnpm test` scripts from `package.json` when running tests.
+- Write tests using the Vitest API: import `{ describe, it, expect, vi }` from `vitest`.
+- Place tests next to the code under test in a `__tests__` folder inside the module layer (domain/data/presentation).
+- Do NOT create inline mock objects inside specs. Instead, add concrete mock implementations that satisfy the interface contract as separate files inside `__tests__` (e.g. `__tests__/MockAuthApi.ts`).
+- Examples in this repo follow that pattern (see [src/renderer/src/modules/clients/data/mappers/__tests__/ClientMapper.spec.ts](src/renderer/src/modules/clients/data/mappers/__tests__/ClientMapper.spec.ts)).
+- For React component tests use `@testing-library/react` together with Vitest. Keep component tests focused on rendering and events; state and business rules belong in ViewModel/usecase tests.
+- Prefer importing mock classes in tests and asserting against their `vi.fn()` spies, e.g. `const mockApi = new MockAuthApi(); expect(mockApi.login).toHaveBeenCalled()`.
+
 — End of file

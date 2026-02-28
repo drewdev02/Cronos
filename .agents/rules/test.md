@@ -1,9 +1,12 @@
 ---
 trigger: always_on
 ---
-🧪 Regla General para Tests Unitarios
+
+🧪 Regla General para Tests Unitarios (Vitest)
 
 (Obligatoria — Basada en Arquitectura Modular + MVVM + Clean Architecture)
+
+El runner de tests estándar es [Vitest](https://vitest.dev/). Todos los tests deben escribirse usando la API de Vitest (`describe`, `it`, `expect`, `vi`).
 
 Los tests deben respetar estrictamente la separación por capas del proyecto:
 
@@ -57,24 +60,34 @@ Qué NO se testea
 	•	APIs reales
 	•	Librerías externas
 
-Ejemplo: LoginUseCase
+
+
+Ejemplo: LoginUseCase (Vitest, usando mock externo)
+
+// __tests__/MockAuthRepository.ts
+import type { AuthRepository } from '../../repositories/AuthRepository'
+import { vi } from 'vitest'
+
+export class MockAuthRepository implements AuthRepository {
+  login = vi.fn().mockResolvedValue({ id: 1 })
+}
+
+// __tests__/LoginUseCase.spec.ts
+import { describe, it, expect } from 'vitest'
+import { LoginUseCase } from '../LoginUseCase'
+import { MockAuthRepository } from './MockAuthRepository'
 
 describe("LoginUseCase", () => {
   it("debe llamar al repositorio con email y password", async () => {
-    const mockRepository = {
-      login: jest.fn().mockResolvedValue({ id: 1 })
-    } as any;
-
-    const useCase = new LoginUseCase(mockRepository);
-
-    await useCase.execute("test@mail.com", "1234");
-
+    const mockRepository = new MockAuthRepository()
+    const useCase = new LoginUseCase(mockRepository)
+    await useCase.execute("test@mail.com", "1234")
     expect(mockRepository.login).toHaveBeenCalledWith(
       "test@mail.com",
       "1234"
-    );
-  });
-});
+    )
+  })
+})
 
 Principio
 
@@ -94,21 +107,32 @@ Qué NO se testea
 	•	Lógica de negocio
 	•	Estado de UI
 
+
+describe("AuthRepositoryImpl", () => {
+
 Ejemplo:
+
+// __tests__/MockAuthApi.ts
+import type { AuthApi } from '../../api/AuthApi'
+import { vi } from 'vitest'
+
+export class MockAuthApi implements AuthApi {
+  login = vi.fn().mockResolvedValue({ id: 1 })
+}
+
+// __tests__/AuthRepositoryImpl.spec.ts
+import { describe, it, expect } from 'vitest'
+import { AuthRepositoryImpl } from '../AuthRepositoryImpl'
+import { MockAuthApi } from './MockAuthApi'
 
 describe("AuthRepositoryImpl", () => {
   it("debe delegar en AuthApi", async () => {
-    const mockApi = {
-      login: jest.fn().mockResolvedValue({ id: 1 })
-    };
-
-    const repo = new AuthRepositoryImpl(mockApi as any);
-
-    await repo.login("a", "b");
-
-    expect(mockApi.login).toHaveBeenCalled();
-  });
-});
+    const mockApi = new MockAuthApi()
+    const repo = new AuthRepositoryImpl(mockApi)
+    await repo.login("a", "b")
+    expect(mockApi.login).toHaveBeenCalled()
+  })
+})
 
 
 ⸻
@@ -116,33 +140,50 @@ describe("AuthRepositoryImpl", () => {
 4️⃣ Regla: Tests de ViewModel (MobX)
 
 Qué se testea
+
+	1️⃣ Estructura de Tests y Mocks
+
+	Los tests deben ubicarse junto a la capa correspondiente o en una carpeta __tests__ dentro del módulo.
+
+	Los mocks NO deben declararse inline dentro de los tests. En su lugar, crea implementaciones de mocks en archivos separados dentro de la carpeta __tests__, cumpliendo el contrato de la interfaz correspondiente.
+
+	Ejemplo recomendado:
+
 	•	Cambios de estado
 	•	Transiciones (loading → false)
 	•	Interacción con UseCases
 
 Qué NO se testea
 	•	Render de componentes
-	•	Estilos
-	•	Routing
-
 Ejemplo:
 
+	Ejemplo:
+
+	// __tests__/MockLoginUseCase.ts
+	import type { LoginUseCase } from '../../usecases/LoginUseCase'
+	import { vi } from 'vitest'
+
+	export class MockLoginUseCase implements LoginUseCase {
+	  execute = vi.fn().mockResolvedValue(undefined)
+	}
+
+	// __tests__/LoginViewModel.spec.ts
+	import { describe, it, expect } from 'vitest'
+	import { LoginViewModel } from '../LoginViewModel'
+	import { MockLoginUseCase } from './MockLoginUseCase'
+
 describe("LoginViewModel", () => {
-  it("debe activar loading durante login", async () => {
-    const mockUseCase = {
-      execute: jest.fn().mockResolvedValue(undefined)
-    };
-
-    const vm = new LoginViewModel(mockUseCase as any);
-
-    const promise = vm.login();
-
-    expect(vm.loading).toBe(true);
-
-    await promise;
-
-    expect(vm.loading).toBe(false);
-  });
+	  it("debe activar loading durante login", async () => {
+	    const mockUseCase = new MockLoginUseCase()
+	    const vm = new LoginViewModel(mockUseCase)
+	    const promise = vm.login()
+	    expect(vm.loading).toBe(true)
+	    await promise
+	    expect(vm.loading).toBe(false)
+	  })
+	})
+		expect(vm.loading).toBe(false);
+	});
 });
 
 Principio
@@ -164,19 +205,24 @@ Nunca:
 	•	Estado MobX interno
 	•	API calls
 
+
 Ejemplo:
 
-render(
-  <LoginForm
-    email="test"
-    loading={false}
-    onSubmit={mockSubmit}
-  />
-);
+import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
 
-fireEvent.click(screen.getByText("Login"));
-
-expect(mockSubmit).toHaveBeenCalled();
+it('llama onSubmit al hacer click', () => {
+	const mockSubmit = vi.fn()
+	render(
+		<LoginForm
+			email="test"
+			loading={false}
+			onSubmit={mockSubmit}
+		/>
+	)
+	fireEvent.click(screen.getByText("Login"))
+	expect(mockSubmit).toHaveBeenCalled()
+})
 
 
 ⸻

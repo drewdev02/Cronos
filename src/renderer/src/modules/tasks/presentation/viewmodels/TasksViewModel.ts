@@ -119,13 +119,18 @@ export class TasksViewModel {
     )
   }
 
-  async createTask(title: string, projectId?: string, createdAt?: Date): Promise<void> {
+  async createTask(
+    title: string,
+    projectId?: string,
+    createdAt?: Date,
+    duration?: number
+  ): Promise<void> {
     this.loading = true
     try {
       const newTask = await this.createTaskUseCase.execute({
         title,
         projectId,
-        duration: 0,
+        duration: duration ?? 0,
         status: 'pending',
         createdAt: createdAt ?? new Date()
       })
