@@ -11,6 +11,7 @@ import { ProjectsScreen } from '@/modules/projects/presentation/screens/Projects
 import { ProjectDetailScreen } from '@/modules/projects/presentation/screens/ProjectDetailScreen'
 import { TasksScreen } from '@/modules/tasks/presentation/screens/TasksScreen'
 import { TaskDetailScreen } from '@/modules/tasks/presentation/screens/TaskDetailScreen'
+import { ChatScreen } from '@/modules/chat/presentation/screens/ChatScreen'
 
 function App(): React.ReactNode {
   return (
@@ -27,6 +28,7 @@ function App(): React.ReactNode {
             <Route path="/statistics" component={StatisticsScreen} />
             <Route path="/tasks" component={TasksScreen} />
             <Route path="/tasks/:id" component={TaskDetailScreen} />
+            <Route path="/chat" component={ChatScreen} />
 
             <Route>
               <DashboardScreen />

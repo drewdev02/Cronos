@@ -4,7 +4,8 @@
     "clients": "Clientes",
     "projects": "Proyectos",
     "tasks": "Tareas",
-    "statistics": "Estadísticas"
+    "statistics": "Estadísticas",
+    "chat": "Chat"
   },
   "projects": {
     "title": "Proyectos",

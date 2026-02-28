@@ -33,6 +33,13 @@ const databaseAPI = {
   },
   statistics: {
     getStats: () => ipcRenderer.invoke('db:statistics:getStats')
+  },
+  messages: {
+    getAll: () => ipcRenderer.invoke('db:messages:getAll'),
+    create: (data: { content: string; sender: 'user' | 'ia' }) => ipcRenderer.invoke('db:messages:create', data)
+  },
+  chat: {
+    sendMessage: (content: string) => ipcRenderer.invoke('db:chat:sendMessage', { content })
   }
 }
 

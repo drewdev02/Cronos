@@ -39,6 +39,13 @@ import { GetStatisticsUseCase } from '@/modules/statistics/domain/usecases/GetSt
 import { StatisticsRepository } from '@/modules/statistics/domain/repositories/StatisticsRepository'
 import { StatisticsRepositoryImpl } from '@/modules/statistics/data/repositories/StatisticsRepositoryImpl'
 import { ProjectDetailViewModel } from '@renderer/modules/projects/presentation/viewmodels/ProjectDetailViewModel'
+import { ChatRepositoryImpl } from '@renderer/modules/chat/data/repositories/ChatRepositoryImpl'
+import { ChatRepository } from '@renderer/modules/chat/domain/repositories/ChatRepository'
+import {
+  SendMessageUseCase,
+  GetChatHistoryUseCase
+} from '@renderer/modules/chat/domain/usecases/ChatUseCases'
+import { ChatViewModel } from '@renderer/modules/chat/presentation/viewmodels/ChatViewModel'
 
 export const container = new Container({
   defaultScope: 'Singleton'
@@ -208,3 +215,16 @@ container.bind(GetStatisticsUseCase).toDynamicValue(() => {
 container.bind(StatisticsViewModel).toDynamicValue(() => {
   return new StatisticsViewModel(container.get(GetStatisticsUseCase))
 })
+
+container.bind<ChatRepository>(ChatRepository).toDynamicValue(() => new ChatRepositoryImpl())
+container
+  .bind(SendMessageUseCase)
+  .toDynamicValue(() => new SendMessageUseCase(container.get(ChatRepository)))
+container
+  .bind(GetChatHistoryUseCase)
+  .toDynamicValue(() => new GetChatHistoryUseCase(container.get(ChatRepository)))
+container
+  .bind(ChatViewModel)
+  .toDynamicValue(
+    () => new ChatViewModel(container.get(SendMessageUseCase), container.get(GetChatHistoryUseCase))
+  )

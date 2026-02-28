@@ -15,6 +15,13 @@
       "when": 1772136285008,
       "tag": "0001_numerous_wrecking_crew",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1772317960537,
+      "tag": "0002_windy_shen",
+      "breakpoints": true
     }
   ]
 }

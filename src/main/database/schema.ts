@@ -34,3 +34,11 @@ export const tasks = sqliteTable('tasks', {
   createdAt: text('created_at').notNull().default('CURRENT_TIMESTAMP'),
   updatedAt: text('updated_at').notNull().default('CURRENT_TIMESTAMP')
 })
+
+// ── Messages (Chat) ─────────────────────────────────────────────────────
+export const messages = sqliteTable('messages', {
+  id: text('id').primaryKey(),
+  content: text('content').notNull(),
+  sender: text('sender', { enum: ['user', 'ia'] }).notNull(),
+  createdAt: text('created_at').notNull().default('CURRENT_TIMESTAMP')
+})

@@ -16,6 +16,18 @@ interface DashboardAPI {
   getStats: () => Promise<DashboardStatsDTO>
 }
 
+interface MessageDTO {
+  id: string
+  content: string
+  sender: 'user' | 'ia'
+  createdAt: string
+}
+
+interface MessagesAPI {
+  getAll: () => Promise<MessageDTO[]>
+  create: (data: { content: string; sender: 'user' | 'ia' }) => Promise<MessageDTO>
+}
+
 interface DatabaseAPI {
   clients: CrudApiExtend<ClientDTO>
   projects: CrudAPI<ProjectDTO>
@@ -24,11 +36,12 @@ interface DatabaseAPI {
   statistics: {
     getStats: () => Promise<StatisticsDTO>
   }
+  messages: MessagesAPI
 }
 
 declare global {
   interface Window {
     electron: ElectronAPI
-    api: DatabaseAPI
+    api: DatabaseAPI & { chat: { sendMessage: (content: string) => Promise<{ ia: MessageDTO }> } }
   }
 }

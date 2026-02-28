@@ -8,6 +8,7 @@ import { registerDashboardHandlers } from './database/ipc-handlers/dashboard'
 import { registerTasksHandlers } from './database/ipc-handlers/tasks'
 import { registerProjectsHandlers } from './database/ipc-handlers/projects'
 import { registerClientsHandlers } from './database/ipc-handlers/clients'
+import { registerChatHandlers } from './database/ipc-handlers/chat'
 
 let tray: Tray | null = null
 
@@ -67,6 +68,7 @@ app.whenReady().then(() => {
   registerTasksHandlers()
   registerDashboardHandlers()
   registerStatisticsHandlers()
+  registerChatHandlers()
 
   createWindow()
 

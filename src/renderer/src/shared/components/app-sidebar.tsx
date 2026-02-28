@@ -27,7 +27,8 @@ export function AppSidebar(): React.ReactNode {
     { name: t('sidebar.clients'), href: '/clients', icon: Users },
     { name: t('sidebar.projects'), href: '/projects', icon: Briefcase },
     { name: t('sidebar.tasks'), href: '/tasks', icon: Clock },
-    { name: t('sidebar.statistics'), href: '/statistics', icon: TrendingUp }
+    { name: t('sidebar.statistics'), href: '/statistics', icon: TrendingUp },
+    { name: t('sidebar.chat', 'Chat'), href: '/chat', icon: LayoutGrid }
   ]
 
   return (
