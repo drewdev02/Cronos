@@ -11,10 +11,12 @@ import {
   LucideTrash2
 } from 'lucide-react'
 import { useInjection } from '@/shared/hooks/useInjection'
+import { formatDate } from '@/shared/lib/formatDate'
 import { Input } from '@/shared/components/ui/input'
 import { Card, CardContent } from '@/shared/components/ui/card'
 import { Button } from '@/shared/components/ui/button'
 import { TasksViewModel } from '../viewmodels/TasksViewModel'
+import { formatCurrency } from '@/shared/lib/formatCurrency'
 import { TaskModal } from '../components/TaskModal'
 
 export const TasksScreen = observer(() => {
@@ -62,7 +64,7 @@ export const TasksScreen = observer(() => {
             {t('tasks.loading')}
           </div>
         ) : vm.tasks.length === 0 ? (
-          <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-[400px] flex items-center justify-center transition-all hover:border-border/60">
+          <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-100 flex items-center justify-center transition-all hover:border-border/60">
             <CardContent className="flex flex-col items-center justify-center p-0 space-y-6">
               <div className="bg-muted/20 p-5 rounded-full ring-8 ring-muted/5">
                 <LucideClock className="w-12 h-12 text-muted-foreground" />
@@ -82,7 +84,7 @@ export const TasksScreen = observer(() => {
           </Card>
         ) : (
           <div className="flex flex-col gap-3">
-            {vm.tasks.map((task) => (
+            {vm.tasksWithProject.map((task) => (
               <Card
                 key={task.id}
                 className={`transition-all duration-300 border-l-4 ${
@@ -111,17 +113,21 @@ export const TasksScreen = observer(() => {
                         </h3>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
                           <span className="truncate">
-                            {task.projectId ? t('tasks.project', { id: task.projectId.slice(0, 4) }) : t('tasks.noProject')}
+                            {task.projectName ?? (task.projectId ? task.projectId.slice(0, 4) : t('tasks.noProject'))}
                           </span>
-                          <span>•</span>
-                          <span>{t('tasks.today')}</span>
+                          {task.createdAt && (
+                            <>
+                              <span>•</span>
+                              <span>{formatDate(task.createdAt)}</span>
+                            </>
+                          )}
                         </div>
                       </div>
                     </Link>
                   </div>
 
                   <div className="flex items-center gap-6">
-                    <div className="text-center min-w-[80px]">
+                    <div className="text-center min-w-20">
                       <div
                         className={`text-xl font-mono font-bold tracking-tight ${
                           task.status === 'in_progress' ? 'text-primary' : 'text-foreground'
@@ -129,7 +135,7 @@ export const TasksScreen = observer(() => {
                       >
                         {formatTime(task.currentDuration ?? task.duration)}
                       </div>
-                      <div className="text-[10px] text-primary/80 font-bold">$0.00</div>
+                      <div className="text-[10px] text-primary/80 font-bold">{formatCurrency(task.earnings ?? 0)}</div>
                     </div>
 
                     <div className="flex items-center gap-1">

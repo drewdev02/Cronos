@@ -23,7 +23,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:sync": "npm rebuild better-sqlite3 && npm run db:push && npm run postinstall"
+    "db:sync": "npm rebuild better-sqlite3 && npm run db:push && npm run postinstall",
+    "test": "vitest",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
@@ -33,6 +35,7 @@
     "better-sqlite3": "^12.6.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "drizzle-orm": "^0.45.1",
     "electron-updater": "^6.3.9",
     "i18next": "^25.8.13",
@@ -43,6 +46,7 @@
     "mobx-react-lite": "^4.1.1",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.3",
+    "react-day-picker": "^9.14.0",
     "react-i18next": "^16.5.4",
     "recharts": "^2.15.4",
     "reflect-metadata": "^0.2.2",
@@ -54,6 +58,7 @@
     "wouter": "^3.9.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^14.0.0",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.1.0",
     "@electron-toolkit/tsconfig": "^2.0.0",
@@ -71,11 +76,14 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "jsdom": "^28.1.0",
     "prettier": "^3.7.4",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3",
-    "vite": "^7.2.6"
+    "vite": "^7.2.6",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.6.1"
   }
 }

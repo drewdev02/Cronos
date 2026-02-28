@@ -3,7 +3,11 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { runMigrations, closeDatabase } from './database'
-import { registerDatabaseHandlers } from './database/ipc-handlers'
+import { registerStatisticsHandlers } from './database/ipc-handlers/statistics'
+import { registerDashboardHandlers } from './database/ipc-handlers/dashboard'
+import { registerTasksHandlers } from './database/ipc-handlers/tasks'
+import { registerProjectsHandlers } from './database/ipc-handlers/projects'
+import { registerClientsHandlers } from './database/ipc-handlers/clients'
 
 let tray: Tray | null = null
 
@@ -58,7 +62,11 @@ app.whenReady().then(() => {
 
   // Initialize database and run migrations
   runMigrations()
-  registerDatabaseHandlers()
+  registerClientsHandlers()
+  registerProjectsHandlers()
+  registerTasksHandlers()
+  registerDashboardHandlers()
+  registerStatisticsHandlers()
 
   createWindow()
 

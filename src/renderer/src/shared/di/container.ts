@@ -33,6 +33,10 @@ import { TrayRepository } from '@/modules/tasks/domain/repositories/TrayReposito
 import { TrayRepositoryImpl } from '@/modules/tasks/data/repositories/TrayRepositoryImpl'
 import { StartTaskTimerUseCase } from '@/modules/tasks/domain/usecases/StartTaskTimerUseCase'
 import { StopTaskTimerUseCase } from '@/modules/tasks/domain/usecases/StopTaskTimerUseCase'
+import { StatisticsViewModel } from '@/modules/statistics/presentation/viewmodels/StatisticsViewModel'
+import { GetStatisticsUseCase } from '@/modules/statistics/domain/usecases/GetStatisticsUseCase'
+import { StatisticsRepository } from '@/modules/statistics/domain/repositories/StatisticsRepository'
+import { StatisticsRepositoryImpl } from '@/modules/statistics/data/repositories/StatisticsRepositoryImpl'
 
 export const container = new Container({
   defaultScope: 'Singleton'
@@ -154,6 +158,8 @@ container.bind(StopTaskTimerUseCase).toDynamicValue(() => {
 
 container.bind(TasksViewModel).toDynamicValue(() => {
   return new TasksViewModel(
+    container.get(GetProjectsUseCase),
+    container.get(CalculateTaskEarningsUseCase),
     container.get(GetTasksUseCase),
     container.get(CreateTaskUseCase),
     container.get(UpdateTaskUseCase),
@@ -176,4 +182,17 @@ container.bind(TaskDetailViewModel).toDynamicValue(() => {
     container.get(GetTaskByIdUseCase),
     container.get(CalculateTaskEarningsUseCase)
   )
+})
+
+// Statistics Module
+container.bind<StatisticsRepository>(StatisticsRepository).toDynamicValue(() => {
+  return new StatisticsRepositoryImpl()
+})
+
+container.bind(GetStatisticsUseCase).toDynamicValue(() => {
+  return new GetStatisticsUseCase(container.get(StatisticsRepository))
+})
+
+container.bind(StatisticsViewModel).toDynamicValue(() => {
+  return new StatisticsViewModel(container.get(GetStatisticsUseCase))
 })

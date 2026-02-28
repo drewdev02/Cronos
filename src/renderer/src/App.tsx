@@ -4,6 +4,7 @@ import { Route, Switch } from 'wouter'
 import { SidebarProvider, SidebarInset } from '@/shared/components/ui/sidebar'
 import { AppSidebar } from '@/shared/components/app-sidebar'
 import { DashboardScreen } from '@/modules/dashboard/presentation/screens/DashboardScreen'
+import { StatisticsScreen } from '@/modules/statistics/presentation/screens/StatisticsScreen'
 import { ClientsScreen } from '@/modules/clients/presentation/screens/ClientsScreen'
 import { ClientDetailScreen } from '@/modules/clients/presentation/screens/ClientDetailScreen'
 import { ProjectsScreen } from '@/modules/projects/presentation/screens/ProjectsScreen'
@@ -21,6 +22,7 @@ function App(): React.ReactNode {
             <Route path="/clients" component={ClientsScreen} />
             <Route path="/clients/:id" component={ClientDetailScreen} />
             <Route path="/projects" component={ProjectsScreen} />
+            <Route path="/statistics" component={StatisticsScreen} />
             <Route path="/tasks" component={TasksScreen} />
             <Route path="/tasks/:id" component={TaskDetailScreen} />
 

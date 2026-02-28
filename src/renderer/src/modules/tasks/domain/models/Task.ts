@@ -7,4 +7,5 @@ export interface Task {
   endTime?: Date
   status: 'pending' | 'in_progress' | 'completed'
   currentDuration?: number
+  createdAt?: Date
 }

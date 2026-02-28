@@ -1,5 +1,5 @@
 import React from 'react'
-import { Briefcase, Clock, LayoutGrid, Users } from 'lucide-react'
+import { Briefcase, Clock, LayoutGrid, Users, TrendingUp } from 'lucide-react'
 import { useLocation } from 'wouter'
 import { useTranslation } from 'react-i18next'
 
@@ -26,7 +26,8 @@ export function AppSidebar(): React.ReactNode {
     { name: t('sidebar.dashboard'), href: '/', icon: LayoutGrid },
     { name: t('sidebar.clients'), href: '/clients', icon: Users },
     { name: t('sidebar.projects'), href: '/projects', icon: Briefcase },
-    { name: t('sidebar.tasks'), href: '/tasks', icon: Clock }
+    { name: t('sidebar.tasks'), href: '/tasks', icon: Clock },
+    { name: t('sidebar.statistics'), href: '/statistics', icon: TrendingUp }
   ]
 
   return (

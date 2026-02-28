@@ -33,3 +33,24 @@ export interface DashboardStatsDTO {
   totalTime: string
   activeProjects: number
 }
+
+export interface EarningsByClientDTO {
+  clientName: string
+  earned: number
+}
+
+export interface TimeDistributionEntryDTO {
+  name: string
+  value: number
+}
+
+export interface TrendEntryDTO {
+  day: string
+  earned: number
+}
+
+export interface StatisticsDTO {
+  earningsByClient: EarningsByClientDTO[]
+  timeDistribution: TimeDistributionEntryDTO[]
+  trend: TrendEntryDTO[]
+}

@@ -42,7 +42,7 @@ export const ProjectsScreen = observer(() => {
               setEditing(null)
               setFormOpen(true)
             }}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95 shadow-2xl"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold flex items-center gap-2 px-4 shadow-lg shadow-primary/20 transition-all active:scale-95"
           >
             <LucidePlus className="w-4 h-4" />
             {t('projects.newProject')}
@@ -57,7 +57,7 @@ export const ProjectsScreen = observer(() => {
             {t('projects.loading')}
           </div>
         ) : vm.projects.length === 0 && !vm.loading ? (
-          <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-[400px] flex items-center justify-center transition-all hover:border-border/60">
+          <Card className="border-dashed border-2 bg-card/10 border-border/40 min-h-100 flex items-center justify-center transition-all hover:border-border/60">
             <CardContent className="flex flex-col items-center justify-center p-0 space-y-6">
               <div className="bg-muted/20 p-5 rounded-full ring-8 ring-muted/5">
                 <LucideBriefcase className="w-12 h-12 text-muted-foreground" />

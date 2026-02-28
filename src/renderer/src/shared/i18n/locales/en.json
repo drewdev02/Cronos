@@ -3,7 +3,8 @@
     "dashboard": "Dashboard",
     "clients": "Clients",
     "projects": "Projects",
-    "tasks": "Tasks"
+    "tasks": "Tasks",
+    "statistics": "Statistics"
   },
   "projects": {
     "title": "Projects",
@@ -35,6 +36,13 @@
     "totalTime": "Total Time",
     "activeProjects": "Active Projects",
     "loading": "Loading..."
+    ,
+    "recentTasks": {
+      "title": "Recent Tasks",
+      "seeAll": "See all",
+      "loading": "Loading...",
+      "noTasks": "You don't have any tasks registered."
+    }
   },
   "clients": {
     "title": "Clients",
@@ -97,5 +105,18 @@
     "labelTime": "Time (HH:MM:SS)",
     "create": "Create Task",
     "save": "Save"
+  },
+  "statistics": {
+    "title": "Statistics",
+    "subtitle": "Summary of earnings, time and trends",
+    "loading": "Loading...",
+    "earningsByClient": "Earnings by Client",
+    "timeDistribution": "Time Distribution",
+    "trend": "Earnings Trend (Last 7 days)",
+    "labels": {
+      "earnings": "Earnings",
+      "time": "Time",
+      "trend": "Earnings"
+    }
   }
 }
