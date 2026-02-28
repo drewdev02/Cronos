@@ -92,5 +92,6 @@ Testing (Vitest)
 - Examples in this repo follow that pattern (see [src/renderer/src/modules/clients/data/mappers/__tests__/ClientMapper.spec.ts](src/renderer/src/modules/clients/data/mappers/__tests__/ClientMapper.spec.ts)).
 - For React component tests use `@testing-library/react` together with Vitest. Keep component tests focused on rendering and events; state and business rules belong in ViewModel/usecase tests.
 - Prefer importing mock classes in tests and asserting against their `vi.fn()` spies, e.g. `const mockApi = new MockAuthApi(); expect(mockApi.login).toHaveBeenCalled()`.
+ - Always use TypeScript types in tests; never use `any` in test files. Use concrete typed mocks or interfaces for dependencies.
 
 — End of file
