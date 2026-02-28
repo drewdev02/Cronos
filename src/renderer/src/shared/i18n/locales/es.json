@@ -26,7 +26,12 @@
     "save": "Guardar",
     "edit": "Editar",
     "delete": "Eliminar",
-    "confirmDelete": "¿Eliminar proyecto {{name}}?"
+    "confirmDelete": "¿Eliminar proyecto {{name}}?",
+    "noTasks": "No hay tareas para este proyecto.",
+    "tasks": "Tareas",
+    "taskName": "Nombre de la tarea",
+    "earned": "Ganado",
+    "completedAt": "Completada el"
   },
   "dashboard": {
     "title": "Dashboard",

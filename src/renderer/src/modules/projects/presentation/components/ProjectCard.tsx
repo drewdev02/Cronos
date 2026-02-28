@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLocation } from 'wouter'
 import { useTranslation } from 'react-i18next'
 import { Project } from '../../domain/models/Project'
 import { Badge } from '@/shared/components/ui/badge'
@@ -9,8 +10,12 @@ export const ProjectCard: React.FC<{
   onDelete?: () => void
 }> = ({ project, onEdit, onDelete }) => {
   const { t } = useTranslation()
+  const [, navigate] = useLocation()
   return (
-    <div className="flex items-center justify-between p-4 bg-card rounded-xl border border-border group">
+    <div
+      className="flex items-center justify-between p-4 bg-card rounded-xl border border-border group cursor-pointer hover:bg-accent/30 transition-colors"
+      onClick={() => navigate(`/projects/${project.id}`)}
+    >
       <div className="flex items-center gap-4">
         <div
           className="w-12 h-12 rounded-lg flex items-center justify-center"
@@ -36,7 +41,7 @@ export const ProjectCard: React.FC<{
         <div className="text-sm text-muted-foreground flex items-center gap-1">
           {t('projects.totalEarned')}:<Badge variant="secondary">${project.totalEarned != null ? project.totalEarned.toLocaleString(undefined, { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }) : '—'}</Badge>
         </div>
-        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200" onClick={e => e.stopPropagation()}>
           <button onClick={onEdit} className="text-primary hover:underline text-sm font-medium">
             {t('projects.edit')}
           </button>

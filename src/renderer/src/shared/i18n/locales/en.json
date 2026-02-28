@@ -26,7 +26,12 @@
     "save": "Save",
     "edit": "Edit",
     "delete": "Delete",
-    "confirmDelete": "Delete project {{name}}?"
+    "confirmDelete": "Delete project {{name}}?",
+    "noTasks": "No tasks for this project.",
+    "tasks": "Tasks",
+    "taskName": "Task Name",
+    "earned": "Earned",
+    "completedAt": "Completed At"
   },
   "dashboard": {
     "title": "Dashboard",

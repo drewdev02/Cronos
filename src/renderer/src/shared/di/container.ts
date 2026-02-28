@@ -38,6 +38,7 @@ import { StatisticsViewModel } from '@/modules/statistics/presentation/viewmodel
 import { GetStatisticsUseCase } from '@/modules/statistics/domain/usecases/GetStatisticsUseCase'
 import { StatisticsRepository } from '@/modules/statistics/domain/repositories/StatisticsRepository'
 import { StatisticsRepositoryImpl } from '@/modules/statistics/data/repositories/StatisticsRepositoryImpl'
+import { ProjectDetailViewModel } from '@renderer/modules/projects/presentation/viewmodels/ProjectDetailViewModel'
 
 export const container = new Container({
   defaultScope: 'Singleton'
@@ -127,6 +128,11 @@ container.bind(ProjectsViewModel).toDynamicValue(() => {
     container.get(DeleteProjectUseCase),
     container.get(GetProjectClientsUseCase)
   )
+})
+
+// Project Detail
+container.bind(ProjectDetailViewModel).toDynamicValue(() => {
+  return new ProjectDetailViewModel(container.get(ProjectRepository), container.get(TaskRepository))
 })
 
 // Tasks Module

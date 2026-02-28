@@ -8,6 +8,7 @@ import { StatisticsScreen } from '@/modules/statistics/presentation/screens/Stat
 import { ClientsScreen } from '@/modules/clients/presentation/screens/ClientsScreen'
 import { ClientDetailScreen } from '@/modules/clients/presentation/screens/ClientDetailScreen'
 import { ProjectsScreen } from '@/modules/projects/presentation/screens/ProjectsScreen'
+import { ProjectDetailScreen } from '@/modules/projects/presentation/screens/ProjectDetailScreen'
 import { TasksScreen } from '@/modules/tasks/presentation/screens/TasksScreen'
 import { TaskDetailScreen } from '@/modules/tasks/presentation/screens/TaskDetailScreen'
 
@@ -22,6 +23,7 @@ function App(): React.ReactNode {
             <Route path="/clients" component={ClientsScreen} />
             <Route path="/clients/:id" component={ClientDetailScreen} />
             <Route path="/projects" component={ProjectsScreen} />
+            <Route path="/projects/:id" component={ProjectDetailScreen} />
             <Route path="/statistics" component={StatisticsScreen} />
             <Route path="/tasks" component={TasksScreen} />
             <Route path="/tasks/:id" component={TaskDetailScreen} />
