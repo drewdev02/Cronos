@@ -8,13 +8,16 @@ interface CrudAPI<T> {
   update: (id: string, data: Partial<T>) => Promise<T | null>
   delete: (id: string) => Promise<boolean>
 }
+interface CrudApiExtend<T> extends CrudAPI<T> {
+  getLite: () => Promise<{ id: string; name: string }[]>
+}
 
 interface DashboardAPI {
   getStats: () => Promise<DashboardStatsDTO>
 }
 
 interface DatabaseAPI {
-  clients: CrudAPI<ClientDTO>
+  clients: CrudApiExtend<ClientDTO>
   projects: CrudAPI<ProjectDTO>
   tasks: CrudAPI<TaskDTO>
   dashboard: DashboardAPI

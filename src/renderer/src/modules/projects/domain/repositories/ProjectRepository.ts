@@ -6,4 +6,6 @@ export abstract class ProjectRepository {
   abstract createProject(project: Project): Promise<Project>
   abstract updateProject(id: string, project: Partial<Project>): Promise<Project | null>
   abstract deleteProject(id: string): Promise<boolean>
+  // Fetch clients for project-related forms (id + name)
+  abstract getClients(): Promise<{ id: string; name: string }[]>
 }

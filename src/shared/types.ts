@@ -6,11 +6,17 @@ export interface ClientDTO {
   updatedAt: string
 }
 
+export interface ClientLiteDTO {
+  id: string
+  name: string
+}
+
 export interface ProjectDTO {
   id: string
   name: string
   clientId: string | null
   color: string | null
+  client?: ClientLiteDTO | null
   rate: number | null
   createdAt: string
   updatedAt: string

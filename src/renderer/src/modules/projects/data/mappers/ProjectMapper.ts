@@ -6,7 +6,7 @@ export class ProjectMapper {
     return {
       id: dto.id,
       name: dto.name,
-      clientId: dto.clientId ?? undefined,
+      client: dto.client ?? undefined,
       color: dto.color ?? undefined,
       rate: dto.rate ?? undefined
     }
@@ -16,7 +16,8 @@ export class ProjectMapper {
     return {
       id: domain.id,
       name: domain.name,
-      clientId: domain.clientId ?? null,
+      clientId: domain.client?.id ?? null,
+      client: domain.client ?? null,
       color: domain.color ?? null,
       rate: domain.rate ?? null,
       createdAt: new Date().toISOString(), // This should ideally come from domain if needed

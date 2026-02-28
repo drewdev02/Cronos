@@ -18,6 +18,7 @@ export const ProjectsScreen = observer(() => {
 
   useEffect(() => {
     vm.loadProjects()
+    vm.loadClients()
   }, [vm])
 
   return (
@@ -98,6 +99,7 @@ export const ProjectsScreen = observer(() => {
           open={formOpen}
           onClose={() => setFormOpen(false)}
           initial={editing ? (vm.projects.find((x) => x.id === editing) ?? undefined) : undefined}
+          clients={vm.clients}
           onSubmit={(project) => {
             if (editing) vm.updateProject(editing, project)
             else vm.createProject(project)

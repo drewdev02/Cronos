@@ -5,6 +5,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 const databaseAPI = {
   clients: {
     getAll: () => ipcRenderer.invoke('db:clients:getAll'),
+    getLite: () => ipcRenderer.invoke('db:clients:getLite'),
     getById: (id: string) => ipcRenderer.invoke('db:clients:getById', id),
     create: (data: Record<string, unknown>) => ipcRenderer.invoke('db:clients:create', data),
     update: (id: string, data: Record<string, unknown>) =>

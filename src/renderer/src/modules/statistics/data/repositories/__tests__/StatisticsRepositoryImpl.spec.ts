@@ -8,11 +8,6 @@ const mockStats: Statistics = {
   trend: [{ day: '2026-02-03', earned: 50 }]
 }
 
-declare global {
-  interface Window {
-    api: any
-  }
-}
 
 describe('StatisticsRepositoryImpl', () => {
   beforeEach(() => {

@@ -17,7 +17,7 @@
     "createProject": "Create project",
     "editProject": "Edit project",
     "name": "Name",
-    "clientOptional": "Client (Optional)",
+    "client": "Client",
     "noClient": "No client",
     "rateLabel": "Rate (USD/h)",
     "rate": "Rate",

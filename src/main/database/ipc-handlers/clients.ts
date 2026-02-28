@@ -9,6 +9,13 @@ export function registerClientsHandlers(): void {
     return db.select().from(schema.clients).all()
   })
 
+  ipcMain.handle('db:clients:getLite', async () => {
+    return db
+      .select({ id: schema.clients.id, name: schema.clients.name })
+      .from(schema.clients)
+      .all()
+  })
+
   ipcMain.handle('db:clients:getById', async (_event, id: string) => {
     const result = db.select().from(schema.clients).where(eq(schema.clients.id, id)).all()
     return result[0] ?? null

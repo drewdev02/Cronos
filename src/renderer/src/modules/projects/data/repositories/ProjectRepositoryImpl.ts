@@ -32,4 +32,8 @@ export class ProjectRepositoryImpl extends ProjectRepository {
   async deleteProject(id: string): Promise<boolean> {
     return window.api.projects.delete(id)
   }
+
+  async getClients(): Promise<{ id: string; name: string }[]> {
+    return window.api.clients.getLite()
+  }
 }

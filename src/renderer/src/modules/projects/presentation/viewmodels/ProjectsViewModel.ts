@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { GetProjectsUseCase } from '../../domain/usecases/GetProjectsUseCase'
+import { GetProjectClientsUseCase } from '../../domain/usecases/GetProjectClientsUseCase'
 import { CreateProjectUseCase } from '../../domain/usecases/CreateProjectUseCase'
 import { UpdateProjectUseCase } from '../../domain/usecases/UpdateProjectUseCase'
 import { DeleteProjectUseCase } from '../../domain/usecases/DeleteProjectUseCase'
@@ -7,13 +8,15 @@ import { Project } from '../../domain/models/Project'
 
 export class ProjectsViewModel {
   projects: Project[] = []
+  clients: { id: string; name: string }[] = []
   loading = false
 
   constructor(
     private readonly getProjectsUseCase: GetProjectsUseCase,
     private readonly createProjectUseCase: CreateProjectUseCase,
     private readonly updateProjectUseCase: UpdateProjectUseCase,
-    private readonly deleteProjectUseCase: DeleteProjectUseCase
+    private readonly deleteProjectUseCase: DeleteProjectUseCase,
+    private readonly getProjectClientsUseCase: GetProjectClientsUseCase
   ) {
     makeAutoObservable(this)
   }
@@ -31,6 +34,17 @@ export class ProjectsViewModel {
       runInAction(() => {
         this.loading = false
       })
+    }
+  }
+
+  async loadClients(): Promise<void> {
+    try {
+      const result = await this.getProjectClientsUseCase.execute()
+      runInAction(() => {
+        this.clients = result
+      })
+    } catch (error) {
+      console.error('Error loading clients for projects:', error)
     }
   }
 
